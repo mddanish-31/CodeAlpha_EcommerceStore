@@ -1,13 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 360" width="100%" role="img" aria-labelledby="banner-title banner-desc">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 360" width="1200" height="360" role="img" aria-labelledby="banner-title banner-desc">
   <title id="banner-title">Simple E-commerce Store — CodeAlpha Full Stack Internship</title>
-  <desc id="banner-desc">Solid eucalyptus-green hero banner with aubergine panels, limestone surfaces, and warm champagne-gold accents for Simple E-commerce Store, showcasing planned Next.js, Node.js, and MongoDB architecture.</desc>
+  <desc id="banner-desc">Solid eucalyptus-green hero banner with aubergine panels, limestone surfaces, and champagne-gold accents for Simple E-commerce Store, showcasing planned Next.js, Node.js, and MongoDB architecture.</desc>
 
-  <!-- Solid deep eucalyptus background -->
-  <rect width="1200" height="360" rx="14" fill="#46513F"/>
-  <rect x="1" y="1" width="1198" height="358" rx="13" fill="none" stroke="#78806A" stroke-width="2"/>
+  <!-- Solid Eucalyptus Green background -->
+  <rect width="1200" height="360" rx="14" fill="#385449"/>
+  <rect x="1" y="1" width="1198" height="358" rx="13" fill="none" stroke="#5A7A6D" stroke-width="2"/>
 
   <!-- Subtle architectural background grid on right -->
-  <g stroke="#59634F" stroke-width="1">
+  <g stroke="#446457" stroke-width="1">
     <line x1="680" y1="24" x2="680" y2="336"/>
     <line x1="795" y1="24" x2="795" y2="336"/>
     <line x1="910" y1="24" x2="910" y2="336"/>
@@ -22,107 +22,107 @@
   <!-- Left Column: Brand & Project Identity -->
   <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
     <!-- Top eyebrow pill with gentle status pulse -->
-    <rect x="56" y="48" width="352" height="32" rx="16" fill="#303B30" stroke="#9A896B" stroke-width="1.2"/>
-    <circle cx="78" cy="64" r="7" fill="#C6A66C" opacity="0.3">
+    <rect x="56" y="48" width="314" height="32" rx="16" fill="#2D192B" stroke="#C9AE74" stroke-width="1.2"/>
+    <circle cx="78" cy="64" r="7" fill="#DFC384" opacity="0.3">
       <animate attributeName="r" values="4;9;4" dur="2.8s" repeatCount="indefinite"/>
       <animate attributeName="opacity" values="0.55;0.1;0.55" dur="2.8s" repeatCount="indefinite"/>
     </circle>
-    <circle cx="78" cy="64" r="4" fill="#E2C98F"/>
-    <text x="94" y="68" font-size="11.5" font-weight="700" letter-spacing="1.4" fill="#E2C98F">CODEALPHA INTERNSHIP</text>
-    <text x="298" y="68" font-size="10.5" font-weight="600" letter-spacing="1" fill="#C8BDA7">•  PLANNED</text>
+    <circle cx="78" cy="64" r="4" fill="#DFC384"/>
+    <text x="94" y="68" font-size="11.5" font-weight="700" letter-spacing="1.3" fill="#DFC384">CODEALPHA INTERNSHIP</text>
+    <text x="278" y="68" font-size="10.5" font-weight="600" letter-spacing="1" fill="#E6E1D6">•  PLANNED</text>
 
-    <!-- Main Title -->
-    <text x="56" y="136" font-size="34" font-weight="800" letter-spacing="0.8" fill="#F1E7D4">SIMPLE E-COMMERCE STORE</text>
+    <!-- Main Title (Limestone) -->
+    <text x="56" y="136" font-size="34" font-weight="800" letter-spacing="0.8" fill="#F4F0E8">SIMPLE E-COMMERCE STORE</text>
 
-    <!-- Subtitle -->
-    <text x="56" y="176" font-size="20" font-weight="400" fill="#D9CEB9">A Full Stack Shopping Experience</text>
+    <!-- Subtitle (Soft Limestone) -->
+    <text x="56" y="176" font-size="20" font-weight="400" fill="#DCD6CA">A Full Stack Shopping Experience</text>
 
-    <!-- Subtle animated accent divider -->
-    <rect x="56" y="206" width="480" height="3" rx="1.5" fill="#68715B"/>
-    <rect x="56" y="206" width="110" height="3" rx="1.5" fill="#D6B878">
+    <!-- Subtle animated Champagne Gold accent divider -->
+    <rect x="56" y="206" width="480" height="3" rx="1.5" fill="#4D6E60"/>
+    <rect x="56" y="206" width="110" height="3" rx="1.5" fill="#DFC384">
       <animate attributeName="x" values="56;426;56" dur="7s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.2 1;0.4 0 0.2 1"/>
     </rect>
-    <rect x="56" y="206" width="36" height="3" rx="1.5" fill="#E2C98F"/>
+    <rect x="56" y="206" width="36" height="3" rx="1.5" fill="#EAE5DA"/>
 
-    <!-- Supporting Technology Label Pill -->
-    <rect x="56" y="238" width="340" height="38" rx="8" fill="#321426" stroke="#9A896B" stroke-width="1.2"/>
-    <text x="74" y="262" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="13.5" font-weight="600" letter-spacing="1.2" fill="#D6B878">NEXT.JS  •  NODE.JS  •  MONGODB</text>
+    <!-- Supporting Technology Label Pill (Aubergine surface + Champagne Gold text) -->
+    <rect x="56" y="238" width="284" height="38" rx="8" fill="#3A1F38" stroke="#C9AE74" stroke-width="1.2"/>
+    <text x="74" y="262" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="13.5" font-weight="600" letter-spacing="1.1" fill="#E8CE90">NEXT.JS  •  NODE.JS  •  MONGODB</text>
 
-    <text x="56" y="306" font-size="12.5" font-weight="500" fill="#C8BDA7">Decoupled TypeScript Storefront  |  Express REST API  |  Mongoose ODM</text>
+    <text x="56" y="306" font-size="12.5" font-weight="500" fill="#D5CFC3">Decoupled TypeScript Storefront  |  Express REST API  |  Mongoose ODM</text>
   </g>
 
-  <!-- Right Column: Futuristic E-Commerce Card & Cart Showcase -->
+  <!-- Right Column: Aubergine Panel with Limestone & Aubergine Storefront Cards -->
   <g>
-    <!-- Container panel -->
-    <rect x="676" y="38" width="468" height="284" rx="14" fill="#321426" stroke="#9A896B" stroke-width="1.5"/>
+    <!-- Aubergine Container Panel -->
+    <rect x="676" y="38" width="468" height="284" rx="14" fill="#3A1F38" stroke="#C9AE74" stroke-width="1.5"/>
 
     <!-- Top mini window bar -->
-    <circle cx="700" cy="58" r="4.5" fill="#69735E"/>
-    <circle cx="716" cy="58" r="4.5" fill="#69735E"/>
-    <circle cx="732" cy="58" r="4.5" fill="#C6A66C"/>
-    <rect x="756" y="52" width="170" height="12" rx="6" fill="#68715B"/>
-    <rect x="1038" y="50" width="84" height="16" rx="8" fill="#493044" stroke="#D6B878" stroke-width="1"/>
-    <text x="1080" y="61" text-anchor="middle" font-family="ui-monospace, monospace" font-size="9" font-weight="700" fill="#D6B878">STOREFRONT</text>
+    <circle cx="700" cy="58" r="4.5" fill="#6F8C7F"/>
+    <circle cx="716" cy="58" r="4.5" fill="#9D968B"/>
+    <circle cx="732" cy="58" r="4.5" fill="#DFC384"/>
+    <rect x="756" y="52" width="170" height="12" rx="6" fill="#4E2D4B"/>
+    <rect x="1038" y="50" width="84" height="16" rx="8" fill="#2A1629" stroke="#DFC384" stroke-width="1"/>
+    <text x="1080" y="61" text-anchor="middle" font-family="ui-monospace, monospace" font-size="9" font-weight="700" fill="#DFC384">STOREFRONT</text>
 
-    <!-- Product Card 1 -->
+    <!-- Product Card 1 (Limestone surface) -->
     <g>
       <animateTransform attributeName="transform" type="translate" values="0 0;0 0;0 -5;0 0" keyTimes="0;0.15;0.5;1" dur="6s" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="1;1;0.78;1" keyTimes="0;0.15;0.5;1" dur="6s" repeatCount="indefinite"/>
-      <rect x="698" y="84" width="132" height="156" rx="10" fill="#5A684F" stroke="#7B8066" stroke-width="1.2"/>
-      <rect x="710" y="96" width="108" height="68" rx="6" fill="#27352B" stroke="#9A896B" stroke-width="1"/>
+      <animate attributeName="opacity" values="1;1;0.84;1" keyTimes="0;0.15;0.5;1" dur="6s" repeatCount="indefinite"/>
+      <rect x="698" y="84" width="132" height="156" rx="10" fill="#EAE5DA" stroke="#C8C0B0" stroke-width="1.2"/>
+      <rect x="710" y="96" width="108" height="68" rx="6" fill="#2D192B" stroke="#7A5F75" stroke-width="1"/>
       <!-- Minimal geometric product icon -->
-      <rect x="748" y="114" width="32" height="32" rx="6" fill="none" stroke="#D6B878" stroke-width="2"/>
-      <circle cx="764" cy="130" r="5" fill="#E2C98F"/>
-      <rect x="710" y="176" width="78" height="9" rx="4.5" fill="#F1E7D4"/>
-      <rect x="710" y="192" width="52" height="7" rx="3.5" fill="#C8BDA7"/>
-      <rect x="710" y="212" width="48" height="16" rx="4" fill="#564233"/>
-      <text x="734" y="223" text-anchor="middle" font-family="ui-monospace, monospace" font-size="9.5" font-weight="700" fill="#E2C98F">CATALOG</text>
+      <rect x="748" y="114" width="32" height="32" rx="6" fill="none" stroke="#DFC384" stroke-width="2"/>
+      <circle cx="764" cy="130" r="5" fill="#EAE5DA"/>
+      <rect x="710" y="176" width="78" height="9" rx="4.5" fill="#3A1F38"/>
+      <rect x="710" y="192" width="52" height="7" rx="3.5" fill="#6B5C69"/>
+      <rect x="710" y="212" width="54" height="16" rx="4" fill="#385449"/>
+      <text x="737" y="223" text-anchor="middle" font-family="ui-monospace, monospace" font-size="9.5" font-weight="700" fill="#F4F0E8">CATALOG</text>
     </g>
 
-    <!-- Product Card 2 (featured center card) -->
+    <!-- Product Card 2 (Featured center card: Elevated Aubergine + Champagne Gold border) -->
     <g>
       <animateTransform attributeName="transform" type="translate" values="0 0;0 -5;0 0;0 0" keyTimes="0;0.35;0.7;1" dur="6s" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="1;0.82;1;1" keyTimes="0;0.35;0.7;1" dur="6s" repeatCount="indefinite"/>
-      <rect x="844" y="84" width="132" height="156" rx="10" fill="#493044" stroke="#D6B878" stroke-width="1.5"/>
-      <rect x="856" y="96" width="108" height="68" rx="6" fill="#27352B" stroke="#C6A66C" stroke-width="1"/>
-      <polygon points="910,112 928,144 892,144" fill="none" stroke="#E2C98F" stroke-width="2" stroke-linejoin="round"/>
-      <circle cx="910" cy="133" r="4" fill="#D6B878"/>
-      <rect x="856" y="176" width="88" height="9" rx="4.5" fill="#F1E7D4"/>
-      <rect x="856" y="192" width="60" height="7" rx="3.5" fill="#D9CEB9"/>
-      <rect x="856" y="212" width="56" height="16" rx="4" fill="#A18A60"/>
-      <text x="884" y="223" text-anchor="middle" font-family="ui-monospace, monospace" font-size="9.5" font-weight="700" fill="#F0DDB5">SEARCH</text>
+      <animate attributeName="opacity" values="1;0.86;1;1" keyTimes="0;0.35;0.7;1" dur="6s" repeatCount="indefinite"/>
+      <rect x="844" y="84" width="132" height="156" rx="10" fill="#4E2D4B" stroke="#DFC384" stroke-width="1.6"/>
+      <rect x="856" y="96" width="108" height="68" rx="6" fill="#2B4239" stroke="#C9AE74" stroke-width="1"/>
+      <polygon points="910,112 928,144 892,144" fill="none" stroke="#EAE5DA" stroke-width="2" stroke-linejoin="round"/>
+      <circle cx="910" cy="133" r="4" fill="#DFC384"/>
+      <rect x="856" y="176" width="88" height="9" rx="4.5" fill="#F4F0E8"/>
+      <rect x="856" y="192" width="60" height="7" rx="3.5" fill="#DCD6CA"/>
+      <rect x="856" y="212" width="56" height="16" rx="4" fill="#DFC384"/>
+      <text x="884" y="223" text-anchor="middle" font-family="ui-monospace, monospace" font-size="9.5" font-weight="700" fill="#2A1629">SEARCH</text>
     </g>
 
-    <!-- Product Card 3 -->
+    <!-- Product Card 3 (Limestone surface) -->
     <g>
-      <animateTransform attributeName="transform" type="translate" values="0 -4;0 0;0 0;0 -4" keyTimes="0;0.3;0.75;1" dur="6s" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="1;0.85;1;1" keyTimes="0;0.45;0.8;1" dur="6s" repeatCount="indefinite"/>
-      <rect x="990" y="84" width="132" height="156" rx="10" fill="#5A684F" stroke="#7B8066" stroke-width="1.2"/>
-      <rect x="1002" y="96" width="108" height="68" rx="6" fill="#27352B" stroke="#9A896B" stroke-width="1"/>
-      <circle cx="1056" cy="130" r="15" fill="none" stroke="#E2C98F" stroke-width="2"/>
-      <path d="M1049 130 l5 5 l10 -10" fill="none" stroke="#D6B878" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-      <rect x="1002" y="176" width="82" height="9" rx="4.5" fill="#F1E7D4"/>
-      <rect x="1002" y="192" width="54" height="7" rx="3.5" fill="#C8BDA7"/>
-      <rect x="1002" y="212" width="58" height="16" rx="4" fill="#564233"/>
-      <text x="1031" y="223" text-anchor="middle" font-family="ui-monospace, monospace" font-size="9.5" font-weight="700" fill="#E2C98F">ORDERS</text>
+      <animateTransform attributeName="transform" type="translate" values="0 0;0 0;0 -5;0 0" keyTimes="0;0.45;0.75;1" dur="6s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="1;1;0.86;1" keyTimes="0;0.45;0.75;1" dur="6s" repeatCount="indefinite"/>
+      <rect x="990" y="84" width="132" height="156" rx="10" fill="#EAE5DA" stroke="#C8C0B0" stroke-width="1.2"/>
+      <rect x="1002" y="96" width="108" height="68" rx="6" fill="#2D192B" stroke="#7A5F75" stroke-width="1"/>
+      <circle cx="1056" cy="130" r="15" fill="none" stroke="#EAE5DA" stroke-width="2"/>
+      <path d="M1049 130 l5 5 l10 -10" fill="none" stroke="#DFC384" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="1002" y="176" width="82" height="9" rx="4.5" fill="#3A1F38"/>
+      <rect x="1002" y="192" width="54" height="7" rx="3.5" fill="#6B5C69"/>
+      <rect x="1002" y="212" width="56" height="16" rx="4" fill="#385449"/>
+      <text x="1030" y="223" text-anchor="middle" font-family="ui-monospace, monospace" font-size="9.5" font-weight="700" fill="#F4F0E8">ORDERS</text>
     </g>
 
     <!-- Bottom Cart Motion Track -->
-    <rect x="698" y="260" width="424" height="44" rx="10" fill="#2C1B2A" stroke="#9A896B" stroke-width="1.2"/>
-    <line x1="726" y1="282" x2="1028" y2="282" stroke="#9A896B" stroke-width="2" stroke-dasharray="6 6"/>
-    <circle cx="726" cy="282" r="4" fill="#D6B878"/>
-    <circle cx="1028" cy="282" r="4" fill="#E2C98F"/>
+    <rect x="698" y="260" width="424" height="44" rx="10" fill="#2A1629" stroke="#8C7858" stroke-width="1.2"/>
+    <line x1="726" y1="282" x2="1028" y2="282" stroke="#8C7858" stroke-width="2" stroke-dasharray="6 6"/>
+    <circle cx="726" cy="282" r="4" fill="#DFC384"/>
+    <circle cx="1028" cy="282" r="4" fill="#EAE5DA"/>
 
     <!-- Animated Shopping Cart moving smoothly along track -->
     <g>
       <animateTransform attributeName="transform" type="translate" values="0 0;246 0;0 0" dur="8s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/>
-      <rect x="716" y="267" width="38" height="30" rx="7" fill="#493044" stroke="#D6B878" stroke-width="1.3"/>
-      <path d="M723 274 h4 l3 11 h12 l2 -8 h-13" fill="none" stroke="#F1E7D4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-      <circle cx="731" cy="289" r="1.8" fill="#E2C98F"/>
-      <circle cx="741" cy="289" r="1.8" fill="#E2C98F"/>
+      <rect x="716" y="267" width="38" height="30" rx="7" fill="#385449" stroke="#DFC384" stroke-width="1.3"/>
+      <path d="M723 274 h4 l3 11 h12 l2 -8 h-13" fill="none" stroke="#F4F0E8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="731" cy="289" r="1.8" fill="#DFC384"/>
+      <circle cx="741" cy="289" r="1.8" fill="#DFC384"/>
     </g>
 
     <!-- Track label -->
-    <text x="1074" y="286" text-anchor="middle" font-family="ui-monospace, monospace" font-size="10" font-weight="700" fill="#C8BDA7">CART FLOW</text>
+    <text x="1074" y="286" text-anchor="middle" font-family="ui-monospace, monospace" font-size="10" font-weight="700" fill="#EAE5DA">CART FLOW</text>
   </g>
 </svg>
