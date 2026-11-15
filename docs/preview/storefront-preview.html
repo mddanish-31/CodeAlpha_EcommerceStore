@@ -1,0 +1,2060 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simple E-commerce Store — Phase 4A Design System &amp; Storefront Blueprint Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@500;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      /* Core Reference Palette (Hungry Tiger Authority) */
+      --color-tiger-gold: #faae33;
+      --color-ember-rust: #823513;
+      --color-saffron-glow: #9f531b;
+      --color-dark-spice: #402011;
+      --color-charred-clove: #281006;
+      --color-cardamom-brown: #6b2e12;
+      --color-chili-red: #d1255c;
+
+      /* Documented Derived Accessibility & Surface Tokens */
+      --color-parchment-cream: #fdf6ec;
+      --color-warm-sand: #e5c7a3;
+      --color-tiger-gold-hover: #ffc052;
+      --color-charred-scrim: rgba(40, 16, 6, 0.80);
+
+      /* 3-Tier Flat Surface Hierarchy (Zero Box Shadows) */
+      --surface-tandoor-canvas: var(--color-ember-rust);
+      --surface-spice-card: var(--color-dark-spice);
+      --surface-charred-core: var(--color-charred-clove);
+
+      /* Typography */
+      --font-display: 'Antonio', 'Bahnschrift SemiCondensed', 'Arial Narrow', Impact, ui-sans-serif, sans-serif;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+      /* Type Scale */
+      --text-caption: 0.6875rem;   /* 11px */
+      --text-ui: 0.8125rem;        /* 13px */
+      --text-body: 0.9375rem;      /* 15px */
+      --text-subheading: 1.125rem; /* 18px */
+      --text-heading-sm: clamp(1.35rem, 2.2vw, 1.8125rem);
+      --text-heading: clamp(2.25rem, 4.5vw, 4.0625rem);
+      --text-heading-lg: clamp(2.75rem, 6.2vw, 6.25rem);
+      --text-display: clamp(3.5rem, 9.2vw, 9.75rem);
+
+      /* Spacing & Layout */
+      --page-max-width: 1440px;
+      --radius-cards: 6px;
+      --radius-pill: 9999px;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--surface-tandoor-canvas);
+      color: var(--color-parchment-cream);
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.45;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background-color: var(--surface-tandoor-canvas);
+      color: var(--color-parchment-cream);
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* Accessible Focus Ring (Intentional WCAG 2.4.7 Override) */
+    :focus-visible {
+      outline: 2px solid var(--color-tiger-gold);
+      outline-offset: 3px;
+    }
+
+    /* Reduced Motion Support */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    .container {
+      width: 100%;
+      max-width: var(--page-max-width);
+      margin-inline: auto;
+      padding-inline: 40px;
+    }
+
+    @media (max-width: 1023px) {
+      .container { padding-inline: 24px; }
+    }
+    @media (max-width: 639px) {
+      .container { padding-inline: 16px; }
+    }
+
+    /* Dotted Horizontal Divider */
+    .divider-dotted {
+      border: 0;
+      border-top: 1px dotted var(--color-tiger-gold);
+      opacity: 0.85;
+      width: 100%;
+    }
+
+    /* Display Typography Helpers */
+    .display-hero {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: var(--text-display);
+      line-height: 0.84;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      color: var(--color-tiger-gold);
+      font-stretch: condensed;
+    }
+
+    .heading-xl {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: var(--text-heading-lg);
+      line-height: 0.88;
+      letter-spacing: -0.016em;
+      text-transform: uppercase;
+      color: var(--color-tiger-gold);
+      font-stretch: condensed;
+    }
+
+    .heading-section {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: var(--text-heading);
+      line-height: 0.94;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+      color: var(--color-tiger-gold);
+      font-stretch: condensed;
+    }
+
+    .heading-card {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: var(--text-heading-sm);
+      line-height: 1.06;
+      letter-spacing: -0.005em;
+      text-transform: uppercase;
+      color: var(--color-parchment-cream);
+      font-stretch: condensed;
+    }
+
+    /* Pill Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: var(--radius-pill);
+      font-size: var(--text-caption);
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      line-height: 1.1;
+      white-space: nowrap;
+    }
+
+    .badge-gold {
+      background-color: var(--color-tiger-gold);
+      color: var(--color-charred-clove);
+    }
+
+    .badge-spice {
+      background-color: var(--surface-spice-card);
+      color: var(--color-tiger-gold);
+      border: 1px solid var(--color-cardamom-brown);
+    }
+
+    .badge-charred {
+      background-color: var(--surface-charred-core);
+      color: var(--color-tiger-gold);
+      border: 1px solid var(--color-tiger-gold);
+    }
+
+    .badge-alert {
+      background-color: var(--color-chili-red);
+      color: var(--color-parchment-cream);
+    }
+
+    /* Buttons (All Full Pills 9999px) */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border-radius: var(--radius-pill);
+      font-family: var(--font-sans);
+      font-size: var(--text-ui);
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      min-block-size: 40px;
+      min-inline-size: 40px;
+      padding: 10px 22px;
+      transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease, transform 160ms ease;
+    }
+
+    @media (pointer: coarse) {
+      .btn, .btn-icon {
+        min-block-size: 44px;
+        min-inline-size: 44px;
+      }
+    }
+
+    .btn-primary {
+      background-color: var(--color-tiger-gold);
+      color: var(--color-charred-clove);
+      border: 1px solid var(--color-tiger-gold);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--color-tiger-gold-hover);
+      border-color: var(--color-tiger-gold-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-ghost {
+      background-color: transparent;
+      color: var(--color-tiger-gold);
+      border: 1px solid var(--color-tiger-gold);
+      padding: 8px 17px;
+      font-weight: 500;
+    }
+
+    .btn-ghost:hover,
+    .btn-ghost[aria-pressed="true"],
+    .btn-ghost[aria-current="page"] {
+      background-color: var(--color-tiger-gold);
+      color: var(--color-charred-clove);
+    }
+
+    .btn-link {
+      background: transparent;
+      border: none;
+      color: var(--color-tiger-gold);
+      font-size: var(--text-ui);
+      font-weight: 500;
+      padding: 4px 8px;
+      cursor: pointer;
+      text-decoration: underline dotted var(--color-tiger-gold);
+      text-underline-offset: 4px;
+    }
+
+    .btn-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-pill);
+      background-color: var(--surface-charred-core);
+      border: 1px solid var(--color-tiger-gold);
+      color: var(--color-tiger-gold);
+      cursor: pointer;
+      transition: background-color 150ms ease, color 150ms ease;
+    }
+
+    .btn-icon:hover {
+      background-color: var(--color-tiger-gold);
+      color: var(--color-charred-clove);
+    }
+
+    /* Line Icons (1.5px stroke, Tiger Gold) */
+    .icon-svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+      flex-shrink: 0;
+    }
+
+    /* Pill Input Field */
+    .input-pill {
+      width: 100%;
+      border-radius: var(--radius-pill);
+      background-color: var(--surface-charred-core);
+      border: 1px solid var(--color-cardamom-brown);
+      color: var(--color-parchment-cream);
+      font-family: var(--font-sans);
+      font-size: var(--text-ui);
+      font-weight: 500;
+      padding: 11px 18px;
+      min-block-size: 40px;
+      transition: border-color 150ms ease;
+    }
+
+    .input-pill::placeholder {
+      color: var(--color-warm-sand);
+      opacity: 0.7;
+    }
+
+    .input-pill:focus {
+      border-color: var(--color-tiger-gold);
+    }
+
+    /* Announcement Strip */
+    .announcement-bar {
+      background-color: var(--surface-charred-core);
+      border-bottom: 1px dotted var(--color-tiger-gold);
+      padding: 8px 16px;
+      text-align: center;
+      font-size: var(--text-caption);
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--color-tiger-gold);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    /* Sticky Navigation Header */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background-color: var(--surface-spice-card);
+      border-bottom: 1px dotted var(--color-tiger-gold);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      min-height: 72px;
+    }
+
+    .brand-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--color-tiger-gold);
+    }
+
+    .brand-emblem {
+      width: 34px;
+      height: 34px;
+      border-radius: var(--radius-pill);
+      background-color: var(--surface-charred-core);
+      border: 1px solid var(--color-tiger-gold);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--color-tiger-gold);
+    }
+
+    .brand-text {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+      color: var(--color-tiger-gold);
+      line-height: 1;
+    }
+
+    .brand-sub {
+      display: block;
+      font-family: var(--font-sans);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: var(--color-warm-sand);
+      margin-top: 2px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      list-style: none;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .header-search {
+      position: relative;
+      width: 230px;
+    }
+
+    .header-search .input-pill {
+      padding-left: 38px;
+    }
+
+    .header-search .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--color-tiger-gold);
+      pointer-events: none;
+    }
+
+    .cart-trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: var(--radius-pill);
+      background-color: var(--surface-charred-core);
+      border: 1px solid var(--color-tiger-gold);
+      color: var(--color-tiger-gold);
+      padding: 6px 14px 6px 12px;
+      min-block-size: 40px;
+      cursor: pointer;
+      font-family: var(--font-sans);
+      font-size: var(--text-ui);
+      font-weight: 600;
+    }
+
+    .cart-trigger:hover {
+      background-color: var(--color-tiger-gold);
+      color: var(--color-charred-clove);
+    }
+
+    .cart-count-pill {
+      background-color: var(--color-tiger-gold);
+      color: var(--color-charred-clove);
+      border-radius: var(--radius-pill);
+      padding: 2px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .cart-trigger:hover .cart-count-pill {
+      background-color: var(--color-charred-clove);
+      color: var(--color-tiger-gold);
+    }
+
+    .mobile-menu-btn {
+      display: none;
+    }
+
+    @media (max-width: 1023px) {
+      .nav-links, .header-search, .account-btn-desktop {
+        display: none;
+      }
+      .mobile-menu-btn {
+        display: inline-flex;
+      }
+    }
+
+    /* Section Spacing */
+    .section-band {
+      position: relative;
+      padding-block: 84px;
+    }
+
+    @media (max-width: 767px) {
+      .section-band {
+        padding-block: 52px;
+      }
+    }
+
+    /* Atmospheric SVG Watermark */
+    .watermark-bg {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.06;
+    }
+
+    .section-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Hero Section */
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.35fr 0.95fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    @media (max-width: 960px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+    }
+
+    .hero-eyebrow-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .hero-lead {
+      font-size: 16px;
+      line-height: 1.5;
+      color: var(--color-parchment-cream);
+      max-width: 56ch;
+      margin-top: 22px;
+      margin-bottom: 28px;
+    }
+
+    .hero-cta-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 639px) {
+      .hero-cta-row .btn {
+        width: 100%;
+      }
+    }
+
+    .hero-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 36px;
+      padding-top: 24px;
+      border-top: 1px dotted var(--color-tiger-gold);
+    }
+
+    .metric-val {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--color-tiger-gold);
+      line-height: 1;
+    }
+
+    .metric-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-warm-sand);
+      margin-top: 4px;
+    }
+
+    /* Hero Product Showcase Pedestal */
+    .hero-showcase {
+      background-color: var(--surface-spice-card);
+      border: 1px solid var(--color-tiger-gold);
+      border-radius: var(--radius-cards);
+      padding: 20px;
+      position: relative;
+    }
+
+    .showcase-stage {
+      background-color: var(--surface-charred-core);
+      border: 1px solid var(--color-cardamom-brown);
+      border-radius: 4px;
+      aspect-ratio: 4 / 3.4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      background-image: radial-gradient(circle at 50% 45%, rgba(250, 174, 51, 0.16) 0%, transparent 68%);
+      padding: 24px;
+    }
+
+    .showcase-top-tags {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      right: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .showcase-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px dotted var(--color-tiger-gold);
+    }
+
+    .price-large {
+      font-family: var(--font-display);
+      font-size: 30px;
+      font-weight: 700;
+      color: var(--color-tiger-gold);
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+
+    .price-compare {
+      font-size: 13px;
+      color: var(--color-warm-sand);
+      text-decoration: line-through;
+      margin-left: 6px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Section Header Row */
+    .section-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 36px;
+      flex-wrap: wrap;
+    }
+
+    .section-eyebrow {
+      font-size: var(--text-caption);
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--color-tiger-gold);
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    /* Category Grid (4 Columns) */
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    @media (max-width: 1023px) {
+      .category-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 520px) {
+      .category-grid { grid-template-columns: 1fr; }
+    }
+
+    .category-card {
+      background-color: var(--surface-spice-card);
+      border: 1px solid var(--color-cardamom-brown);
+      border-radius: var(--radius-cards);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 170px;
+      text-decoration: none;
+      color: var(--color-parchment-cream);
+      transition: border-color 160ms ease, transform 160ms ease;
+    }
+
+    .category-card:hover {
+      border-color: var(--color-tiger-gold);
+      transform: translateY(-2px);
+    }
+
+    .category-num {
+      font-family: var(--font-display);
+      font-size: 14px;
+      color: var(--color-tiger-gold);
+      letter-spacing: 0.06em;
+    }
+
+    .category-bottom {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    /* Catalog Toolbar (<search>) */
+    .catalog-toolbar {
+      background-color: var(--surface-spice-card);
+      border: 1px solid var(--color-cardamom-brown);
+      border-radius: var(--radius-cards);
+      padding: 16px;
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .filter-pills {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .toolbar-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* Product Grid & Cards (6px radius, #402011 surface, zero shadow) */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    @media (max-width: 1120px) {
+      .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 560px) {
+      .product-grid { grid-template-columns: 1fr; }
+    }
+
+    .product-card {
+      background-color: var(--surface-spice-card);
+      border: 1px solid var(--color-cardamom-brown);
+      border-radius: var(--radius-cards);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: border-color 180ms ease;
+    }
+
+    .product-card:hover {
+      border-color: var(--color-tiger-gold);
+    }
+
+    .product-stage {
+      background-color: var(--surface-charred-core);
+      border: 1px solid var(--color-cardamom-brown);
+      border-radius: 4px;
+      aspect-ratio: 4 / 3.2;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      margin-bottom: 14px;
+      background-image: radial-gradient(circle at 50% 50%, rgba(250, 174, 51, 0.12) 0%, transparent 70%);
+    }
+
+    .product-badges {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    .product-meta {
+      font-size: var(--text-caption);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-warm-sand);
+      margin-bottom: 4px;
+    }
+
+    .product-desc-short {
+      font-size: 13px;
+      color: var(--color-warm-sand);
+      margin-top: 6px;
+      margin-bottom: 14px;
+      line-height: 1.4;
+    }
+
+    .product-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding-top: 12px;
+      border-top: 1px dotted rgba(250, 174, 51, 0.45);
+      margin-top: auto;
+    }
+
+    .product-price {
+      font-family: var(--font-sans);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--color-tiger-gold);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Editorial Promotional Split Banner */
+    .promo-banner {
+      background-color: var(--surface-charred-core);
+      border: 1px solid var(--color-tiger-gold);
+      border-radius: var(--radius-cards);
+      padding: 42px;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 32px;
+      align-items: center;
+    }
+
+    @media (max-width: 860px) {
+      .promo-banner {
+        grid-template-columns: 1fr;
+        padding: 24px;
+      }
+    }
+
+    /* Product Details Preview Section (PDP) */
+    .pdp-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 36px;
+      align-items: start;
+    }
+
+    @media (max-width: 920px) {
+      .pdp-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .pdp-gallery-main {
+      background-color: var(--surface-charred-core);
+      border: 1px solid var(--color-cardamom-brown);
+      border-radius: var(--radius-cards);
+      aspect-ratio: 4 / 3.2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 32px;
+      background-image: radial-gradient(circle at 50% 45%, rgba(250, 174, 51, 0.16) 0%, transparent 68%);
+    }
+
+    .pdp-thumbs {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .pdp-thumb-btn {
+      background-color: var(--surface-spice-card);
+      border: 1px solid var(--color-cardamom-brown);
+      border-radius: var(--radius-cards);
+      padding: 10px;
+      aspect-ratio: 1 / 0.8;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-tiger-gold);
+    }
+
+    .pdp-thumb-btn[aria-current="true"],
+    .pdp-thumb-btn:hover {
+      border-color: var(--color-tiger-gold);
+      background-color: var(--surface-charred-core);
+    }
+
+    .pdp-buybox {
+      background-color: var(--surface-spice-card);
+      border: 1px solid var(--color-cardamom-brown);
+      border-radius: var(--radius-cards);
+      padding: 28px;
+    }
+
+    .pdp-action-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-block: 22px;
+      flex-wrap: wrap;
+    }
+
+    .qty-stepper {
+      display: inline-flex;
+      align-items: center;
+      border-radius: var(--radius-pill);
+      background-color: var(--surface-charred-core);
+      border: 1px solid var(--color-tiger-gold);
+      overflow: hidden;
+    }
+
+    .qty-btn {
+      background: transparent;
+      border: none;
+      color: var(--color-tiger-gold);
+      width: 40px;
+      height: 40px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .qty-btn:hover {
+      background-color: var(--color-tiger-gold);
+      color: var(--color-charred-clove);
+    }
+
+    .qty-val {
+      min-width: 36px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--color-parchment-cream);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Exclusive Native <details name="pdp-specs"> Accordions */
+    .specs-accordion {
+      border-top: 1px dotted var(--color-tiger-gold);
+      margin-top: 18px;
+    }
+
+    .specs-accordion details {
+      border-bottom: 1px dotted var(--color-tiger-gold);
+      padding-block: 12px;
+    }
+
+    .specs-accordion summary {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      font-size: var(--text-ui);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--color-tiger-gold);
+      padding-block: 4px;
+    }
+
+    .specs-accordion summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .specs-body {
+      padding-top: 10px;
+      font-size: 13px;
+      color: var(--color-parchment-cream);
+      line-height: 1.5;
+    }
+
+    .specs-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px 16px;
+      margin-top: 6px;
+    }
+
+    /* Inline Shopping Cart & Mobile Nav Preview Showcase Band */
+    .cart-mobile-showcase {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    @media (max-width: 960px) {
+      .cart-mobile-showcase {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .preview-panel {
+      background-color: var(--surface-charred-core);
+      border: 1px solid var(--color-tiger-gold);
+      border-radius: var(--radius-cards);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .cart-item-card {
+      background-color: var(--surface-spice-card);
+      border: 1px solid var(--color-cardamom-brown);
+      border-radius: var(--radius-cards);
+      padding: 12px;
+      display: grid;
+      grid-template-columns: 60px 1fr auto;
+      gap: 14px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .cart-thumb {
+      width: 60px;
+      height: 60px;
+      background-color: var(--surface-charred-core);
+      border: 1px solid var(--color-cardamom-brown);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+    }
+
+    .shipping-bar-track {
+      width: 100%;
+      height: 8px;
+      background-color: var(--surface-spice-card);
+      border-radius: var(--radius-pill);
+      overflow: hidden;
+      margin-top: 8px;
+      border: 1px solid var(--color-cardamom-brown);
+    }
+
+    .shipping-bar-fill {
+      height: 100%;
+      background-color: var(--color-tiger-gold);
+      border-radius: var(--radius-pill);
+      width: 100%;
+    }
+
+    /* Trust / Service Band */
+    .trust-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 960px) {
+      .trust-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 520px) {
+      .trust-grid { grid-template-columns: 1fr; }
+    }
+
+    .trust-card {
+      background-color: var(--surface-spice-card);
+      border: 1px solid var(--color-cardamom-brown);
+      border-radius: var(--radius-cards);
+      padding: 20px;
+    }
+
+    /* Site Footer (#281006 Charred Clove) */
+    .site-footer {
+      background-color: var(--surface-charred-core);
+      border-top: 1px dotted var(--color-tiger-gold);
+      padding-top: 64px;
+      padding-bottom: 40px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
+      gap: 32px;
+      margin-bottom: 48px;
+    }
+
+    @media (max-width: 900px) {
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 520px) {
+      .footer-grid { grid-template-columns: 1fr; }
+    }
+
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .footer-links a {
+      color: var(--color-warm-sand);
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    .footer-links a:hover {
+      color: var(--color-tiger-gold);
+    }
+
+    /* Native <dialog> Slide-Over Drawers */
+    dialog.drawer-dialog {
+      margin: 0 0 0 auto;
+      height: 100dvh;
+      max-height: 100dvh;
+      width: min(440px, 100vw);
+      background-color: var(--surface-charred-core);
+      color: var(--color-parchment-cream);
+      border: none;
+      border-left: 1px solid var(--color-tiger-gold);
+      padding: 24px;
+    }
+
+    dialog.drawer-dialog::backdrop {
+      background-color: var(--color-charred-scrim);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. ANNOUNCEMENT STRIP -->
+  <div class="announcement-bar" role="region" aria-label="Storefront Status Announcement">
+    <span class="badge badge-gold">PHASE 4A DESIGN PREVIEW</span>
+    <span>CODEALPHA FULL STACK E-COMMERCE STORE • SAMPLE PREVIEW CATALOG • FREE SHIPPING OVER $75</span>
+  </div>
+
+  <!-- 2. STICKY NAVIGATION HEADER -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#top" class="brand-logo" aria-label="Simple E-commerce Store Home">
+        <span class="brand-emblem" aria-hidden="true">CA</span>
+        <span>
+          <span class="brand-text">SIMPLE E-COMMERCE</span>
+          <span class="brand-sub">CODEALPHA STOREFRONT</span>
+        </span>
+      </a>
+
+      <nav aria-label="Primary Storefront Navigation">
+        <ul class="nav-links">
+          <li><a href="#catalog" class="btn btn-ghost" aria-current="page">Shop All</a></li>
+          <li><a href="#categories" class="btn btn-ghost">Categories</a></li>
+          <li><a href="#pdp-preview" class="btn btn-ghost">Product Detail</a></li>
+          <li><a href="#cart-preview" class="btn btn-ghost">Cart &amp; Mobile UX</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <!-- Semantic <search> Landmark -->
+        <search class="header-search" title="Catalog Quick Search">
+          <form action="#catalog" onsubmit="event.preventDefault(); filterCatalogByQuery(this.q.value);">
+            <svg class="icon-svg search-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="11" cy="11" r="7"></circle>
+              <line x1="20" y1="20" x2="16.2" y2="16.2"></line>
+            </svg>
+            <input
+              type="search"
+              name="q"
+              id="header-search-input"
+              class="input-pill"
+              placeholder="Search objects..."
+              aria-label="Search store catalog"
+              oninput="filterCatalogByQuery(this.value)"
+            />
+          </form>
+        </search>
+
+        <a href="#cart-preview" class="btn btn-ghost account-btn-desktop">
+          <svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="8" r="4"></circle>
+            <path d="M4 20c1.8-3.8 5-6 8-6s6.2 2.2 8 6"></path>
+          </svg>
+          Account
+        </a>
+
+        <button
+          type="button"
+          class="cart-trigger"
+          onclick="openDialog('cart-dialog')"
+          aria-label="Open shopping cart drawer, 2 items"
+        >
+          <svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 7h12l1 13H5L6 7z"></path>
+            <path d="M9 7V5a3 3 0 0 1 6 0v2"></path>
+          </svg>
+          <span>CART</span>
+          <span class="cart-count-pill" id="header-cart-count">2</span>
+        </button>
+
+        <button
+          type="button"
+          class="btn-icon mobile-menu-btn"
+          onclick="openDialog('mobile-nav-dialog')"
+          aria-label="Open mobile navigation menu"
+        >
+          <svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true">
+            <line x1="4" y1="7" x2="20" y2="7"></line>
+            <line x1="4" y1="12" x2="20" y2="12"></line>
+            <line x1="4" y1="17" x2="20" y2="17"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- 3. EDITORIAL HERO SECTION -->
+    <section class="section-band" aria-labelledby="hero-heading">
+      <!-- Subtle Atmospheric Geometric/Botanical Watermark -->
+      <div class="watermark-bg" aria-hidden="true">
+        <svg width="100%" height="100%" viewBox="0 0 1440 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="1180" cy="340" r="320" stroke="#FAAE33" stroke-width="2" stroke-dasharray="6 8" />
+          <circle cx="1180" cy="340" r="220" stroke="#FAAE33" stroke-width="1.5" />
+          <path d="M1180 20 L1180 660 M860 340 L1500 340 M954 114 L1406 566 M1406 114 L954 566" stroke="#FAAE33" stroke-width="1" />
+        </svg>
+      </div>
+
+      <div class="container section-content">
+        <div class="hero-grid">
+          <div>
+            <div class="hero-eyebrow-row">
+              <span class="badge badge-gold">EDITION 01 // CURATED HARDWARE &amp; GOODS</span>
+              <span class="badge badge-spice">SAMPLE PREVIEW CONTENT</span>
+            </div>
+
+            <h1 id="hero-heading" class="display-hero">
+              CRAFTED FOR<br />DAILY RITUALS
+            </h1>
+
+            <p class="hero-lead">
+              Precision desk instruments, tactile everyday carry, and architectural home objects. Engineered in warm anodized metals and natural materials—built for focus, longevity, and effortless online shopping.
+            </p>
+
+            <div class="hero-cta-row">
+              <a href="#catalog" class="btn btn-primary">
+                <span>Shop Collection</span>
+                <svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="13 6 19 12 13 18"></polyline>
+                </svg>
+              </a>
+              <a href="#pdp-preview" class="btn btn-ghost">Inspect Flagship Lamp</a>
+              <button type="button" class="btn btn-ghost" onclick="openDialog('cart-dialog')">
+                Preview Cart Drawer (2)
+              </button>
+            </div>
+
+            <div class="hero-metrics">
+              <div>
+                <div class="metric-val">04</div>
+                <div class="metric-label">Core Departments</div>
+              </div>
+              <div>
+                <div class="metric-val">100%</div>
+                <div class="metric-label">WCAG AA Contrast</div>
+              </div>
+              <div>
+                <div class="metric-val">48H</div>
+                <div class="metric-label">Tracked Dispatch</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hero Featured Product Showcase -->
+          <div class="hero-showcase" aria-label="Featured Hero Product: Chrono Brass Desk Lamp">
+            <div class="showcase-stage">
+              <div class="showcase-top-tags">
+                <span class="badge badge-gold">FLAGSHIP RELEASE</span>
+                <span class="badge badge-alert">-15% LAUNCH OFFER</span>
+              </div>
+              <!-- Studio Vector Product Illustration: Architectural Desk Lamp -->
+              <svg width="240" height="220" viewBox="0 0 240 220" fill="none" aria-label="Studio illustration of Chrono Brass Desk Lamp">
+                <ellipse cx="120" cy="196" rx="74" ry="10" fill="#402011" stroke="#FAAE33" stroke-width="1.5" />
+                <rect x="86" y="176" width="68" height="20" rx="4" fill="#823513" stroke="#FAAE33" stroke-width="2" />
+                <line x1="120" y1="176" x2="120" y2="68" stroke="#FAAE33" stroke-width="5" />
+                <circle cx="120" cy="68" r="8" fill="#281006" stroke="#FAAE33" stroke-width="2.5" />
+                <path d="M56 72 L184 72 L162 34 L78 34 Z" fill="#9F531B" stroke="#FAAE33" stroke-width="2" />
+                <path d="M74 74 L166 74 L182 118 L58 118 Z" fill="#FAAE33" fill-opacity="0.14" />
+                <circle cx="138" cy="186" r="4" fill="#FAAE33" />
+              </svg>
+            </div>
+
+            <div class="showcase-footer">
+              <div>
+                <div class="product-meta">AUDIO &amp; DESK CRAFT • SKU AT-014</div>
+                <div class="heading-card">CHRONO BRASS DESK LAMP</div>
+              </div>
+              <div style="text-align: right;">
+                <div>
+                  <span class="price-large">$128</span>
+                  <span class="price-compare">$150</span>
+                </div>
+                <button type="button" class="btn btn-primary" style="margin-top: 8px; padding: 7px 16px;" onclick="addToPreviewCart('Chrono Brass Desk Lamp', 128)">
+                  + Quick Add
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider-dotted" />
+
+    <!-- 4. FEATURED CATEGORIES SECTION -->
+    <section id="categories" class="section-band" aria-labelledby="categories-heading">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <span class="section-eyebrow">01 // STOREFRONT ARCHITECTURE</span>
+            <h2 id="categories-heading" class="heading-section">BROWSE BY DEPARTMENT</h2>
+          </div>
+          <a href="#catalog" class="btn btn-ghost">View Full Catalog (24 Items)</a>
+        </div>
+
+        <div class="category-grid">
+          <a href="#catalog" class="category-card" onclick="filterCatalogByCategory('Audio & Desk')">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="category-num">DEPT // 01</span>
+              <span class="badge badge-spice">8 ITEMS</span>
+            </div>
+            <div class="category-bottom">
+              <div>
+                <h3 class="heading-card">AUDIO &amp; DESK CRAFT</h3>
+                <p style="font-size:13px; color:var(--color-warm-sand); margin-top:4px;">Task lighting, tactile keyboards &amp; studio monitors</p>
+              </div>
+              <span class="btn-icon" aria-hidden="true">→</span>
+            </div>
+          </a>
+
+          <a href="#catalog" class="category-card" onclick="filterCatalogByCategory('Everyday Carry')">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="category-num">DEPT // 02</span>
+              <span class="badge badge-spice">6 ITEMS</span>
+            </div>
+            <div class="category-bottom">
+              <div>
+                <h3 class="heading-card">EVERYDAY CARRY</h3>
+                <p style="font-size:13px; color:var(--color-warm-sand); margin-top:4px;">Machined pens, field watches &amp; modular packs</p>
+              </div>
+              <span class="btn-icon" aria-hidden="true">→</span>
+            </div>
+          </a>
+
+          <a href="#catalog" class="category-card" onclick="filterCatalogByCategory('Home Objects')">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="category-num">DEPT // 03</span>
+              <span class="badge badge-spice">6 ITEMS</span>
+            </div>
+            <div class="category-bottom">
+              <div>
+                <h3 class="heading-card">HOME OBJECTS</h3>
+                <p style="font-size:13px; color:var(--color-warm-sand); margin-top:4px;">Pour-over kettles, ceramic vessels &amp; desk clocks</p>
+              </div>
+              <span class="btn-icon" aria-hidden="true">→</span>
+            </div>
+          </a>
+
+          <a href="#catalog" class="category-card" onclick="filterCatalogByCategory('Apparel & Goods')">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="category-num">DEPT // 04</span>
+              <span class="badge badge-spice">4 ITEMS</span>
+            </div>
+            <div class="category-bottom">
+              <div>
+                <h3 class="heading-card">APPAREL &amp; GOODS</h3>
+                <p style="font-size:13px; color:var(--color-warm-sand); margin-top:4px;">Waxed canvas totes, work jackets &amp; leather folios</p>
+              </div>
+              <span class="btn-icon" aria-hidden="true">→</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider-dotted" />
+
+    <!-- 5. SHOP / PRODUCT LISTING & CARDS SECTION -->
+    <section id="catalog" class="section-band" aria-labelledby="catalog-heading">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <span class="section-eyebrow">02 // CURATED CATALOG GRID (SAMPLE PREVIEW DATA)</span>
+            <h2 id="catalog-heading" class="heading-section">TRENDING &amp; BEST SELLERS</h2>
+          </div>
+          <span class="badge badge-charred" id="catalog-count-label">SHOWING 4 OF 4 SAMPLE PRODUCTS</span>
+        </div>
+
+        <!-- Semantic <search> Filter & Sort Toolbar -->
+        <search class="catalog-toolbar" aria-label="Catalog Category and Price Filters">
+          <div class="filter-pills" role="group" aria-label="Filter by Department">
+            <button type="button" class="btn btn-ghost" aria-pressed="true" data-cat="ALL" onclick="filterCatalogByCategory('ALL', this)">All Departments</button>
+            <button type="button" class="btn btn-ghost" aria-pressed="false" data-cat="Audio & Desk" onclick="filterCatalogByCategory('Audio & Desk', this)">Audio &amp; Desk</button>
+            <button type="button" class="btn btn-ghost" aria-pressed="false" data-cat="Everyday Carry" onclick="filterCatalogByCategory('Everyday Carry', this)">Everyday Carry</button>
+            <button type="button" class="btn btn-ghost" aria-pressed="false" data-cat="Home Objects" onclick="filterCatalogByCategory('Home Objects', this)">Home Objects</button>
+            <button type="button" class="btn btn-ghost" aria-pressed="false" data-cat="Apparel & Goods" onclick="filterCatalogByCategory('Apparel & Goods', this)">Apparel &amp; Goods</button>
+          </div>
+
+          <div class="toolbar-controls">
+            <span class="badge badge-spice">PRICE: ALL</span>
+            <span class="badge badge-spice">SORT: FEATURED ↓</span>
+          </div>
+        </search>
+
+        <div class="product-grid" id="product-grid">
+          <!-- Card 1 -->
+          <article class="product-card" data-category="Audio & Desk" data-title="Chrono Brass Desk Lamp">
+            <div>
+              <div class="product-stage">
+                <div class="product-badges">
+                  <span class="badge badge-gold">BESTSELLER</span>
+                  <span class="badge badge-alert">-15% SALE</span>
+                </div>
+                <svg width="130" height="120" viewBox="0 0 240 220" fill="none" aria-hidden="true">
+                  <rect x="86" y="176" width="68" height="18" rx="4" fill="#823513" stroke="#FAAE33" stroke-width="2.5" />
+                  <line x1="120" y1="176" x2="120" y2="68" stroke="#FAAE33" stroke-width="5" />
+                  <path d="M56 72 L184 72 L162 34 L78 34 Z" fill="#9F531B" stroke="#FAAE33" stroke-width="2.5" />
+                </svg>
+              </div>
+              <div class="product-meta">Audio &amp; Desk • In Stock (14)</div>
+              <h3 class="heading-card">CHRONO BRASS DESK LAMP</h3>
+              <p class="product-desc-short">Stepless warm-dimmable LED task lamp with solid brushed brass base.</p>
+            </div>
+            <div class="product-footer">
+              <div>
+                <span class="product-price">$128.00</span>
+                <span class="price-compare">$150</span>
+              </div>
+              <button type="button" class="btn btn-primary" style="padding: 8px 16px;" onclick="addToPreviewCart('Chrono Brass Desk Lamp', 128)">
+                Add to Cart
+              </button>
+            </div>
+          </article>
+
+          <!-- Card 2 -->
+          <article class="product-card" data-category="Everyday Carry" data-title="Tactile Field Chronograph">
+            <div>
+              <div class="product-stage">
+                <div class="product-badges">
+                  <span class="badge badge-spice">EDITION 02</span>
+                  <span class="badge badge-alert">LOW STOCK (2 LEFT)</span>
+                </div>
+                <svg width="130" height="120" viewBox="0 0 160 160" fill="none" aria-hidden="true">
+                  <rect x="64" y="14" width="32" height="132" rx="6" fill="#402011" stroke="#FAAE33" stroke-width="2" />
+                  <circle cx="80" cy="80" r="42" fill="#281006" stroke="#FAAE33" stroke-width="3" />
+                  <circle cx="80" cy="80" r="34" stroke="#9F531B" stroke-width="1.5" stroke-dasharray="4 4" />
+                  <line x1="80" y1="80" x2="80" y2="54" stroke="#FAAE33" stroke-width="2.5" stroke-linecap="round" />
+                  <line x1="80" y1="80" x2="102" y2="80" stroke="#FAAE33" stroke-width="2" stroke-linecap="round" />
+                </svg>
+              </div>
+              <div class="product-meta">Everyday Carry • Low Stock (2)</div>
+              <h3 class="heading-card">TACTILE FIELD CHRONOGRAPH</h3>
+              <p class="product-desc-short">Sandblasted titanium case, sapphire crystal, and vegetable-tanned strap.</p>
+            </div>
+            <div class="product-footer">
+              <div>
+                <span class="product-price">$195.00</span>
+              </div>
+              <button type="button" class="btn btn-primary" style="padding: 8px 16px;" onclick="addToPreviewCart('Tactile Field Chronograph', 195)">
+                Add to Cart
+              </button>
+            </div>
+          </article>
+
+          <!-- Card 3 -->
+          <article class="product-card" data-category="Home Objects" data-title="Copper Gooseneck Kettle">
+            <div>
+              <div class="product-stage">
+                <div class="product-badges">
+                  <span class="badge badge-gold">NEW ARRIVAL</span>
+                </div>
+                <svg width="130" height="120" viewBox="0 0 180 150" fill="none" aria-hidden="true">
+                  <path d="M52 122 L128 122 L116 54 L64 54 Z" fill="#823513" stroke="#FAAE33" stroke-width="2.5" />
+                  <path d="M72 54 L108 54 L102 42 L78 42 Z" fill="#402011" stroke="#FAAE33" stroke-width="2" />
+                  <path d="M122 104 C146 100 148 56 164 50" stroke="#FAAE33" stroke-width="3" stroke-linecap="round" />
+                  <path d="M58 64 C34 64 34 108 54 110" stroke="#FAAE33" stroke-width="3" stroke-linecap="round" />
+                </svg>
+              </div>
+              <div class="product-meta">Home Objects • In Stock (9)</div>
+              <h3 class="heading-card">COPPER GOOSENECK KETTLE</h3>
+              <p class="product-desc-short">Precision pour-over spout with internal thermometer and walnut handle.</p>
+            </div>
+            <div class="product-footer">
+              <div>
+                <span class="product-price">$84.00</span>
+              </div>
+              <button type="button" class="btn btn-primary" style="padding: 8px 16px;" onclick="addToPreviewCart('Copper Gooseneck Kettle', 84)">
+                Add to Cart
+              </button>
+            </div>
+          </article>
+
+          <!-- Card 4 -->
+          <article class="product-card" data-category="Apparel & Goods" data-title="Waxed Canvas Utility Tote">
+            <div>
+              <div class="product-stage">
+                <div class="product-badges">
+                  <span class="badge badge-spice">CRAFT SERIES</span>
+                </div>
+                <svg width="130" height="120" viewBox="0 0 160 160" fill="none" aria-hidden="true">
+                  <rect x="36" y="54" width="88" height="82" rx="5" fill="#823513" stroke="#FAAE33" stroke-width="2.5" />
+                  <path d="M58 54 V34 A22 22 0 0 1 102 34 V54" stroke="#FAAE33" stroke-width="3" />
+                  <line x1="36" y1="112" x2="124" y2="112" stroke="#FAAE33" stroke-width="1.5" stroke-dasharray="4 4" />
+                </svg>
+              </div>
+              <div class="product-meta">Apparel &amp; Goods • In Stock (18)</div>
+              <h3 class="heading-card">WAXED CANVAS UTILITY TOTE</h3>
+              <p class="product-desc-short">18oz water-repellent organic canvas with padded 16-inch laptop sleeve.</p>
+            </div>
+            <div class="product-footer">
+              <div>
+                <span class="product-price">$64.00</span>
+              </div>
+              <button type="button" class="btn btn-primary" style="padding: 8px 16px;" onclick="addToPreviewCart('Waxed Canvas Utility Tote', 64)">
+                Add to Cart
+              </button>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider-dotted" />
+
+    <!-- 6. EDITORIAL PROMOTIONAL BANNER -->
+    <section class="section-band" aria-labelledby="promo-heading">
+      <div class="container">
+        <div class="promo-banner">
+          <div>
+            <span class="badge badge-alert" style="margin-bottom: 14px;">LIMITED BATCH // ARCHIVE 04</span>
+            <h2 id="promo-heading" class="heading-xl">BUILT TO OUTLAST<br />FAST TRENDS</h2>
+            <p style="color: var(--color-parchment-cream); font-size: 15px; max-width: 54ch; margin-block: 18px 24px;">
+              Every object in our catalog is modular, repairable, and crafted from warm raw brass, anodized aluminum, and heavyweight canvas.
+            </p>
+            <a href="#pdp-preview" class="btn btn-primary">Explore Technical Specs</a>
+          </div>
+          <div style="background: var(--surface-spice-card); border: 1px solid var(--color-cardamom-brown); border-radius: 6px; padding: 24px;">
+            <div class="product-meta">DESIGN SYSTEM SURFACE CHECK</div>
+            <div class="heading-card" style="margin-top: 4px; color: var(--color-tiger-gold);">3-TIER WARM MONOCHROME DEPTH</div>
+            <p style="font-size: 13px; color: var(--color-warm-sand); margin-top: 8px;">
+              Level 0 Tandoor Canvas (<code>#823513</code>) → Level 1 Spice Card (<code>#402011</code>) → Level 2 Charred Core (<code>#281006</code>). Zero box-shadows; 100% colour-driven hierarchy.
+            </p>
+            <div style="display:flex; gap:8px; margin-top:16px; flex-wrap:wrap;">
+              <span class="badge badge-gold">#FAAE33 GOLD</span>
+              <span class="badge badge-spice">#823513 RUST</span>
+              <span class="badge badge-alert">#D1255C CHILI</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider-dotted" />
+
+    <!-- 7. PRODUCT DETAILS (PDP) BLUEPRINT PREVIEW -->
+    <section id="pdp-preview" class="section-band" aria-labelledby="pdp-heading">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <span class="section-eyebrow">03 // PRODUCT DETAILS PAGE (PDP) BLUEPRINT</span>
+            <h2 id="pdp-heading" class="heading-section">PRODUCT INSPECTION VIEW</h2>
+          </div>
+          <span class="badge badge-spice">ROUTE: /shop/[id]</span>
+        </div>
+
+        <div class="pdp-grid">
+          <!-- Left: Gallery -->
+          <div>
+            <div class="pdp-gallery-main">
+              <div class="showcase-top-tags">
+                <span class="badge badge-gold">STUDIO VIEW 01 / 04</span>
+                <span class="badge badge-alert">SAVE $22.00 (-15%)</span>
+              </div>
+              <svg width="240" height="210" viewBox="0 0 240 220" fill="none" aria-label="Chrono Brass Desk Lamp Gallery Image">
+                <ellipse cx="120" cy="196" rx="74" ry="10" fill="#402011" stroke="#FAAE33" stroke-width="1.5" />
+                <rect x="86" y="176" width="68" height="20" rx="4" fill="#823513" stroke="#FAAE33" stroke-width="2" />
+                <line x1="120" y1="176" x2="120" y2="68" stroke="#FAAE33" stroke-width="5" />
+                <circle cx="120" cy="68" r="8" fill="#281006" stroke="#FAAE33" stroke-width="2.5" />
+                <path d="M56 72 L184 72 L162 34 L78 34 Z" fill="#9F531B" stroke="#FAAE33" stroke-width="2" />
+              </svg>
+            </div>
+            <div class="pdp-thumbs" role="group" aria-label="Product Gallery Thumbnails">
+              <button type="button" class="pdp-thumb-btn" aria-current="true">01 // FRONT</button>
+              <button type="button" class="pdp-thumb-btn">02 // DIMMER</button>
+              <button type="button" class="pdp-thumb-btn">03 // BRASS BASE</button>
+              <button type="button" class="pdp-thumb-btn">04 // SCALE</button>
+            </div>
+          </div>
+
+          <!-- Right: Buy Box -->
+          <div class="pdp-buybox">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:10px;">
+              <span class="badge badge-spice">AUDIO &amp; DESK CRAFT</span>
+              <span class="badge badge-gold">● IN STOCK (14 AVAILABLE)</span>
+            </div>
+
+            <h3 class="heading-section" style="font-size: clamp(2rem, 3.5vw, 3.1rem); color: var(--color-parchment-cream);">
+              CHRONO BRASS DESK LAMP
+            </h3>
+
+            <div style="display:flex; align-items:baseline; gap:12px; margin-block: 14px;">
+              <span class="price-large">$128.00</span>
+              <span class="price-compare">$150.00</span>
+              <span class="badge badge-alert">-15% OFF</span>
+            </div>
+
+            <p style="font-size: 15px; color: var(--color-parchment-cream); line-height: 1.5;">
+              Machined from solid C36000 architectural brass with a rotary tactile dimmer (2700K warm candle to 4000K studio daylight). Designed for glare-free illumination across wide desk setups.
+            </p>
+
+            <div class="pdp-action-row">
+              <div class="qty-stepper" aria-label="Select Quantity">
+                <button type="button" class="qty-btn" onclick="stepPdpQty(-1)" aria-label="Decrease quantity">−</button>
+                <span class="qty-val" id="pdp-qty">1</span>
+                <button type="button" class="qty-btn" onclick="stepPdpQty(1)" aria-label="Increase quantity">+</button>
+              </div>
+
+              <button type="button" class="btn btn-primary" style="flex: 1;" onclick="addToPreviewCart('Chrono Brass Desk Lamp', 128)">
+                Add to Cart — $128.00
+              </button>
+            </div>
+
+            <!-- Exclusive Accordions via Native <details name="pdp-specs"> -->
+            <div class="specs-accordion">
+              <details name="pdp-specs" open>
+                <summary>
+                  <span>01 // Specifications &amp; Dimensions</span>
+                  <span>+</span>
+                </summary>
+                <div class="specs-body">
+                  <div class="specs-grid">
+                    <div><strong>Height:</strong> 420 mm (16.5 in)</div>
+                    <div><strong>Shade Diameter:</strong> 210 mm</div>
+                    <div><strong>Color Temp:</strong> 2700K – 4000K CRI 97+</div>
+                    <div><strong>Cord:</strong> 2m Braided Textile USB-C / AC</div>
+                  </div>
+                </div>
+              </details>
+
+              <details name="pdp-specs">
+                <summary>
+                  <span>02 // Materials &amp; Care</span>
+                  <span>+</span>
+                </summary>
+                <div class="specs-body">
+                  Unlacquered brushed brass base, spun aluminum shade with Ember Rust matte powder coat. Wipe clean with a dry microfiber cloth.
+                </div>
+              </details>
+
+              <details name="pdp-specs">
+                <summary>
+                  <span>03 // Shipping &amp; 30-Day Returns</span>
+                  <span>+</span>
+                </summary>
+                <div class="specs-body">
+                  Ships within 48 hours in molded recyclable pulp packaging. Free standard shipping on orders over $75.
+                </div>
+              </details>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider-dotted" />
+
+    <!-- 8. SHOPPING CART & MOBILE NAVIGATION BLUEPRINT SHOWCASE -->
+    <section id="cart-preview" class="section-band" aria-labelledby="cart-preview-heading">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <span class="section-eyebrow">04 // INTERACTIVE DRAWER &amp; MOBILE UX BLUEPRINTS</span>
+            <h2 id="cart-preview-heading" class="heading-section">SHOPPING CART &amp; MOBILE NAVIGATION</h2>
+          </div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button type="button" class="btn btn-primary" onclick="openDialog('cart-dialog')">Open Live Cart Modal</button>
+            <button type="button" class="btn btn-ghost" onclick="openDialog('mobile-nav-dialog')">Open Mobile Nav Modal</button>
+          </div>
+        </div>
+
+        <div class="cart-mobile-showcase">
+          <!-- Left: Shopping Cart Blueprint -->
+          <div class="preview-panel" aria-label="Shopping Cart State Preview">
+            <div>
+              <div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:14px; border-bottom:1px dotted var(--color-tiger-gold);">
+                <h3 class="heading-card" style="color:var(--color-tiger-gold);">YOUR SHOPPING CART (2 ITEMS)</h3>
+                <span class="badge badge-gold">UNLOCKED: FREE SHIPPING</span>
+              </div>
+
+              <div style="margin-block: 14px;">
+                <div style="font-size:12px; color:var(--color-warm-sand); display:flex; justify-content:space-between;">
+                  <span>Free Standard Shipping Threshold ($75.00)</span>
+                  <strong style="color:var(--color-tiger-gold);">100% Unlocked</strong>
+                </div>
+                <div class="shipping-bar-track">
+                  <div class="shipping-bar-fill"></div>
+                </div>
+              </div>
+
+              <!-- Cart Item 1 -->
+              <div class="cart-item-card">
+                <div class="cart-thumb">
+                  <svg width="40" height="40" viewBox="0 0 240 220" fill="none" aria-hidden="true">
+                    <rect x="86" y="176" width="68" height="18" rx="4" fill="#823513" stroke="#FAAE33" stroke-width="3" />
+                    <line x1="120" y1="176" x2="120" y2="68" stroke="#FAAE33" stroke-width="6" />
+                    <path d="M56 72 L184 72 L162 34 L78 34 Z" fill="#9F531B" stroke="#FAAE33" stroke-width="3" />
+                  </svg>
+                </div>
+                <div>
+                  <div class="product-meta">Audio &amp; Desk</div>
+                  <div style="font-weight:600; color:var(--color-parchment-cream);">Chrono Brass Desk Lamp</div>
+                  <div style="font-size:12px; color:var(--color-warm-sand); margin-top:2px;">Unit: $128.00 • Qty: 1</div>
+                </div>
+                <div style="text-align:right;">
+                  <div class="product-price">$128.00</div>
+                  <button type="button" class="btn-link" style="font-size:11px;">Remove</button>
+                </div>
+              </div>
+
+              <!-- Cart Item 2 -->
+              <div class="cart-item-card">
+                <div class="cart-thumb">
+                  <svg width="40" height="40" viewBox="0 0 160 160" fill="none" aria-hidden="true">
+                    <rect x="36" y="54" width="88" height="82" rx="5" fill="#823513" stroke="#FAAE33" stroke-width="3" />
+                    <path d="M58 54 V34 A22 22 0 0 1 102 34 V54" stroke="#FAAE33" stroke-width="4" />
+                  </svg>
+                </div>
+                <div>
+                  <div class="product-meta">Apparel &amp; Goods</div>
+                  <div style="font-weight:600; color:var(--color-parchment-cream);">Waxed Canvas Utility Tote</div>
+                  <div style="font-size:12px; color:var(--color-warm-sand); margin-top:2px;">Unit: $64.00 • Qty: 1</div>
+                </div>
+                <div style="text-align:right;">
+                  <div class="product-price">$64.00</div>
+                  <button type="button" class="btn-link" style="font-size:11px;">Remove</button>
+                </div>
+              </div>
+            </div>
+
+            <div style="padding-top:14px; border-top:1px dotted var(--color-tiger-gold); margin-top:12px;">
+              <div style="display:flex; justify-content:space-between; font-size:13px; color:var(--color-warm-sand); margin-bottom:6px;">
+                <span>Subtotal (2 items)</span>
+                <span style="font-variant-numeric:tabular-nums;">$192.00</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; font-size:13px; color:var(--color-warm-sand); margin-bottom:12px;">
+                <span>Estimated Shipping</span>
+                <span style="color:var(--color-tiger-gold); font-weight:600;">FREE</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:16px;">
+                <span class="heading-card">ORDER TOTAL</span>
+                <span class="price-large">$192.00</span>
+              </div>
+              <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                <a href="#catalog" class="btn btn-ghost">Continue Shopping</a>
+                <button type="button" class="btn btn-primary" onclick="openDialog('cart-dialog')">Proceed to Checkout</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Mobile Navigation Drawer Blueprint -->
+          <div class="preview-panel" aria-label="Mobile Navigation Drawer Specification Preview">
+            <div>
+              <div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:14px; border-bottom:1px dotted var(--color-tiger-gold);">
+                <span class="heading-card" style="color:var(--color-tiger-gold);">MOBILE DRAWER (390PX SPEC)</span>
+                <span class="badge badge-spice">&lt;dialog closedby="any"&gt;</span>
+              </div>
+
+              <div style="margin-block: 14px;">
+                <input type="search" class="input-pill" placeholder="Search products, categories..." aria-label="Mobile drawer search preview" readonly />
+              </div>
+
+              <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:18px;">
+                <a href="#catalog" class="btn btn-primary" style="justify-content:space-between; width:100%;">
+                  <span>01 // SHOP ALL PRODUCTS</span>
+                  <span>→</span>
+                </a>
+                <a href="#categories" class="btn btn-ghost" style="justify-content:space-between; width:100%;">
+                  <span>02 // DEPARTMENTS (4)</span>
+                  <span>→</span>
+                </a>
+                <a href="#pdp-preview" class="btn btn-ghost" style="justify-content:space-between; width:100%;">
+                  <span>03 // NEW ARRIVALS &amp; DEALS</span>
+                  <span>→</span>
+                </a>
+                <a href="#cart-preview" class="btn btn-ghost" style="justify-content:space-between; width:100%;">
+                  <span>04 // CUSTOMER ACCOUNT &amp; ORDERS</span>
+                  <span>→</span>
+                </a>
+              </div>
+            </div>
+
+            <div style="background:var(--surface-spice-card); border:1px solid var(--color-cardamom-brown); border-radius:6px; padding:14px;">
+              <div class="product-meta">TOUCH ERGONOMICS (WCAG 2.5.8)</div>
+              <p style="font-size:12px; color:var(--color-parchment-cream); margin-top:4px;">
+                All mobile pill controls enforce <code>min-block-size: 44px</code>, full-bleed stack geometry, automatic focus trapping, and light-dismiss backdrop support.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider-dotted" />
+
+    <!-- 9. TRUST GUARANTEES & NEWSLETTER -->
+    <section class="section-band" aria-label="Storefront Guarantees and Newsletter">
+      <div class="container">
+        <div class="trust-grid" style="margin-bottom: 56px;">
+          <div class="trust-card">
+            <span class="badge badge-gold">01 // DISPATCH</span>
+            <h3 class="heading-card" style="margin-top:10px;">48-HOUR TRACKED SHIPPING</h3>
+            <p style="font-size:13px; color:var(--color-warm-sand); margin-top:6px;">Protective plastic-free packaging with real-time order status updates.</p>
+          </div>
+          <div class="trust-card">
+            <span class="badge badge-gold">02 // GUARANTEE</span>
+            <h3 class="heading-card" style="margin-top:10px;">30-DAY EASY RETURNS</h3>
+            <p style="font-size:13px; color:var(--color-warm-sand); margin-top:6px;">Straightforward exchanges or full refunds within 30 days of delivery.</p>
+          </div>
+          <div class="trust-card">
+            <span class="badge badge-gold">03 // CRAFT</span>
+            <h3 class="heading-card" style="margin-top:10px;">VERIFIED MATERIALS</h3>
+            <p style="font-size:13px; color:var(--color-warm-sand); margin-top:6px;">Solid brass, anodized alloys, and heavy organic canvas tested for daily use.</p>
+          </div>
+          <div class="trust-card">
+            <span class="badge badge-gold">04 // ARCHITECTURE</span>
+            <h3 class="heading-card" style="margin-top:10px;">ACCOUNT ORDER HISTORY</h3>
+            <p style="font-size:13px; color:var(--color-warm-sand); margin-top:6px;">Planned JWT customer accounts with persisted MongoDB Atlas order records.</p>
+          </div>
+        </div>
+
+        <!-- Newsletter Capture Box -->
+        <div style="background:var(--surface-spice-card); border:1px solid var(--color-tiger-gold); border-radius:6px; padding:32px; display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap;">
+          <div>
+            <span class="section-eyebrow">05 // EDITION DISPATCH</span>
+            <h2 class="heading-section" style="font-size: clamp(1.8rem, 3.5vw, 3rem);">JOIN THE OBJECT DISPATCH</h2>
+            <p style="font-size:14px; color:var(--color-warm-sand); margin-top:4px;">Receive notifications on restocks and new catalog releases. Zero spam.</p>
+          </div>
+          <form onsubmit="event.preventDefault();" style="display:flex; gap:10px; flex-wrap:wrap; flex:1; max-width:460px;">
+            <input type="email" autocomplete="email" class="input-pill" placeholder="Enter your email address..." aria-label="Email address for newsletter" style="flex:1; min-width:220px;" required />
+            <button type="submit" class="btn btn-primary">Subscribe</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 10. COMPLETE SITE FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="brand-text">SIMPLE E-COMMERCE STORE</div>
+          <p style="font-size:13px; color:var(--color-warm-sand); margin-top:10px; max-width:38ch;">
+            CodeAlpha Full Stack Development Internship project by MD DANISH RAZA. Designed with the adapted Tiger Gold &amp; Ember Rust editorial design system.
+          </p>
+          <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:14px;">
+            <span class="badge badge-spice">NEXT.JS (PLANNED)</span>
+            <span class="badge badge-spice">EXPRESS.JS (PLANNED)</span>
+            <span class="badge badge-spice">MONGODB ATLAS (PLANNED)</span>
+          </div>
+        </div>
+
+        <div>
+          <div class="product-meta" style="color:var(--color-tiger-gold);">SHOP DEPARTMENTS</div>
+          <ul class="footer-links">
+            <li><a href="#catalog">Audio &amp; Desk Craft</a></li>
+            <li><a href="#catalog">Everyday Carry</a></li>
+            <li><a href="#catalog">Home Objects</a></li>
+            <li><a href="#catalog">Apparel &amp; Goods</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="product-meta" style="color:var(--color-tiger-gold);">CUSTOMER FLOWS</div>
+          <ul class="footer-links">
+            <li><a href="#pdp-preview">Product Details Blueprint</a></li>
+            <li><a href="#cart-preview">Shopping Cart &amp; Checkout</a></li>
+            <li><a href="#cart-preview">Customer Login &amp; Register</a></li>
+            <li><a href="#cart-preview">Order History &amp; Tracking</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="product-meta" style="color:var(--color-tiger-gold);">PHASE 4A DELIVERABLES</div>
+          <ul class="footer-links">
+            <li><a href="../design-system.md">docs/design-system.md</a></li>
+            <li><a href="../frontend-ux-blueprint.md">docs/frontend-ux-blueprint.md</a></li>
+            <li><a href="../frontend-component-architecture.md">docs/frontend-component-architecture.md</a></li>
+            <li><a href="../responsive-design-spec.md">docs/responsive-design-spec.md</a></li>
+            <li><a href="../design-reference-mapping.md">docs/design-reference-mapping.md</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <hr class="divider-dotted" />
+
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; padding-top:24px; font-size:12px; color:var(--color-warm-sand);">
+        <span>© 2026 MD DANISH RAZA (@mddanish-31) • MIT License</span>
+        <span>Phase 4A UI/UX Blueprint &amp; Token Verification Prototype (Sample Data Only)</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- INTERACTIVE NATIVE <dialog closedby="any"> SHOPPING CART DRAWER -->
+  <dialog id="cart-dialog" class="drawer-dialog" closedby="any" aria-labelledby="cart-dialog-title">
+    <div style="display:flex; flex-direction:column; height:100%; justify-content:space-between;">
+      <div>
+        <div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:16px; border-bottom:1px dotted var(--color-tiger-gold);">
+          <h2 id="cart-dialog-title" class="heading-card" style="color:var(--color-tiger-gold);">SHOPPING CART DRAWER</h2>
+          <button type="button" class="btn-icon" onclick="closeDialog('cart-dialog')" aria-label="Close shopping cart drawer">✕</button>
+        </div>
+
+        <p style="font-size:12px; color:var(--color-warm-sand); margin-block:12px;">
+          Interactive preview drawer using native <code>&lt;dialog closedby="any"&gt;</code>. Press <code>Esc</code> or click outside to dismiss.
+        </p>
+
+        <div id="drawer-cart-items">
+          <div class="cart-item-card">
+            <div class="cart-thumb">
+              <span style="color:var(--color-tiger-gold); font-weight:700;">01</span>
+            </div>
+            <div>
+              <div style="font-weight:600;">Chrono Brass Desk Lamp</div>
+              <div style="font-size:12px; color:var(--color-warm-sand);">Qty: 1 • $128.00</div>
+            </div>
+            <div class="product-price">$128.00</div>
+          </div>
+
+          <div class="cart-item-card">
+            <div class="cart-thumb">
+              <span style="color:var(--color-tiger-gold); font-weight:700;">02</span>
+            </div>
+            <div>
+              <div style="font-weight:600;">Waxed Canvas Utility Tote</div>
+              <div style="font-size:12px; color:var(--color-warm-sand);">Qty: 1 • $64.00</div>
+            </div>
+            <div class="product-price">$64.00</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding-top:16px; border-top:1px dotted var(--color-tiger-gold);">
+        <div style="display:flex; justify-content:space-between; margin-bottom:14px;">
+          <span class="heading-card">ESTIMATED TOTAL</span>
+          <span class="price-large" id="drawer-cart-total">$192.00</span>
+        </div>
+        <button type="button" class="btn btn-primary" style="width:100%; margin-bottom:8px;" onclick="closeDialog('cart-dialog')">
+          Proceed to Checkout Flow
+        </button>
+        <button type="button" class="btn btn-ghost" style="width:100%;" onclick="closeDialog('cart-dialog')">
+          Continue Shopping
+        </button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- INTERACTIVE NATIVE <dialog closedby="any"> MOBILE NAVIGATION DRAWER -->
+  <dialog id="mobile-nav-dialog" class="drawer-dialog" closedby="any" aria-labelledby="mobile-nav-title">
+    <div style="display:flex; flex-direction:column; gap:16px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:14px; border-bottom:1px dotted var(--color-tiger-gold);">
+        <h2 id="mobile-nav-title" class="heading-card" style="color:var(--color-tiger-gold);">STOREFRONT MENU</h2>
+        <button type="button" class="btn-icon" onclick="closeDialog('mobile-nav-dialog')" aria-label="Close mobile menu">✕</button>
+      </div>
+
+      <search>
+        <input type="search" class="input-pill" placeholder="Search products..." aria-label="Mobile menu search" />
+      </search>
+
+      <nav aria-label="Mobile Navigation Links" style="display:flex; flex-direction:column; gap:10px;">
+        <a href="#catalog" class="btn btn-primary" onclick="closeDialog('mobile-nav-dialog')">Shop All Products</a>
+        <a href="#categories" class="btn btn-ghost" onclick="closeDialog('mobile-nav-dialog')">Browse Departments</a>
+        <a href="#pdp-preview" class="btn btn-ghost" onclick="closeDialog('mobile-nav-dialog')">Product Detail View</a>
+        <a href="#cart-preview" class="btn btn-ghost" onclick="closeDialog('mobile-nav-dialog')">Shopping Cart (2)</a>
+      </nav>
+    </div>
+  </dialog>
+
+  <script>
+    let cartCount = 2;
+    let cartTotal = 192;
+    let pdpQty = 1;
+
+    function openDialog(id) {
+      const dlg = document.getElementById(id);
+      if (dlg && typeof dlg.showModal === 'function') {
+        dlg.showModal();
+      }
+    }
+
+    function closeDialog(id) {
+      const dlg = document.getElementById(id);
+      if (dlg && typeof dlg.close === 'function') {
+        dlg.close();
+      }
+    }
+
+    // Fallback for browsers that do not yet support closedby="any" on <dialog>
+    document.querySelectorAll('dialog[closedby="any"]').forEach((dlg) => {
+      if (!('closedBy' in dlg)) {
+        dlg.addEventListener('click', (event) => {
+          const rect = dlg.getBoundingClientRect();
+          const clickedInDialog =
+            rect.top <= event.clientY &&
+            event.clientY <= rect.top + rect.height &&
+            rect.left <= event.clientX &&
+            event.clientX <= rect.left + rect.width;
+          if (!clickedInDialog) {
+            dlg.close();
+          }
+        });
+      }
+    });
+
+    function stepPdpQty(delta) {
+      pdpQty = Math.max(1, Math.min(10, pdpQty + delta));
+      document.getElementById('pdp-qty').textContent = String(pdpQty);
+    }
+
+    function addToPreviewCart(title, price) {
+      cartCount += 1;
+      cartTotal += price;
+      document.getElementById('header-cart-count').textContent = String(cartCount);
+      document.getElementById('drawer-cart-total').textContent = '$' + cartTotal.toFixed(2);
+      openDialog('cart-dialog');
+    }
+
+    function filterCatalogByCategory(cat, btnEl) {
+      if (btnEl) {
+        document.querySelectorAll('.filter-pills .btn').forEach((b) => b.setAttribute('aria-pressed', 'false'));
+        btnEl.setAttribute('aria-pressed', 'true');
+      }
+      const cards = document.querySelectorAll('#product-grid .product-card');
+      let visible = 0;
+      cards.forEach((card) => {
+        const match = cat === 'ALL' || card.dataset.category === cat;
+        card.style.display = match ? 'flex' : 'none';
+        if (match) visible++;
+      });
+      document.getElementById('catalog-count-label').textContent =
+        `SHOWING ${visible} OF ${cards.length} SAMPLE PRODUCTS`;
+    }
+
+    function filterCatalogByQuery(query) {
+      const q = (query || '').trim().toLowerCase();
+      const cards = document.querySelectorAll('#product-grid .product-card');
+      let visible = 0;
+      cards.forEach((card) => {
+        const text = (card.dataset.title + ' ' + card.dataset.category).toLowerCase();
+        const match = !q || text.includes(q);
+        card.style.display = match ? 'flex' : 'none';
+        if (match) visible++;
+      });
+      document.getElementById('catalog-count-label').textContent =
+        `SHOWING ${visible} OF ${cards.length} SAMPLE PRODUCTS`;
+    }
+  </script>
+</body>
+</html>
