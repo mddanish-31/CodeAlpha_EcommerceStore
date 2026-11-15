@@ -1,13 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 360" width="100%" role="img" aria-labelledby="banner-title banner-desc">
   <title id="banner-title">Simple E-commerce Store — CodeAlpha Full Stack Internship</title>
-  <desc id="banner-desc">Solid deep plum hero banner with warm taupe surfaces, cream typography, and muted champagne-gold accents for Simple E-commerce Store, showcasing planned Next.js, Node.js, and MongoDB architecture.</desc>
+  <desc id="banner-desc">Solid eucalyptus-green hero banner with aubergine panels, limestone surfaces, and warm champagne-gold accents for Simple E-commerce Store, showcasing planned Next.js, Node.js, and MongoDB architecture.</desc>
 
-  <!-- Solid deep plum background -->
-  <rect width="1200" height="360" rx="14" fill="#39181A"/>
-  <rect x="1" y="1" width="1198" height="358" rx="13" fill="none" stroke="#604044" stroke-width="2"/>
+  <!-- Solid deep eucalyptus background -->
+  <rect width="1200" height="360" rx="14" fill="#46513F"/>
+  <rect x="1" y="1" width="1198" height="358" rx="13" fill="none" stroke="#78806A" stroke-width="2"/>
 
   <!-- Subtle architectural background grid on right -->
-  <g stroke="#4A292C" stroke-width="1">
+  <g stroke="#59634F" stroke-width="1">
     <line x1="680" y1="24" x2="680" y2="336"/>
     <line x1="795" y1="24" x2="795" y2="336"/>
     <line x1="910" y1="24" x2="910" y2="336"/>
@@ -22,107 +22,107 @@
   <!-- Left Column: Brand & Project Identity -->
   <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
     <!-- Top eyebrow pill with gentle status pulse -->
-    <rect x="56" y="48" width="352" height="32" rx="16" fill="#4A2529" stroke="#765A4A" stroke-width="1.2"/>
-    <circle cx="78" cy="64" r="7" fill="#B89A61" opacity="0.3">
+    <rect x="56" y="48" width="352" height="32" rx="16" fill="#303B30" stroke="#9A896B" stroke-width="1.2"/>
+    <circle cx="78" cy="64" r="7" fill="#C6A66C" opacity="0.3">
       <animate attributeName="r" values="4;9;4" dur="2.8s" repeatCount="indefinite"/>
       <animate attributeName="opacity" values="0.55;0.1;0.55" dur="2.8s" repeatCount="indefinite"/>
     </circle>
-    <circle cx="78" cy="64" r="4" fill="#E2C58A"/>
-    <text x="94" y="68" font-size="11.5" font-weight="700" letter-spacing="1.4" fill="#E2C58A">CODEALPHA INTERNSHIP</text>
-    <text x="298" y="68" font-size="10.5" font-weight="600" letter-spacing="1" fill="#B5A58F">•  PLANNED</text>
+    <circle cx="78" cy="64" r="4" fill="#E2C98F"/>
+    <text x="94" y="68" font-size="11.5" font-weight="700" letter-spacing="1.4" fill="#E2C98F">CODEALPHA INTERNSHIP</text>
+    <text x="298" y="68" font-size="10.5" font-weight="600" letter-spacing="1" fill="#C8BDA7">•  PLANNED</text>
 
     <!-- Main Title -->
-    <text x="56" y="136" font-size="34" font-weight="800" letter-spacing="0.8" fill="#F3E9D8">SIMPLE E-COMMERCE STORE</text>
+    <text x="56" y="136" font-size="34" font-weight="800" letter-spacing="0.8" fill="#F1E7D4">SIMPLE E-COMMERCE STORE</text>
 
     <!-- Subtitle -->
-    <text x="56" y="176" font-size="20" font-weight="400" fill="#D5C7B3">A Full Stack Shopping Experience</text>
+    <text x="56" y="176" font-size="20" font-weight="400" fill="#D9CEB9">A Full Stack Shopping Experience</text>
 
     <!-- Subtle animated accent divider -->
-    <rect x="56" y="206" width="480" height="3" rx="1.5" fill="#634B43"/>
-    <rect x="56" y="206" width="110" height="3" rx="1.5" fill="#D5B77C">
+    <rect x="56" y="206" width="480" height="3" rx="1.5" fill="#68715B"/>
+    <rect x="56" y="206" width="110" height="3" rx="1.5" fill="#D6B878">
       <animate attributeName="x" values="56;426;56" dur="7s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.2 1;0.4 0 0.2 1"/>
     </rect>
-    <rect x="56" y="206" width="36" height="3" rx="1.5" fill="#E2C58A"/>
+    <rect x="56" y="206" width="36" height="3" rx="1.5" fill="#E2C98F"/>
 
     <!-- Supporting Technology Label Pill -->
-    <rect x="56" y="238" width="340" height="38" rx="8" fill="#6F5D4D" stroke="#765A4A" stroke-width="1.2"/>
-    <text x="74" y="262" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="13.5" font-weight="600" letter-spacing="1.2" fill="#D5B77C">NEXT.JS  •  NODE.JS  •  MONGODB</text>
+    <rect x="56" y="238" width="340" height="38" rx="8" fill="#321426" stroke="#9A896B" stroke-width="1.2"/>
+    <text x="74" y="262" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="13.5" font-weight="600" letter-spacing="1.2" fill="#D6B878">NEXT.JS  •  NODE.JS  •  MONGODB</text>
 
-    <text x="56" y="306" font-size="12.5" font-weight="500" fill="#B5A58F">Decoupled TypeScript Storefront  |  Express REST API  |  Mongoose ODM</text>
+    <text x="56" y="306" font-size="12.5" font-weight="500" fill="#C8BDA7">Decoupled TypeScript Storefront  |  Express REST API  |  Mongoose ODM</text>
   </g>
 
   <!-- Right Column: Futuristic E-Commerce Card & Cart Showcase -->
   <g>
     <!-- Container panel -->
-    <rect x="676" y="38" width="468" height="284" rx="14" fill="#6F5D4D" stroke="#765A4A" stroke-width="1.5"/>
+    <rect x="676" y="38" width="468" height="284" rx="14" fill="#321426" stroke="#9A896B" stroke-width="1.5"/>
 
     <!-- Top mini window bar -->
-    <circle cx="700" cy="58" r="4.5" fill="#9B8873"/>
-    <circle cx="716" cy="58" r="4.5" fill="#9B8873"/>
-    <circle cx="732" cy="58" r="4.5" fill="#B89A61"/>
-    <rect x="756" y="52" width="170" height="12" rx="6" fill="#634B43"/>
-    <rect x="1038" y="50" width="84" height="16" rx="8" fill="#806A55" stroke="#D5B77C" stroke-width="1"/>
-    <text x="1080" y="61" text-anchor="middle" font-family="ui-monospace, monospace" font-size="9" font-weight="700" fill="#D5B77C">STOREFRONT</text>
+    <circle cx="700" cy="58" r="4.5" fill="#69735E"/>
+    <circle cx="716" cy="58" r="4.5" fill="#69735E"/>
+    <circle cx="732" cy="58" r="4.5" fill="#C6A66C"/>
+    <rect x="756" y="52" width="170" height="12" rx="6" fill="#68715B"/>
+    <rect x="1038" y="50" width="84" height="16" rx="8" fill="#493044" stroke="#D6B878" stroke-width="1"/>
+    <text x="1080" y="61" text-anchor="middle" font-family="ui-monospace, monospace" font-size="9" font-weight="700" fill="#D6B878">STOREFRONT</text>
 
     <!-- Product Card 1 -->
     <g>
       <animateTransform attributeName="transform" type="translate" values="0 0;0 0;0 -5;0 0" keyTimes="0;0.15;0.5;1" dur="6s" repeatCount="indefinite"/>
       <animate attributeName="opacity" values="1;1;0.78;1" keyTimes="0;0.15;0.5;1" dur="6s" repeatCount="indefinite"/>
-      <rect x="698" y="84" width="132" height="156" rx="10" fill="#806F5B" stroke="#9C886F" stroke-width="1.2"/>
-      <rect x="710" y="96" width="108" height="68" rx="6" fill="#4A3330" stroke="#765A4A" stroke-width="1"/>
+      <rect x="698" y="84" width="132" height="156" rx="10" fill="#5A684F" stroke="#7B8066" stroke-width="1.2"/>
+      <rect x="710" y="96" width="108" height="68" rx="6" fill="#27352B" stroke="#9A896B" stroke-width="1"/>
       <!-- Minimal geometric product icon -->
-      <rect x="748" y="114" width="32" height="32" rx="6" fill="none" stroke="#D5B77C" stroke-width="2"/>
-      <circle cx="764" cy="130" r="5" fill="#E2C58A"/>
-      <rect x="710" y="176" width="78" height="9" rx="4.5" fill="#F3E9D8"/>
-      <rect x="710" y="192" width="52" height="7" rx="3.5" fill="#B5A58F"/>
-      <rect x="710" y="212" width="48" height="16" rx="4" fill="#594139"/>
-      <text x="734" y="223" text-anchor="middle" font-family="ui-monospace, monospace" font-size="9.5" font-weight="700" fill="#E2C58A">CATALOG</text>
+      <rect x="748" y="114" width="32" height="32" rx="6" fill="none" stroke="#D6B878" stroke-width="2"/>
+      <circle cx="764" cy="130" r="5" fill="#E2C98F"/>
+      <rect x="710" y="176" width="78" height="9" rx="4.5" fill="#F1E7D4"/>
+      <rect x="710" y="192" width="52" height="7" rx="3.5" fill="#C8BDA7"/>
+      <rect x="710" y="212" width="48" height="16" rx="4" fill="#564233"/>
+      <text x="734" y="223" text-anchor="middle" font-family="ui-monospace, monospace" font-size="9.5" font-weight="700" fill="#E2C98F">CATALOG</text>
     </g>
 
     <!-- Product Card 2 (featured center card) -->
     <g>
       <animateTransform attributeName="transform" type="translate" values="0 0;0 -5;0 0;0 0" keyTimes="0;0.35;0.7;1" dur="6s" repeatCount="indefinite"/>
       <animate attributeName="opacity" values="1;0.82;1;1" keyTimes="0;0.35;0.7;1" dur="6s" repeatCount="indefinite"/>
-      <rect x="844" y="84" width="132" height="156" rx="10" fill="#8C765F" stroke="#D5B77C" stroke-width="1.5"/>
-      <rect x="856" y="96" width="108" height="68" rx="6" fill="#4A3330" stroke="#B89A61" stroke-width="1"/>
-      <polygon points="910,112 928,144 892,144" fill="none" stroke="#E2C58A" stroke-width="2" stroke-linejoin="round"/>
-      <circle cx="910" cy="133" r="4" fill="#D5B77C"/>
-      <rect x="856" y="176" width="88" height="9" rx="4.5" fill="#F3E9D8"/>
-      <rect x="856" y="192" width="60" height="7" rx="3.5" fill="#D5C7B3"/>
-      <rect x="856" y="212" width="56" height="16" rx="4" fill="#735A43"/>
-      <text x="884" y="223" text-anchor="middle" font-family="ui-monospace, monospace" font-size="9.5" font-weight="700" fill="#F0D9A7">SEARCH</text>
+      <rect x="844" y="84" width="132" height="156" rx="10" fill="#493044" stroke="#D6B878" stroke-width="1.5"/>
+      <rect x="856" y="96" width="108" height="68" rx="6" fill="#27352B" stroke="#C6A66C" stroke-width="1"/>
+      <polygon points="910,112 928,144 892,144" fill="none" stroke="#E2C98F" stroke-width="2" stroke-linejoin="round"/>
+      <circle cx="910" cy="133" r="4" fill="#D6B878"/>
+      <rect x="856" y="176" width="88" height="9" rx="4.5" fill="#F1E7D4"/>
+      <rect x="856" y="192" width="60" height="7" rx="3.5" fill="#D9CEB9"/>
+      <rect x="856" y="212" width="56" height="16" rx="4" fill="#A18A60"/>
+      <text x="884" y="223" text-anchor="middle" font-family="ui-monospace, monospace" font-size="9.5" font-weight="700" fill="#F0DDB5">SEARCH</text>
     </g>
 
     <!-- Product Card 3 -->
     <g>
       <animateTransform attributeName="transform" type="translate" values="0 -4;0 0;0 0;0 -4" keyTimes="0;0.3;0.75;1" dur="6s" repeatCount="indefinite"/>
       <animate attributeName="opacity" values="1;0.85;1;1" keyTimes="0;0.45;0.8;1" dur="6s" repeatCount="indefinite"/>
-      <rect x="990" y="84" width="132" height="156" rx="10" fill="#806F5B" stroke="#9C886F" stroke-width="1.2"/>
-      <rect x="1002" y="96" width="108" height="68" rx="6" fill="#4A3330" stroke="#765A4A" stroke-width="1"/>
-      <circle cx="1056" cy="130" r="15" fill="none" stroke="#E2C58A" stroke-width="2"/>
-      <path d="M1049 130 l5 5 l10 -10" fill="none" stroke="#D5B77C" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-      <rect x="1002" y="176" width="82" height="9" rx="4.5" fill="#F3E9D8"/>
-      <rect x="1002" y="192" width="54" height="7" rx="3.5" fill="#B5A58F"/>
-      <rect x="1002" y="212" width="58" height="16" rx="4" fill="#594139"/>
-      <text x="1031" y="223" text-anchor="middle" font-family="ui-monospace, monospace" font-size="9.5" font-weight="700" fill="#E2C58A">ORDERS</text>
+      <rect x="990" y="84" width="132" height="156" rx="10" fill="#5A684F" stroke="#7B8066" stroke-width="1.2"/>
+      <rect x="1002" y="96" width="108" height="68" rx="6" fill="#27352B" stroke="#9A896B" stroke-width="1"/>
+      <circle cx="1056" cy="130" r="15" fill="none" stroke="#E2C98F" stroke-width="2"/>
+      <path d="M1049 130 l5 5 l10 -10" fill="none" stroke="#D6B878" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="1002" y="176" width="82" height="9" rx="4.5" fill="#F1E7D4"/>
+      <rect x="1002" y="192" width="54" height="7" rx="3.5" fill="#C8BDA7"/>
+      <rect x="1002" y="212" width="58" height="16" rx="4" fill="#564233"/>
+      <text x="1031" y="223" text-anchor="middle" font-family="ui-monospace, monospace" font-size="9.5" font-weight="700" fill="#E2C98F">ORDERS</text>
     </g>
 
     <!-- Bottom Cart Motion Track -->
-    <rect x="698" y="260" width="424" height="44" rx="10" fill="#5B463C" stroke="#765A4A" stroke-width="1.2"/>
-    <line x1="726" y1="282" x2="1028" y2="282" stroke="#765A4A" stroke-width="2" stroke-dasharray="6 6"/>
-    <circle cx="726" cy="282" r="4" fill="#D5B77C"/>
-    <circle cx="1028" cy="282" r="4" fill="#E2C58A"/>
+    <rect x="698" y="260" width="424" height="44" rx="10" fill="#2C1B2A" stroke="#9A896B" stroke-width="1.2"/>
+    <line x1="726" y1="282" x2="1028" y2="282" stroke="#9A896B" stroke-width="2" stroke-dasharray="6 6"/>
+    <circle cx="726" cy="282" r="4" fill="#D6B878"/>
+    <circle cx="1028" cy="282" r="4" fill="#E2C98F"/>
 
     <!-- Animated Shopping Cart moving smoothly along track -->
     <g>
       <animateTransform attributeName="transform" type="translate" values="0 0;246 0;0 0" dur="8s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/>
-      <rect x="716" y="267" width="38" height="30" rx="7" fill="#8A745B" stroke="#D5B77C" stroke-width="1.3"/>
-      <path d="M723 274 h4 l3 11 h12 l2 -8 h-13" fill="none" stroke="#F3E9D8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-      <circle cx="731" cy="289" r="1.8" fill="#E2C58A"/>
-      <circle cx="741" cy="289" r="1.8" fill="#E2C58A"/>
+      <rect x="716" y="267" width="38" height="30" rx="7" fill="#493044" stroke="#D6B878" stroke-width="1.3"/>
+      <path d="M723 274 h4 l3 11 h12 l2 -8 h-13" fill="none" stroke="#F1E7D4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="731" cy="289" r="1.8" fill="#E2C98F"/>
+      <circle cx="741" cy="289" r="1.8" fill="#E2C98F"/>
     </g>
 
     <!-- Track label -->
-    <text x="1074" y="286" text-anchor="middle" font-family="ui-monospace, monospace" font-size="10" font-weight="700" fill="#B5A58F">CART FLOW</text>
+    <text x="1074" y="286" text-anchor="middle" font-family="ui-monospace, monospace" font-size="10" font-weight="700" fill="#C8BDA7">CART FLOW</text>
   </g>
 </svg>
