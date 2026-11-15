@@ -1,5 +1,9 @@
-import React from 'react';
-
 export function DottedDivider({ className = '' }: { className?: string }) {
-  return <hr className={`divider-dotted ${className}`} />;
+  return (
+    <div
+      className={`hairline-rule ${className}`}
+      role="separator"
+      aria-hidden="true"
+    />
+  );
 }

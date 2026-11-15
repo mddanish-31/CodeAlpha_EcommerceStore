@@ -1,17 +1,21 @@
-import React from 'react';
-import { PillBadge } from '@/components/ui/PillBadge';
-
 export function AnnouncementBar() {
   return (
-    <div
-      role="region"
-      aria-label="Storefront Status Announcement"
-      className="bg-charred-clove border-b border-dotted border-tiger-gold px-4 py-2 text-center text-[11px] font-semibold tracking-wider uppercase text-tiger-gold flex items-center justify-center gap-3 flex-wrap"
-    >
-      <PillBadge tone="gold">CODEALPHA INTERNSHIP</PillBadge>
-      <span>
-        SIMPLE E-COMMERCE STORE • FREE STANDARD SHIPPING ON ORDERS OVER $75 • SAMPLE DEMO CATALOG
-      </span>
+    <div className="bg-pure-white border-b border-faint-border min-h-[44px] py-2 px-4 flex items-center justify-center">
+      <div className="store-container flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-center text-xs tracking-[-0.01em] text-slate-ink">
+        <span className="inline-flex items-center gap-2 font-medium text-ink-black">
+          <span
+            className="w-2 h-2 rounded-pill bg-shop-violet shrink-0"
+            aria-hidden="true"
+          />
+          <span>Free shipping on orders over $75</span>
+        </span>
+        <span className="hidden sm:inline text-muted-gray" aria-hidden="true">
+          ·
+        </span>
+        <span className="text-slate-ink">
+          CodeAlpha Storefront — Static Demo Catalog &amp; Browser-Saved Cart
+        </span>
+      </div>
     </div>
   );
 }

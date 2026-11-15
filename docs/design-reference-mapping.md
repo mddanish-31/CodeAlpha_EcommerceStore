@@ -1,46 +1,23 @@
-# Design Reference Mapping — `DESIGN.md` to Simple E-commerce Store
+# Design Reference Mapping — Phase 4C/4D Active Architecture
 
-**Project:** Simple E-commerce Store (`CodeAlpha_EcommerceStore`)  
-**Reference Source:** `DESIGN.md` (*Hungry Tiger — Style Reference*)  
-**Purpose:** Document how every rule in the supplied style reference is preserved, adapted for e-commerce usability and accessibility, or intentionally excluded.
+**Project:** CodeAlpha Internship — Simple E-commerce Store (`simple.`)  
+**Status:** Active Visual Mapping (Implemented in Phase 4D)  
+**Detailed Structural Mapping:** [design-reference-mapping-v2.md](./design-reference-mapping-v2.md)
 
----
-
-## 1. Executive Summary of Translation Strategy
-
-`DESIGN.md` describes a single-product fire-roasted condiment brand website built as an aggressive typographic poster (`90% type, 10% product`). Our target application is **Simple E-commerce Store**—a multi-category full-stack retail storefront where customers search, filter, compare prices, inspect specifications, manage a multi-item shopping cart, authenticate, and complete checkout orders.
-
-Our design translation follows three strict principles:
-1. **Preserve the Visual DNA 100%:** Keep the exact 7-color warm rust/brown/gold palette (`#823513`, `#402011`, `#281006`, `#FAAE33`, `#9F531B`, `#6B2E12`, `#D1255C`), poster-scale condensed uppercase display type, inverse letter-spacing, full-pill interactive controls (`9999px`), `6px` card corners, `1.5px` Tiger Gold line icons, `1px dotted #FAAE33` dividers, and zero `box-shadow` elevation.
-2. **Adapt for E-Commerce Scannability & WCAG AA Accessibility:** Introduce structured product cards (`#402011` with `#281006` image stages), high-contrast warm cream body text (`#FDF6EC`), visible `:focus-visible` keyboard outlines, and responsive fluid `clamp()` typography so customers can browse 12+ products per view without horizontal overflow.
-3. **Exclude Condiment Brand Content & Anti-Patterns:** Exclude all sauce/recipe/game business sections, proprietary unlicensed font assumptions, frameless catalog items that obscure pricing, and removed focus rings.
+> [!NOTE]
+> The earlier Phase 4A *Editorial Craft Market* reference mapping (v1 dark storefront direction) was formally superseded after user approval of **Floating Shopping Constellation — White Canvas Commerce** (Phase 4C/4D).
 
 ---
 
-## 2. Rule-by-Rule Mapping Table
+## Active Reference Translation Summary
 
-| # | Reference `DESIGN.md` Rule | Status | Project-Specific Adaptation (`Simple E-commerce Store`) | Rationale |
-| :--- | :--- | :--- | :--- | :--- |
-| **1** | **7 Core Colour Tokens:** `#FAAE33` Tiger Gold, `#823513` Ember Rust, `#9F531B` Saffron Glow, `#402011` Dark Spice, `#281006` Charred Clove, `#6B2E12` Cardamom Brown, `#D1255C` Chili Red | **Preserved Verbatim** | Used as the exact primary palette across all pages, components, borders, and badges. No cool blues, greens, or stark white backgrounds are introduced. | Core brand signature of the reference system. |
-| **2** | **Body Text Colour:** *"Dark Spice `#402011` — body text color — or `#FAAE33` on dark fields"* | **Modified (Extended)** | Added two documented warm-family text tokens: `--color-parchment-cream` (`#FDF6EC`, 13.5:1 on `#402011`) for product titles/descriptions/inputs, and `--color-warm-sand` (`#E5C7A3`, 9.1:1) for secondary metadata. | `#402011` text on `#402011` cards is invisible (`1:1`), and long paragraphs in saturated `#FAAE33` reduce reading speed and cause eye strain during shopping/checkout. |
-| **3** | **Alert Badge Colour:** `#D1255C` Chili Red reserved for rare heat-level callouts | **Adapted to E-Commerce** | Reserved strictly for e-commerce urgency/status indicators: `LOW STOCK`, `LIMITED DROP`, percentage discount pills (`-20%`), and form validation errors. Paired with `#FDF6EC` text (`4.95:1` WCAG AA contrast). | Translates "spice heat" into retail stock/sale urgency without diluting the gold-on-rust palette. |
-| **4** | **Typefaces:** `Salmond` (display + UI) and `Graphikx` (`13px` weight 500 functional micro-copy) | **Adapted via Reference Substitutes** | Selected **`Antonio`** (open-source OFL from Google Fonts, explicitly listed in `DESIGN.md` as a `Salmond` substitute) for display/headings and **`Inter`** (explicitly listed as a `Graphikx` substitute) for `11px–18px` UI, body, prices, and forms. | `Salmond` and `Graphikx` are commercial fonts not present in the repo. `Antonio` + `Inter` are legally redistributable via `next/font/google` with zero licensing friction. |
-| **5** | **Display Type Scale & Inverse Tracking:** `130–213px` weight 700, `0.80–0.95` line-height, `-0.02em` tracking at display sizes down to `+0.02em` at `11px` | **Preserved with Fluid `clamp()`** | Hero display uses `clamp(3.5rem, 9.5vw, 11.5rem)` (`56px` mobile → `184px` desktop) at `0.82` line-height and `-0.02em` tracking; section headers use `clamp(2.125rem, 4.5vw, 4.0625rem)` at `0.94` line-height. | Preserves the poster-scale desktop impact while preventing horizontal scrollbar overflow on `320px–390px` mobile screens. |
-| **6** | **Binary Border Radius System:** `6px` for cards only; `9999px` (`1080px–1296px`) for buttons, badges, inputs, and icon containers | **Preserved Verbatim** | Product cards, filter panels, and order summary containers use `6px` radius; all buttons, search bars, form fields (except multi-line `<textarea>`), category chips, and badges use `9999px` pill radius. | Essential to the spice-label / editorial craft geometry. |
-| **7** | **3-Tier Surface Hierarchy & Zero Shadows:** `#823513` (Canvas) → `#402011` (Card) → `#281006` (Deepest); *"never use box-shadow to imply elevation"* | **Preserved Verbatim** | All pages use `#823513` canvas, `#402011` cards/bars, and `#281006` recessed image wells, drawers, and footer. `box-shadow: none` is enforced across all components. | Creates a distinctive flat, tactile poster aesthetic that stands out from generic SaaS/e-commerce templates. |
-| **8** | **Dotted Horizontal Dividers:** `1px dotted #FAAE33` between major viewport sections | **Preserved Verbatim** | Every major homepage band, catalog header, PDP specification block, and footer tier is separated by a full-width `1px dotted #FAAE33` rule. | Delivers the signature label-printed vertical rhythm. |
-| **9** | **Button Hierarchy:** Ghost Outline (`1px #FAAE33`, transparent fill), Filled Primary (`#FAAE33` fill, `#281006` text), Ghost Borderless | **Preserved Verbatim** | Used across the entire storefront: Filled Primary for conversion CTAs (`Add to Cart`, `Checkout`), Ghost Outline for navigation and filter pills, Ghost Borderless for inline actions (`Remove`, `Clear All`). | Clear visual hierarchy where the Tiger Gold filled button is unmistakably the primary action on every screen. |
-| **10** | **Focus Visibility:** *"No visible focus ring — interaction states use border-color shift to #faae33"* | **Intentionally Overridden** | Added explicit `:focus-visible { outline: 2px solid #FAAE33; outline-offset: 3px; }` on all interactive elements, in addition to border-color shift on inputs. | Mandatory for WCAG 2.1 AA (**2.4.7 Focus Visible**) and keyboard navigation across product grids, drawers, and checkout forms. |
-| **11** | **Product Presentation:** *"Do not place product photography in large rectangular frames, cards... the page is 90% type, 10% product"* | **Adapted Split Model** | **Hero & Editorial Promo Banner:** Preserves the reference's asymmetric poster composition with oversized headline on the left and a large studio-lit showcase object on the right. **Catalog Grid & Related Products:** Uses `6px`-radius `#402011` `Surface Card` containers with `#281006` image stages, badges, ratings/stock, price, and `Add to Cart` CTA. | A multi-product e-commerce store cannot present 20+ catalog items as unframed floating images without breaking price-to-product association and grid scanning. Note that `DESIGN.md` itself defines `Surface Card (6px, #402011)` for *"Product card, recipe card, content tile"*. |
-| **12** | **Atmospheric Watermarks:** Low-opacity botanical/geometric watermarks behind sections | **Adapted to Craft Geometry** | Uses subtle, low-opacity (`4%–7%` `#FAAE33` / `#9F531B`) SVG geometric star/compass and botanical line watermarks in the Hero and Promotional Banner backgrounds. | Preserves the warm textured depth without implying a food/condiment brand. |
-| **13** | **Navigation & Floating Action Dock:** Minimal top bar with ghost pill buttons + centered brand mark; circular icon buttons | **Adapted for E-Commerce Header** | Sticky top navigation bar (`#402011` surface with `1px dotted #FAAE33` bottom border) containing: Brand Wordmark (`ATELIER RUST // STORE`), Ghost Pill Nav Links (`Shop`, `Categories`, `New Arrivals`, `Deals`), expandable Pill Search (`<search>`), Account pill button, and Circular Cart Icon Button with live item count badge. | Shoppers require persistent access to Search, Account, and Cart count at any scroll depth. |
-| **14** | **Business Domain & Copywriting:** Sauce, recipes, flavor heat, game (`SAUCE, ABOUT, RECIPES, GAME, CONTACT, BUY NOW`) | **Intentionally Excluded** | Replaced completely with e-commerce retail architecture: curated lifestyle/craft goods (`Audio & Desk Craft`, `Everyday Carry`, `Home Objects`, `Apparel & Goods`), shopping filters, cart drawer, checkout, auth, and order history. | Project requirement: *"Do not build a sauce or food-brand website... The final product must clearly look and function like an E-commerce Store."* |
+| Visual Element | Authoritative v2 Decision | Production Location |
+| --- | --- | --- |
+| **Brand Wordmark** | Minimal lowercase `simple.` with `#5433EB` period (`s.` compact icon on desktop rail) | [SiteHeader.tsx](../frontend/src/components/layout/SiteHeader.tsx) |
+| **Canvas & Card Hierarchy** | `#F2F4F5` Canvas Mist viewport with `#FFFFFF` `28px`-radius outer cards + `20px` inner `1:1` stages | [globals.css](../frontend/src/app/globals.css), [ProductCard.tsx](../frontend/src/components/product/ProductCard.tsx) |
+| **Desktop & Mobile Navigation** | Persistent `64px` left rail (`>= 1024px`) + sticky white mobile header and `<dialog closedby="any">` drawer (`< 1024px`) | [SiteHeader.tsx](../frontend/src/components/layout/SiteHeader.tsx), [MobileNavDrawer.tsx](../frontend/src/components/navigation/MobileNavDrawer.tsx) |
+| **Hero Constellation** | Asymmetric 8-tile product mini-card constellation flanking centered pill `<search>` bar and department filter pills | [page.tsx](../frontend/src/app/page.tsx), [SearchFilterBar.tsx](../frontend/src/components/forms/SearchFilterBar.tsx) |
+| **Spotlight & Merchandising** | Inverted dark Slate Ink (`#332F2D`) department spotlight paired with interactive white product stage preview card | [page.tsx](../frontend/src/app/page.tsx), [ProductGallery.tsx](../frontend/src/components/product/ProductGallery.tsx) |
+| **Cart, Checkout & Account** | Slide-over `<dialog>` cart drawer (`FREE_SHIPPING_THRESHOLD = $75`) + full white-surface transactional routes | [CartDrawer.tsx](../frontend/src/components/cart/CartDrawer.tsx), [CheckoutForm.tsx](../frontend/src/components/forms/CheckoutForm.tsx) |
 
----
-
-## 3. Summary of What Is Excluded and Why
-
-1. **Food, Sauce, Condiment & Recipe Sections (`RECIPES`, `GAME`, `FIRE ROASTED INDIAN SAUCE`):** Excluded because this repository builds the **CodeAlpha Simple E-commerce Store**, a general retail shopping application.
-2. **Unlicensed Commercial Font Files (`Salmond`, `Graphikx`):** Excluded to prevent copyright/licensing violations and broken font requests; replaced with open-source Google Fonts (`Antonio` + `Inter`) specified in the reference's own substitute list.
-3. **Removed Focus Outlines (`outline: none` without replacement):** Excluded because keyboard users must be able to navigate product cards, filters, quantity steppers, and checkout fields with high-contrast `:focus-visible` rings.
-4. **Heavy Animation Libraries (`GSAP`, `Lenis`):** Excluded in Phase 4A per Ponytail YAGNI rules—native CSS transitions, `@keyframes`, `<dialog>`, and `<details>` satisfy every interaction requirement with `0 KB` of third-party JavaScript bundle overhead.
+For full token-by-token rationale and component deltas, read [design-reference-mapping-v2.md](./design-reference-mapping-v2.md) and [design-system-v2.md](./design-system-v2.md).

@@ -1,107 +1,130 @@
 'use client';
 
-import React from 'react';
 import Link from 'next/link';
-import { Product } from '@/types/store';
+import type { Product } from '@/types/store';
 import { useStore } from '@/context/StoreContext';
-import { PillBadge } from '@/components/ui/PillBadge';
-import { ProductIllustration } from '@/components/ui/ProductIllustration';
+import { PillBadge, type BadgeTone } from '@/components/ui/PillBadge';
+import { LineIcon } from '@/components/ui/LineIcon';
+import { ProductIllustration, getProductStage } from '@/components/ui/ProductIllustration';
 
-export function ProductCard({ product }: { product: Product }) {
+interface ProductCardProps {
+  product: Product;
+  showDescription?: boolean;
+}
+
+function getBadgeConfig(product: Product): { label: string; tone: BadgeTone } | null {
+  if (product.stockCount === 0) {
+    return { label: 'Sold Out', tone: 'soldout' };
+  }
+  if (product.badge === 'BESTSELLER') {
+    return { label: 'Bestseller', tone: 'dark' };
+  }
+  if (product.badge === 'LIMITED DROP') {
+    return { label: 'Limited Drop', tone: 'violet-subtle' };
+  }
+  if (product.badge === 'NEW ARRIVAL') {
+    return { label: 'New Arrival', tone: 'light' };
+  }
+  return null;
+}
+
+export function ProductCard({ product, showDescription = false }: ProductCardProps) {
   const { addToCart } = useStore();
-  const isOutOfStock = product.stockCount <= 0;
-  const isLowStock = product.stockCount > 0 && product.stockCount <= 3;
-  const discountPct =
-    product.compareAtPrice && product.compareAtPrice > product.price
-      ? Math.round(
-          ((product.compareAtPrice - product.price) / product.compareAtPrice) * 100
-        )
-      : null;
+  const stage = getProductStage(product.imageSvgId);
+  const badgeConfig = getBadgeConfig(product);
+  const soldOut = product.stockCount === 0;
+  const lowStock = !soldOut && product.stockCount <= 3;
 
   return (
-    <article className="surface-card-interactive p-3.5 flex flex-col justify-between h-full">
-      <div>
+    <article className="surface-card hover-lift p-2 flex flex-col justify-between gap-2.5 h-full">
+      <div className="space-y-3">
         <Link
           href={`/shop/${product.id}`}
-          aria-label={`View ${product.title} details`}
-          className="block rounded-[4px] bg-charred-clove border border-cardamom-brown aspect-[4/3.2] relative flex items-center justify-center p-4 mb-3.5 overflow-hidden group"
-          style={{
-            backgroundImage:
-              'radial-gradient(circle at 50% 50%, rgba(250, 174, 51, 0.14) 0%, transparent 70%)',
-          }}
+          aria-label={`Inspect ${product.title}`}
+          className={`relative block product-stage-inner ${stage.bgClass} p-6 flex items-center justify-center group`}
         >
-          <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between flex-wrap gap-1.5 pointer-events-none">
-            <span>
-              {product.badge && (
-                <PillBadge
-                  tone={product.badge === 'LIMITED DROP' ? 'alert' : 'gold'}
-                >
-                  {product.badge}
-                </PillBadge>
-              )}
-            </span>
-            <span>
-              {isOutOfStock ? (
-                <PillBadge tone="spice">SOLD OUT</PillBadge>
-              ) : isLowStock ? (
-                <PillBadge tone="alert">ONLY {product.stockCount} LEFT</PillBadge>
-              ) : discountPct ? (
-                <PillBadge tone="alert">-{discountPct}% SALE</PillBadge>
-              ) : null}
-            </span>
-          </div>
+          {badgeConfig ? (
+            <div className="absolute top-3 left-3 z-10">
+              <PillBadge label={badgeConfig.label} tone={badgeConfig.tone} />
+            </div>
+          ) : null}
 
-          <div className="transition-transform duration-200 group-hover:scale-105">
-            <ProductIllustration
-              svgId={product.imageSvgId}
-              className="w-32 h-28"
-            />
-          </div>
+          <ProductIllustration
+            svgId={product.imageSvgId}
+            darkBackdrop={stage.darkBackdrop}
+            className="w-28 h-28 sm:w-32 sm:h-32 transition-transform duration-200 group-hover:scale-[1.03]"
+          />
         </Link>
 
-        <div className="text-[11px] uppercase tracking-wider text-warm-sand mb-1">
-          {product.category} •{' '}
-          {isOutOfStock
-            ? 'Out of Stock'
-            : `In Stock (${product.stockCount})`}
+        <div className="px-2 space-y-1.5">
+          <div className="flex items-center justify-between gap-2 text-[11px] text-muted-gray">
+            <span className="truncate">{product.category}</span>
+            <span className="tabular-nums shrink-0">{product.sku}</span>
+          </div>
+
+          <h3 className="text-sm font-medium text-ink-black leading-snug m-0">
+            <Link
+              href={`/shop/${product.id}`}
+              className="hover:underline underline-offset-4 focus-visible:underline"
+            >
+              {product.title}
+            </Link>
+          </h3>
+
+          {showDescription ? (
+            <p className="text-xs text-muted-gray line-clamp-2 m-0 leading-relaxed">
+              {product.description}
+            </p>
+          ) : null}
+
+          <p className="text-[11px] m-0 flex items-center gap-1.5">
+            {soldOut ? (
+              <span className="font-medium text-slate-ink inline-flex items-center gap-1">
+                <LineIcon name="alert" size={12} />
+                <span>Currently unavailable</span>
+              </span>
+            ) : lowStock ? (
+              <span className="font-medium text-slate-ink tabular-nums">
+                Low stock ({product.stockCount} left)
+              </span>
+            ) : (
+              <span className="text-muted-gray tabular-nums">
+                In stock ({product.stockCount})
+              </span>
+            )}
+          </p>
         </div>
-
-        <h3 className="heading-card">
-          <Link
-            href={`/shop/${product.id}`}
-            className="text-parchment-cream hover:text-tiger-gold transition-colors no-underline"
-          >
-            {product.title}
-          </Link>
-        </h3>
-
-        <p className="text-xs text-warm-sand mt-1.5 mb-3.5 leading-relaxed">
-          {product.shortDescription}
-        </p>
       </div>
 
-      <div className="flex items-center justify-between gap-2.5 pt-3 border-t border-dotted border-tiger-gold/50 mt-auto">
-        <div className="tabular-nums">
-          <span className="text-lg font-bold text-tiger-gold">
-            ${product.price.toFixed(2)}
+      <div className="px-2 pb-1.5 pt-2 flex items-center justify-between gap-2 border-t border-faint-border">
+        <div className="flex items-baseline gap-1.5 min-w-0">
+          <span className="text-base font-semibold text-ink-black tabular-nums">
+            ${product.price}
           </span>
-          {product.compareAtPrice && (
-            <span className="text-xs text-warm-sand line-through ml-1.5">
-              ${product.compareAtPrice.toFixed(2)}
+          {product.compareAtPrice ? (
+            <span className="text-xs text-muted-gray line-through tabular-nums">
+              ${product.compareAtPrice}
             </span>
-          )}
+          ) : null}
         </div>
 
         <button
           type="button"
-          disabled={isOutOfStock}
-          onClick={() => addToCart(product, 1, true)}
-          className="btn btn-primary px-4 py-2 text-xs"
+          disabled={soldOut}
+          onClick={() => addToCart(product, 1)}
+          aria-label={soldOut ? `${product.title} is sold out` : `Add ${product.title} to bag`}
+          className="min-h-[44px] px-4 py-2 rounded-pill text-xs font-medium tracking-[-0.01em] transition-colors shrink-0 inline-flex items-center gap-1.5 bg-ink-black text-pure-white hover:bg-slate-ink disabled:bg-pure-white disabled:text-slate-ink disabled:border disabled:border-ink-black/30 disabled:cursor-not-allowed"
         >
-          {isOutOfStock ? 'Sold Out' : 'Add to Cart'}
+          {soldOut ? (
+            <span>Sold Out</span>
+          ) : (
+            <>
+              <LineIcon name="plus" size={13} />
+              <span>Add</span>
+            </>
+          )}
         </button>
       </div>
     </article>
   );
 }
-

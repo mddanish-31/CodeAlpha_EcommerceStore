@@ -1,0 +1,2797 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>simple. — Floating Shopping Constellation (Phase 4C Design Preview)</title>
+  <style>
+    /* Self-hosted Inter (400 / 500 / 600 only — zero external font CDNs, zero 700+ weights) */
+    @font-face {
+      font-family: 'Inter';
+      src: url('../../frontend/src/fonts/inter-latin-400-normal.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter';
+      src: url('../../frontend/src/fonts/inter-latin-500-normal.woff2') format('woff2');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter';
+      src: url('../../frontend/src/fonts/inter-latin-600-normal.woff2') format('woff2');
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root {
+      /* Exact tokens from docs/design-system-v2.md (adapted from DESIGN (10).md) */
+      --color-canvas-mist: #f2f4f5;
+      --color-pure-white: #ffffff;
+      --color-ink-black: #000000;
+      --color-muted-gray: #787574; /* AA 4.57:1 on #FFFFFF */
+      --color-canvas-secondary-text: #595655; /* AA 6.59:1 on #F2F4F5 */
+      --color-slate-ink: #332f2d;
+      --color-ash-veil: #665a54;
+      --color-faint-border: #ebebeb;
+      --color-cool-stone: #cccccc;
+      --color-warm-fog: #acb0aa;
+      --color-violet-accent: #5433eb;
+      --color-violet-wash: #c0b5f3;
+
+      --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+      --page-max-width: 1200px;
+      --rail-width: 64px;
+      --section-gap: 64px;
+      --element-gap: 12px;
+
+      --radius-card: 28px;
+      --radius-image-inner: 20px;
+      --radius-tile-sm: 12px;
+      --radius-pill: 9999px;
+
+      --shadow-sm: 0 2px 8px 0 rgba(0, 0, 0, 0.06);
+      --shadow-sm-2: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 4px 24px 0 rgba(0, 0, 0, 0.12);
+      --shadow-lg-2: 0 4px 24px 0 rgba(69, 36, 219, 0.34);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      font-family: var(--font-sans);
+      font-size: 16px;
+      background-color: var(--color-canvas-mist);
+      color: var(--color-ink-black);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      html {
+        scroll-behavior: smooth;
+      }
+    }
+
+    body {
+      margin: 0;
+      min-height: 100dvh;
+      background-color: var(--color-canvas-mist);
+      color: var(--color-ink-black);
+      font-weight: 400;
+      font-size: 0.875rem;
+      line-height: 1.4;
+      letter-spacing: -0.014em;
+      overflow-x: clip;
+    }
+
+    img, svg {
+      display: block;
+      max-width: 100%;
+    }
+
+    button, input, select, textarea {
+      font-family: inherit;
+      font-size: inherit;
+      color: inherit;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--color-violet-accent);
+      outline-offset: 3px;
+    }
+
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Accessible visually-hidden utility (reveals Skip Link on focus) */
+    .visually-hidden:where(:not(:focus-within, :active)) {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    .skip-link {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      z-index: 120;
+      display: inline-flex;
+      align-items: center;
+      min-block-size: 44px;
+      padding: 10px 18px;
+      background-color: var(--color-violet-accent);
+      color: var(--color-pure-white);
+      border-radius: var(--radius-pill);
+      font-weight: 500;
+      text-decoration: none;
+      box-shadow: var(--shadow-lg);
+    }
+
+    /* Shell layout: mobile first, desktop 64px rail at >= 1024px */
+    .app-shell {
+      display: flex;
+      flex-direction: column;
+      min-height: 100dvh;
+    }
+
+    .desktop-rail {
+      display: none;
+    }
+
+    .mobile-header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background-color: var(--color-pure-white);
+      border-bottom: 1px solid var(--color-faint-border);
+      min-block-size: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 6px 12px;
+    }
+
+    .mobile-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .main-column {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 44px+ top announcement bar */
+    .announcement-bar {
+      background-color: var(--color-pure-white);
+      border-bottom: 1px solid var(--color-faint-border);
+      min-block-size: 44px;
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .announcement-inner {
+      max-width: var(--page-max-width);
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 6px 12px;
+      font-size: 0.75rem;
+      letter-spacing: -0.017em;
+      color: var(--color-muted-gray);
+    }
+
+    .announcement-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 2px 10px;
+      border-radius: var(--radius-pill);
+      background-color: var(--color-canvas-mist);
+      color: var(--color-ink-black);
+      font-weight: 500;
+      font-size: 0.75rem;
+    }
+
+    .violet-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 9999px;
+      background-color: var(--color-violet-accent);
+      flex-shrink: 0;
+      display: inline-block;
+    }
+
+    /* Wordmark "simple." */
+    .wordmark {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 2px;
+      text-decoration: none;
+      color: var(--color-ink-black);
+      font-weight: 600;
+      letter-spacing: -0.055em;
+      line-height: 1;
+    }
+
+    .wordmark--compact {
+      font-size: 1.5rem;
+    }
+
+    .wordmark--hero {
+      font-size: clamp(2.125rem, 1.8rem + 1.5vw, 3rem);
+    }
+
+    .wordmark--footer {
+      color: var(--color-pure-white);
+      font-size: 1.75rem;
+    }
+
+    .wordmark-period {
+      width: 0.22em;
+      height: 0.22em;
+      border-radius: 9999px;
+      background-color: var(--color-violet-accent);
+      display: inline-block;
+      margin-left: 1px;
+    }
+
+    /* Icon buttons & bag badge (44x44 minimum interactive hit area) */
+    .icon-btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-inline-size: 44px;
+      min-block-size: 44px;
+      padding: 8px;
+      border: 1px solid transparent;
+      border-radius: var(--radius-pill);
+      background-color: transparent;
+      color: var(--color-ink-black);
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .icon-btn:hover {
+      background-color: var(--color-canvas-mist);
+    }
+
+    .icon-btn--bordered {
+      border-color: var(--color-faint-border);
+      background-color: var(--color-pure-white);
+    }
+
+    .cart-count-badge {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      min-inline-size: 18px;
+      min-block-size: 18px;
+      padding: 0 5px;
+      border-radius: var(--radius-pill);
+      background-color: var(--color-violet-accent);
+      color: var(--color-pure-white);
+      font-size: 0.6875rem;
+      font-weight: 500;
+      line-height: 18px;
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .cart-count-badge[data-empty="true"] {
+      display: none;
+    }
+
+    /* Desktop Left Rail >= 1024px */
+    @media (min-width: 1024px) {
+      .mobile-header {
+        display: none;
+      }
+
+      .app-shell {
+        flex-direction: row;
+      }
+
+      .desktop-rail {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: var(--rail-width);
+        z-index: 45;
+        background-color: var(--color-pure-white);
+        border-right: 1px solid var(--color-faint-border);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 8px;
+      }
+
+      .main-column {
+        margin-left: var(--rail-width);
+        width: calc(100% - var(--rail-width));
+      }
+
+      .rail-top-group,
+      .rail-bottom-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+      }
+
+      .rail-mark {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        border-radius: var(--radius-pill);
+        color: var(--color-ink-black);
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1.125rem;
+        letter-spacing: -0.055em;
+        margin-bottom: 6px;
+      }
+
+      .rail-nav-list {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .rail-link {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        border-radius: 20px;
+        border: 0;
+        background-color: transparent;
+        color: var(--color-muted-gray);
+        cursor: pointer;
+        text-decoration: none;
+      }
+
+      .rail-link:hover,
+      .rail-link:focus-visible {
+        background-color: var(--color-canvas-mist);
+        color: var(--color-ink-black);
+      }
+
+      .rail-link[aria-current="page"],
+      .rail-link[data-active="true"] {
+        background-color: var(--color-canvas-mist);
+        color: var(--color-violet-accent);
+      }
+
+      .rail-tooltip {
+        position: absolute;
+        left: 58px;
+        top: 50%;
+        transform: translateY(-50%);
+        padding: 6px 12px;
+        border-radius: var(--radius-pill);
+        background-color: var(--color-ink-black);
+        color: var(--color-pure-white);
+        font-size: 0.75rem;
+        font-weight: 500;
+        white-space: nowrap;
+        pointer-events: none;
+        opacity: 0;
+        box-shadow: var(--shadow-sm-2);
+        z-index: 60;
+      }
+
+      .rail-link:hover .rail-tooltip,
+      .rail-link:focus-visible .rail-tooltip {
+        opacity: 1;
+      }
+
+      .rail-avatar {
+        width: 34px;
+        height: 34px;
+        border-radius: var(--radius-pill);
+        border: 1px solid var(--color-faint-border);
+        background-color: var(--color-canvas-mist);
+        color: var(--color-ink-black);
+        font-size: 0.75rem;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+      }
+
+      .rail-avatar-wrap {
+        min-inline-size: 44px;
+        min-block-size: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: var(--radius-pill);
+        text-decoration: none;
+      }
+
+      .rail-avatar-wrap:hover .rail-avatar {
+        border-color: var(--color-violet-accent);
+      }
+    }
+
+    /* Main Centered Content Container */
+    .canvas-container {
+      width: 100%;
+      max-width: var(--page-max-width);
+      margin: 0 auto;
+      padding: 20px 16px 0;
+    }
+
+    @media (min-width: 768px) {
+      .canvas-container {
+        padding: 28px 24px 0;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .canvas-container {
+        padding: 32px 32px 0;
+      }
+    }
+
+    /* Hero Floating Shopping Constellation */
+    .hero-section {
+      margin-bottom: 48px;
+    }
+
+    @media (min-width: 1024px) {
+      .hero-section {
+        margin-bottom: var(--section-gap);
+      }
+    }
+
+    .constellation-stage {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .hero-center-column {
+      order: -1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 16px;
+      max-width: 620px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      background-color: var(--color-pure-white);
+      border: 1px solid var(--color-faint-border);
+      box-shadow: var(--shadow-sm);
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--color-slate-ink);
+    }
+
+    .hero-title {
+      margin: 0;
+      font-size: clamp(1.625rem, 1.35rem + 1.25vw, 2.25rem);
+      line-height: 1.12;
+      letter-spacing: -0.055em;
+      font-weight: 600;
+      color: var(--color-ink-black);
+    }
+
+    .hero-subtitle {
+      margin: 0;
+      max-width: 48ch;
+      font-size: 1rem;
+      line-height: 1.45;
+      letter-spacing: -0.031em;
+      color: var(--color-canvas-secondary-text);
+    }
+
+    /* Native <search> Pill Bar with Electric Violet #5433EB Submit Button */
+    .hero-search-wrap {
+      width: 100%;
+      max-width: 620px;
+    }
+
+    .hero-search-form {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      min-block-size: 56px;
+      padding: 4px 4px 4px 18px;
+      background-color: var(--color-pure-white);
+      border: 1px solid rgba(0, 0, 0, 0.24);
+      border-radius: var(--radius-pill);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .hero-search-form:focus-within {
+      border-color: var(--color-violet-accent);
+      box-shadow: 0 0 0 3px rgba(192, 181, 243, 0.55);
+    }
+
+    .hero-search-input {
+      flex: 1;
+      min-width: 0;
+      border: 0;
+      background: transparent;
+      font-size: 1rem;
+      line-height: 1.33;
+      letter-spacing: -0.02em;
+      color: var(--color-ink-black);
+      padding: 8px 0;
+    }
+
+    .hero-search-input::placeholder {
+      color: var(--color-muted-gray);
+    }
+
+    .hero-search-input:focus {
+      outline: none;
+    }
+
+    .search-clear-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-inline-size: 36px;
+      min-block-size: 36px;
+      border: 0;
+      border-radius: var(--radius-pill);
+      background-color: transparent;
+      color: var(--color-muted-gray);
+      cursor: pointer;
+    }
+
+    .search-clear-btn[hidden] {
+      display: none;
+    }
+
+    .search-clear-btn:hover {
+      background-color: var(--color-canvas-mist);
+      color: var(--color-ink-black);
+    }
+
+    .search-submit-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-inline-size: 48px;
+      min-block-size: 48px;
+      border: 0;
+      border-radius: var(--radius-pill);
+      background-color: var(--color-violet-accent);
+      color: var(--color-pure-white);
+      box-shadow: var(--shadow-lg-2);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .search-submit-btn:hover {
+      background-color: #4628d0;
+    }
+
+    /* Category Pills (Single saturated accent rule: monochrome icons + #5433EB active) */
+    .category-strip-nav {
+      width: 100%;
+    }
+
+    .category-strip {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      padding: 4px 0;
+    }
+
+    .category-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-block-size: 44px;
+      padding: 8px 16px 8px 12px;
+      background-color: var(--color-pure-white);
+      color: var(--color-ink-black);
+      border: 1px solid var(--color-faint-border);
+      border-radius: var(--radius-pill);
+      box-shadow: var(--shadow-sm);
+      font-size: 0.875rem;
+      font-weight: 400;
+      letter-spacing: -0.015em;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .category-pill:hover {
+      border-color: rgba(0, 0, 0, 0.24);
+    }
+
+    .category-pill[aria-pressed="true"] {
+      background-color: var(--color-violet-accent);
+      color: var(--color-pure-white);
+      border-color: var(--color-violet-accent);
+      font-weight: 500;
+    }
+
+    /* Constellation Wings (Flank center stack cleanly on desktop >= 1120px, clean strip on smaller) */
+    .constellation-wing {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .constellation-wing--secondary {
+      display: none;
+    }
+
+    @media (min-width: 768px) {
+      .constellation-wing {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+
+    @media (min-width: 1120px) {
+      .hero-center-column {
+        order: 0;
+      }
+
+      .constellation-stage {
+        grid-template-columns: minmax(190px, 240px) minmax(480px, 600px) minmax(190px, 240px);
+        gap: 24px;
+        align-items: center;
+      }
+
+      .constellation-wing,
+      .constellation-wing--secondary {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .constellation-wing .constellation-tile:nth-child(2),
+      .constellation-wing .constellation-tile:nth-child(4) {
+        transform: translateY(18px);
+      }
+
+      .constellation-wing--secondary .constellation-tile:nth-child(1),
+      .constellation-wing--secondary .constellation-tile:nth-child(3) {
+        transform: translateY(-14px);
+      }
+    }
+
+    .constellation-tile {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+      background-color: var(--color-pure-white);
+      border: 1px solid var(--color-faint-border);
+      border-radius: 22px;
+      padding: 6px;
+      box-shadow: var(--shadow-sm-2);
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    .constellation-tile-stage {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      overflow: hidden;
+    }
+
+    .constellation-tile-label {
+      padding: 8px 6px 4px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--color-ink-black);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+
+    .constellation-tile-price {
+      color: var(--color-muted-gray);
+      font-weight: 400;
+      font-variant-numeric: tabular-nums;
+      flex-shrink: 0;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .constellation-tile,
+      .product-card,
+      .spotlight-card {
+        transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 220ms ease;
+      }
+
+      .constellation-tile:hover,
+      .product-card:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-lg);
+      }
+    }
+
+    /* Curated Spotlight Duo Section */
+    .spotlight-section {
+      margin-bottom: var(--section-gap);
+    }
+
+    .spotlight-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--element-gap);
+    }
+
+    @media (min-width: 768px) {
+      .spotlight-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .spotlight-card {
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-sm-2);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 24px;
+      gap: 20px;
+    }
+
+    .spotlight-card--dark {
+      background-color: var(--color-slate-ink);
+      color: var(--color-pure-white);
+    }
+
+    .spotlight-card--white {
+      background-color: var(--color-pure-white);
+      color: var(--color-ink-black);
+    }
+
+    .spotlight-eyebrow {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+    }
+
+    .spotlight-card--dark .spotlight-eyebrow {
+      color: var(--color-violet-wash);
+    }
+
+    .spotlight-card--white .spotlight-eyebrow {
+      color: var(--color-violet-accent);
+    }
+
+    .spotlight-heading {
+      margin: 6px 0 8px;
+      font-size: clamp(1.375rem, 1.15rem + 1vw, 1.875rem);
+      line-height: 1.14;
+      letter-spacing: -0.05em;
+      font-weight: 600;
+    }
+
+    .spotlight-copy {
+      margin: 0;
+      font-size: 0.875rem;
+      line-height: 1.45;
+      max-width: 44ch;
+    }
+
+    .spotlight-card--dark .spotlight-copy {
+      color: var(--color-faint-border);
+    }
+
+    .spotlight-card--white .spotlight-copy {
+      color: var(--color-muted-gray);
+    }
+
+    .spotlight-dark-visual {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px;
+      border-radius: var(--radius-image-inner);
+      background-color: var(--color-ash-veil);
+    }
+
+    .spotlight-tag-frosted {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: var(--radius-tile-sm);
+      background-color: rgba(255, 255, 255, 0.94);
+      color: var(--color-ink-black);
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .spotlight-pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    /* Interactive Mini Swatch Spotlight Row */
+    .swatch-preview-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      align-items: center;
+    }
+
+    @media (min-width: 640px) {
+      .swatch-preview-layout {
+        grid-template-columns: 152px 1fr;
+      }
+    }
+
+    .swatch-stage {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border-radius: var(--radius-image-inner);
+      background-color: var(--color-canvas-mist);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .swatch-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 12px 0;
+    }
+
+    .swatch-btn {
+      width: 48px;
+      height: 48px;
+      padding: 4px;
+      border-radius: var(--radius-tile-sm);
+      border: 1px solid var(--color-faint-border);
+      background-color: var(--color-canvas-mist);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .swatch-btn[aria-pressed="true"] {
+      border: 2px solid var(--color-violet-accent);
+      background-color: var(--color-pure-white);
+    }
+
+    /* Standard Pill CTAs */
+    .pill-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-block-size: 44px;
+      padding: 10px 20px;
+      border-radius: var(--radius-pill);
+      border: 1px solid transparent;
+      font-size: 0.875rem;
+      font-weight: 500;
+      letter-spacing: -0.015em;
+      text-decoration: none;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .pill-btn--primary {
+      background-color: var(--color-violet-accent);
+      color: var(--color-pure-white);
+    }
+
+    .pill-btn--primary:hover:not(:disabled) {
+      background-color: #4628d0;
+    }
+
+    .pill-btn--white {
+      background-color: var(--color-pure-white);
+      color: var(--color-ink-black);
+    }
+
+    .pill-btn--white:hover:not(:disabled) {
+      background-color: var(--color-canvas-mist);
+    }
+
+    .pill-btn--subtle {
+      background-color: var(--color-canvas-mist);
+      color: var(--color-ink-black);
+      border-color: var(--color-faint-border);
+    }
+
+    .pill-btn--subtle:hover:not(:disabled) {
+      background-color: var(--color-violet-accent);
+      color: var(--color-pure-white);
+      border-color: var(--color-violet-accent);
+    }
+
+    .pill-btn--outline {
+      background-color: var(--color-pure-white);
+      color: var(--color-ink-black);
+      border-color: rgba(0, 0, 0, 0.24);
+    }
+
+    .pill-btn--outline:hover:not(:disabled) {
+      border-color: var(--color-violet-accent);
+    }
+
+    .pill-btn:disabled {
+      background-color: var(--color-faint-border);
+      color: var(--color-canvas-secondary-text);
+      border-color: var(--color-cool-stone);
+      cursor: not-allowed;
+    }
+
+    /* Section Crown & Carousel Arrow */
+    .section-crown {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .section-heading-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .section-title {
+      margin: 0;
+      font-size: 1.25rem;
+      line-height: 1.2;
+      letter-spacing: -0.05em;
+      font-weight: 600;
+      color: var(--color-ink-black);
+    }
+
+    .section-meta {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--color-canvas-secondary-text);
+    }
+
+    .section-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sort-select {
+      min-block-size: 44px;
+      padding: 8px 14px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(0, 0, 0, 0.24);
+      background-color: var(--color-pure-white);
+      color: var(--color-ink-black);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .mobile-filter-trigger {
+      display: inline-flex;
+    }
+
+    @media (min-width: 1024px) {
+      .mobile-filter-trigger {
+        display: none;
+      }
+    }
+
+    .carousel-chevron-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-inline-size: 44px;
+      min-block-size: 44px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--color-faint-border);
+      background-color: var(--color-pure-white);
+      color: var(--color-ink-black);
+      box-shadow: var(--shadow-lg);
+      cursor: pointer;
+    }
+
+    .carousel-chevron-btn:hover {
+      border-color: var(--color-violet-accent);
+      color: var(--color-violet-accent);
+    }
+
+    /* Discovery Product Grid */
+    .catalog-section {
+      margin-bottom: var(--section-gap);
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--element-gap);
+    }
+
+    @media (min-width: 640px) {
+      .product-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .product-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (min-width: 1280px) {
+      .product-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+
+    /* Concentric White Product Card (28px card / 8px white frame / 20px inner stage) */
+    .product-card {
+      background-color: var(--color-pure-white);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-sm-2);
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .product-stage-link {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border-radius: var(--radius-image-inner);
+      overflow: hidden;
+      padding: 20px;
+      text-decoration: none;
+    }
+
+    .stage-tone--mist { background-color: var(--color-canvas-mist); }
+    .stage-tone--stone { background-color: var(--color-faint-border); }
+    .stage-tone--slate { background-color: var(--color-slate-ink); }
+    .stage-tone--ash { background-color: var(--color-ash-veil); }
+
+    .product-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      padding: 4px 10px;
+      border-radius: var(--radius-tile-sm);
+      font-size: 0.6875rem;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      line-height: 1.2;
+    }
+
+    .product-badge--solid {
+      background-color: var(--color-ink-black);
+      color: var(--color-pure-white);
+    }
+
+    .product-badge--violet {
+      background-color: var(--color-violet-accent);
+      color: var(--color-pure-white);
+    }
+
+    .product-badge--frosted {
+      background-color: rgba(255, 255, 255, 0.94);
+      color: var(--color-ink-black);
+    }
+
+    .product-badge--soldout {
+      background-color: var(--color-faint-border);
+      color: var(--color-ink-black);
+      border: 1px solid rgba(0, 0, 0, 0.24);
+    }
+
+    .product-card-body {
+      padding: 12px 10px 10px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      gap: 8px;
+    }
+
+    .product-meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 0.75rem;
+      color: var(--color-muted-gray);
+    }
+
+    .product-title-link {
+      color: var(--color-ink-black);
+      text-decoration: none;
+      font-size: 0.9375rem;
+      line-height: 1.3;
+      letter-spacing: -0.02em;
+      font-weight: 500;
+    }
+
+    .product-title-link:hover {
+      color: var(--color-violet-accent);
+    }
+
+    .product-card-footer {
+      margin-top: auto;
+      padding-top: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .price-stack {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .price-current {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--color-ink-black);
+    }
+
+    .price-compare {
+      font-size: 0.75rem;
+      color: var(--color-muted-gray);
+      text-decoration: line-through;
+    }
+
+    .card-add-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-inline-size: 64px;
+      min-block-size: 38px;
+      padding: 8px 14px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--color-faint-border);
+      background-color: var(--color-canvas-mist);
+      color: var(--color-ink-black);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .card-add-btn:hover:not(:disabled) {
+      background-color: var(--color-violet-accent);
+      color: var(--color-pure-white);
+      border-color: var(--color-violet-accent);
+    }
+
+    .card-add-btn[data-added="true"] {
+      background-color: var(--color-violet-accent);
+      color: var(--color-pure-white);
+      border-color: var(--color-violet-accent);
+    }
+
+    .card-add-btn:disabled {
+      background-color: var(--color-faint-border);
+      color: var(--color-muted-gray);
+      border-color: var(--color-cool-stone);
+      cursor: not-allowed;
+    }
+
+    .empty-state-card {
+      background-color: var(--color-pure-white);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-sm-2);
+      padding: 40px 24px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Secondary Route Surfaces Showcase */
+    .routes-showcase-section {
+      margin-bottom: var(--section-gap);
+    }
+
+    .route-tabs-bar {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 4px;
+      background-color: var(--color-pure-white);
+      border: 1px solid var(--color-faint-border);
+      border-radius: var(--radius-pill);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .route-tab-btn {
+      min-block-size: 44px;
+      padding: 8px 16px;
+      border-radius: var(--radius-pill);
+      border: 0;
+      background-color: transparent;
+      color: var(--color-muted-gray);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .route-tab-btn[aria-selected="true"] {
+      background-color: var(--color-violet-accent);
+      color: var(--color-pure-white);
+    }
+
+    .route-panel {
+      margin-top: 16px;
+    }
+
+    .route-panel[hidden] {
+      display: none;
+    }
+
+    .surface-card {
+      background-color: var(--color-pure-white);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-sm-2);
+      padding: 20px;
+    }
+
+    @media (min-width: 768px) {
+      .surface-card {
+        padding: 28px;
+      }
+    }
+
+    /* PDP Showcase */
+    .pdp-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    @media (min-width: 1024px) {
+      .pdp-grid {
+        grid-template-columns: 1.05fr 1fr;
+        align-items: start;
+      }
+    }
+
+    .pdp-gallery-stage {
+      aspect-ratio: 1 / 1;
+      border-radius: var(--radius-image-inner);
+      background-color: var(--color-canvas-mist);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px;
+    }
+
+    .pdp-thumb-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+
+    .qty-stepper {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid rgba(0, 0, 0, 0.24);
+      border-radius: var(--radius-pill);
+      padding: 2px;
+      background-color: var(--color-pure-white);
+    }
+
+    .qty-btn {
+      min-inline-size: 40px;
+      min-block-size: 40px;
+      border: 0;
+      border-radius: var(--radius-pill);
+      background: transparent;
+      color: var(--color-ink-black);
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .qty-btn:hover {
+      background-color: var(--color-canvas-mist);
+    }
+
+    .qty-value {
+      min-inline-size: 32px;
+      text-align: center;
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .clean-details {
+      border-top: 1px solid var(--color-faint-border);
+      padding: 12px 0;
+    }
+
+    .clean-details summary {
+      cursor: pointer;
+      font-weight: 500;
+      color: var(--color-ink-black);
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      min-block-size: 36px;
+    }
+
+    .clean-details p {
+      margin: 8px 0 0;
+      color: var(--color-muted-gray);
+      line-height: 1.5;
+    }
+
+    /* Checkout & Form Controls */
+    .split-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    @media (min-width: 1024px) {
+      .split-grid {
+        grid-template-columns: 1.35fr 1fr;
+        align-items: start;
+      }
+    }
+
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    @media (min-width: 640px) {
+      .form-grid-2 {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--color-slate-ink);
+    }
+
+    .pill-input {
+      width: 100%;
+      min-block-size: 46px;
+      padding: 10px 16px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(0, 0, 0, 0.24);
+      background-color: var(--color-pure-white);
+      color: var(--color-ink-black);
+      font-size: 1rem;
+    }
+
+    .pill-input:focus {
+      outline: none;
+      border-color: var(--color-violet-accent);
+      box-shadow: 0 0 0 3px rgba(192, 181, 243, 0.55);
+    }
+
+    .order-line {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--color-faint-border);
+    }
+
+    /* Native Modal <dialog closedby="any"> */
+    dialog.drawer-dialog {
+      margin: 0;
+      border: 0;
+      padding: 0;
+      background-color: var(--color-pure-white);
+      color: var(--color-ink-black);
+      box-shadow: var(--shadow-lg);
+      overscroll-behavior: contain;
+      max-height: 100dvh;
+    }
+
+    dialog.drawer-dialog::backdrop {
+      background-color: rgba(0, 0, 0, 0.42);
+      overscroll-behavior: contain;
+      overflow: hidden;
+    }
+
+    dialog.drawer-dialog--right {
+      margin-left: auto;
+      width: min(420px, 100vw);
+      height: 100dvh;
+      max-width: 100vw;
+      display: flex;
+      flex-direction: column;
+    }
+
+    @media (min-width: 640px) {
+      dialog.drawer-dialog--right {
+        border-top-left-radius: var(--radius-card);
+        border-bottom-left-radius: var(--radius-card);
+      }
+    }
+
+    dialog.drawer-dialog--left {
+      margin-right: auto;
+      width: min(320px, 88vw);
+      height: 100dvh;
+      max-width: 100vw;
+      display: flex;
+      flex-direction: column;
+      border-top-right-radius: var(--radius-card);
+      border-bottom-right-radius: var(--radius-card);
+    }
+
+    dialog.drawer-dialog:not([open]) {
+      display: none;
+    }
+
+    .drawer-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--color-faint-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .drawer-body {
+      padding: 16px 20px;
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .drawer-footer {
+      padding: 16px 20px;
+      border-top: 1px solid var(--color-faint-border);
+      background-color: var(--color-pure-white);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .shipping-track {
+      width: 100%;
+      height: 6px;
+      border-radius: var(--radius-pill);
+      background-color: var(--color-faint-border);
+      overflow: hidden;
+    }
+
+    .shipping-fill {
+      height: 100%;
+      border-radius: var(--radius-pill);
+      background-color: var(--color-violet-accent);
+    }
+
+    /* Dark Brand Footer */
+    .site-footer {
+      margin-top: auto;
+      background-color: var(--color-ink-black);
+      color: var(--color-pure-white);
+      padding: 56px 16px 36px;
+    }
+
+    @media (min-width: 768px) {
+      .site-footer {
+        padding: 64px 24px 40px;
+      }
+    }
+
+    .footer-inner {
+      max-width: var(--page-max-width);
+      margin: 0 auto;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 32px;
+      padding-bottom: 36px;
+      border-bottom: 1px solid var(--color-slate-ink);
+    }
+
+    @media (min-width: 768px) {
+      .footer-grid {
+        grid-template-columns: 1.4fr 1fr 1fr 1fr;
+      }
+    }
+
+    .footer-heading {
+      margin: 0 0 12px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--color-violet-wash);
+    }
+
+    .footer-links {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-link {
+      color: var(--color-cool-stone);
+      text-decoration: none;
+      font-size: 0.875rem;
+    }
+
+    .footer-link:hover {
+      color: var(--color-pure-white);
+    }
+
+    .footer-bottom {
+      padding-top: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 0.75rem;
+      color: var(--color-cool-stone);
+    }
+
+    /* Windows High Contrast Mode fallback */
+    @media (forced-colors: active) {
+      .product-card,
+      .constellation-tile,
+      .surface-card,
+      .spotlight-card,
+      .category-pill,
+      .pill-btn,
+      .carousel-chevron-btn {
+        border: 1px solid CanvasText;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link visually-hidden">Skip to main content</a>
+
+  <div class="app-shell">
+    <!-- Persistent 64px Desktop Navigation Rail (>= 1024px ONLY) -->
+    <aside class="desktop-rail" aria-label="Store utility sidebar">
+      <div class="rail-top-group">
+        <a href="#top" class="rail-mark" aria-label="Simple E-commerce Store home">
+          <span>s</span><span class="wordmark-period" aria-hidden="true"></span>
+        </a>
+        <nav aria-label="Primary store rail">
+          <ul class="rail-nav-list">
+            <li>
+              <a href="#top" class="rail-link" aria-current="page" aria-label="Home">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M3 10.5 12 3l9 7.5" />
+                  <path d="M5 9.5V21h14V9.5" />
+                </svg>
+                <span class="rail-tooltip">Home</span>
+              </a>
+            </li>
+            <li>
+              <a href="#catalog-section" class="rail-link" aria-label="Shop catalog">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="3" y="3" width="7" height="7" rx="2" />
+                  <rect x="14" y="3" width="7" height="7" rx="2" />
+                  <rect x="3" y="14" width="7" height="7" rx="2" />
+                  <rect x="14" y="14" width="7" height="7" rx="2" />
+                </svg>
+                <span class="rail-tooltip">Shop Catalog</span>
+              </a>
+            </li>
+            <li>
+              <button type="button" class="rail-link" id="rail-search-btn" aria-label="Focus product search">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="11" cy="11" r="7" />
+                  <path d="m20 20-3.5-3.5" />
+                </svg>
+                <span class="rail-tooltip">Search</span>
+              </button>
+            </li>
+            <li>
+              <button type="button" class="rail-link" data-open-cart aria-label="Open shopping bag">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M6 8h12l1 12H5L6 8Z" />
+                  <path d="M9 8V6a3 3 0 0 1 6 0v2" />
+                </svg>
+                <span class="cart-count-badge" data-cart-badge data-empty="true">0</span>
+                <span class="rail-tooltip">Shopping Bag</span>
+              </button>
+            </li>
+            <li>
+              <a href="#secondary-routes" class="rail-link" data-jump-route="checkout" aria-label="Checkout and account previews">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M7 3h10v18l-3-2-2 2-2-2-3 2V3Z" />
+                  <path d="M9 8h6M9 12h6" />
+                </svg>
+                <span class="rail-tooltip">Orders &amp; Checkout</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+      <div class="rail-bottom-group">
+        <a href="#secondary-routes" class="rail-avatar-wrap" data-jump-route="account" aria-label="Account preview (Danish, Demo Profile)">
+          <span class="rail-avatar" aria-hidden="true">MD</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Mobile & Tablet Sticky Header (< 1024px) -->
+    <header class="mobile-header" aria-label="Mobile store header">
+      <a href="#top" class="wordmark wordmark--compact" aria-label="Simple Store Home">
+        <span>simple</span><span class="wordmark-period" aria-hidden="true"></span>
+      </a>
+      <div class="mobile-header-actions">
+        <button type="button" class="icon-btn" id="mobile-search-jump" aria-label="Jump to product search">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" />
+            <path d="m20 20-3.5-3.5" />
+          </svg>
+        </button>
+        <button type="button" class="icon-btn" data-open-cart aria-label="Open shopping bag">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M6 8h12l1 12H5L6 8Z" />
+            <path d="M9 8V6a3 3 0 0 1 6 0v2" />
+          </svg>
+          <span class="cart-count-badge" data-cart-badge data-empty="true">0</span>
+        </button>
+        <button type="button" class="icon-btn icon-btn--bordered" id="mobile-menu-open" aria-label="Open mobile navigation menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <path d="M4 7h16M4 12h16M4 17h16" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="main-column" id="top">
+      <!-- Top Announcement Strip (44px) -->
+      <div class="announcement-bar" role="region" aria-label="Storefront announcements">
+        <div class="announcement-inner">
+          <span class="announcement-badge">
+            <span class="violet-dot" aria-hidden="true"></span>
+            Phase 4C Design Preview · v2
+          </span>
+          <span>Free shipping on orders over <span class="tabular-nums">$75</span> · 12 studio objects ready to explore</span>
+        </div>
+      </div>
+
+      <main id="main-content" class="canvas-container">
+        <!-- HERO: Floating Shopping Constellation -->
+        <section class="hero-section" aria-labelledby="hero-heading">
+          <div class="constellation-stage">
+            <!-- Left Constellation Wing (4 tiles on desktop >= 1120px, unified top ribbon on mobile/tablet) -->
+            <div class="constellation-wing" id="constellation-left" aria-label="Featured studio highlights"></div>
+
+            <!-- Center Brand Wordmark, Heading, Search Pill & Category Pills -->
+            <div class="hero-center-column">
+              <div class="hero-eyebrow">
+                <span class="violet-dot" aria-hidden="true"></span>
+                Simple E-commerce Store · White Canvas Commerce
+              </div>
+
+              <div class="wordmark wordmark--hero" aria-hidden="true">
+                <span>simple</span><span class="wordmark-period"></span>
+              </div>
+
+              <h1 id="hero-heading" class="hero-title">
+                Everyday craft objects, framed for calm discovery
+              </h1>
+
+              <p class="hero-subtitle">
+                Desk precision, everyday carry, home objects, and utilitarian apparel curated on an airy studio canvas.
+              </p>
+
+              <!-- Native <search> Violet Pill Search -->
+              <search class="hero-search-wrap" aria-label="Search store catalog">
+                <form class="hero-search-form" id="hero-search-form" action="#catalog-section">
+                  <label for="catalog-search-input" class="visually-hidden">Search products by name, category, or SKU</label>
+                  <input
+                    id="catalog-search-input"
+                    class="hero-search-input"
+                    type="search"
+                    name="q"
+                    placeholder="Search desk lamp, titanium pen, kettle..."
+                    autocomplete="off"
+                  >
+                  <button type="button" id="search-clear-btn" class="search-clear-btn" hidden aria-label="Clear search query">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                      <path d="M18 6 6 18M6 6l12 12" />
+                    </svg>
+                  </button>
+                  <button type="submit" class="search-submit-btn" aria-label="Submit catalog search">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M5 12h14" />
+                      <path d="m13 6 6 6-6 6" />
+                    </svg>
+                  </button>
+                </form>
+              </search>
+
+              <!-- Interactive Department Category Filter Pills -->
+              <nav class="category-strip-nav" aria-label="Catalog departments">
+                <div class="category-strip" id="category-pills">
+                  <button type="button" class="category-pill" data-category="All" aria-pressed="true">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                      <circle cx="12" cy="12" r="8" />
+                    </svg>
+                    <span>All Objects</span>
+                  </button>
+                  <button type="button" class="category-pill" data-category="Audio & Desk Craft" aria-pressed="false">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                      <path d="M9 18V5l10-2v13" />
+                      <circle cx="6" cy="18" r="3" />
+                      <circle cx="16" cy="16" r="3" />
+                    </svg>
+                    <span>Audio &amp; Desk Craft</span>
+                  </button>
+                  <button type="button" class="category-pill" data-category="Everyday Carry" aria-pressed="false">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                      <circle cx="12" cy="12" r="6" />
+                      <path d="M12 9v3l2 2" />
+                    </svg>
+                    <span>Everyday Carry</span>
+                  </button>
+                  <button type="button" class="category-pill" data-category="Home Objects" aria-pressed="false">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                      <path d="M5 10h10v6a5 5 0 0 1-10 0v-6Z" />
+                      <path d="M15 11h2a2 2 0 0 1 0 4h-2" />
+                    </svg>
+                    <span>Home Objects</span>
+                  </button>
+                  <button type="button" class="category-pill" data-category="Apparel & Goods" aria-pressed="false">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                      <path d="M7 9V6a5 5 0 0 1 10 0v3" />
+                      <rect x="4" y="9" width="16" height="11" rx="2" />
+                    </svg>
+                    <span>Apparel &amp; Goods</span>
+                  </button>
+                </div>
+              </nav>
+            </div>
+
+            <!-- Right Constellation Wing (desktop >= 1120px) -->
+            <div class="constellation-wing constellation-wing--secondary" id="constellation-right" aria-label="Additional studio highlights"></div>
+          </div>
+        </section>
+
+        <!-- SPOTLIGHT DUO: Dark Slate Studio Card + Interactive Mini Swatch Spotlight -->
+        <section class="spotlight-section" aria-label="Curated department spotlights">
+          <div class="spotlight-grid">
+            <article class="spotlight-card spotlight-card--dark">
+              <div>
+                <span class="spotlight-eyebrow">Curated Department · Studio Precision</span>
+                <h2 class="spotlight-heading">Audio &amp; Desk Craft Built to Endure</h2>
+                <p class="spotlight-copy">
+                  Weighted spun brass task lighting, anodized CNC tactile keypads, and acoustic monitor isolation stands.
+                </p>
+              </div>
+              <div class="spotlight-dark-visual">
+                <div class="spotlight-tag-frosted">
+                  <span class="violet-dot" aria-hidden="true"></span>
+                  <span>AT Series · 3 Objects</span>
+                </div>
+                <div id="dark-spotlight-art" style="width: 72px; height: 72px; display: flex; align-items: center; justify-content: center;" aria-hidden="true"></div>
+              </div>
+              <div class="spotlight-pill-row">
+                <button type="button" class="pill-btn pill-btn--white" data-filter-shortcut="Audio & Desk Craft">
+                  Explore Desk Craft
+                </button>
+                <span style="font-size: 0.75rem; color: var(--color-cool-stone);">From <span class="tabular-nums">$92</span></span>
+              </div>
+            </article>
+
+            <article class="spotlight-card spotlight-card--white">
+              <div>
+                <span class="spotlight-eyebrow">Featured Object · Multi-Angle Spotlight</span>
+                <h2 class="spotlight-heading" id="swatch-product-title">Chrono Brass Desk Lamp</h2>
+                <p class="spotlight-copy">
+                  Machined solid brass task light with weighted base and warm 2700K optic diffuser. Inspect perspectives using the mini swatch strip.
+                </p>
+              </div>
+
+              <div class="swatch-preview-layout">
+                <div class="swatch-stage" id="spotlight-main-stage" aria-live="polite"></div>
+                <div>
+                  <div style="font-size: 0.75rem; color: var(--color-muted-gray); font-weight: 500;" id="spotlight-angle-label">
+                    View: Front Studio Elevation
+                  </div>
+                  <div class="swatch-strip" role="group" aria-label="Lamp studio angles">
+                    <button type="button" class="swatch-btn" data-swatch-view="front" aria-pressed="true" aria-label="Front Studio Elevation"></button>
+                    <button type="button" class="swatch-btn" data-swatch-view="profile" aria-pressed="false" aria-label="Side Brass Profile"></button>
+                    <button type="button" class="swatch-btn" data-swatch-view="darkroom" aria-pressed="false" aria-label="Dark Studio Backdrop"></button>
+                  </div>
+                  <div class="spotlight-pill-row">
+                    <div class="price-stack">
+                      <span class="price-current tabular-nums">$128</span>
+                      <span class="price-compare tabular-nums">$150</span>
+                    </div>
+                    <button type="button" class="pill-btn pill-btn--primary" id="spotlight-add-btn">
+                      Add to Bag
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <!-- MAIN DISCOVERY CATALOG GRID (All 12 SAMPLE_PRODUCTS) -->
+        <section id="catalog-section" class="catalog-section" aria-labelledby="catalog-heading">
+          <div class="section-crown">
+            <div class="section-heading-group">
+              <h2 id="catalog-heading" class="section-title">Featured Collection</h2>
+              <p id="catalog-count" class="section-meta tabular-nums">Showing 12 of 12 studio objects</p>
+            </div>
+
+            <div class="section-controls">
+              <button type="button" class="pill-btn pill-btn--outline mobile-filter-trigger" id="mobile-filter-open">
+                Filter &amp; Sort
+              </button>
+
+              <label for="catalog-sort-select" class="visually-hidden">Sort catalog products</label>
+              <select id="catalog-sort-select" class="sort-select" aria-label="Sort catalog products">
+                <option value="featured">Sort: Featured</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+                <option value="newest">New Arrivals First</option>
+              </select>
+
+              <button type="button" class="carousel-chevron-btn" id="catalog-cycle-btn" aria-label="Jump to next department category">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="m9 6 6 6-6 6" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div id="product-grid" class="product-grid"></div>
+        </section>
+
+        <!-- SECONDARY ROUTE ARCHITECTURE PREVIEWS (PDP, Cart & Checkout, Account) -->
+        <section id="secondary-routes" class="routes-showcase-section" aria-labelledby="routes-heading">
+          <div class="section-crown">
+            <div class="section-heading-group">
+              <h2 id="routes-heading" class="section-title">Storefront Route Templates (v2 Surface System)</h2>
+              <p class="section-meta">All 11 existing Next.js routes retain full functionality under White Canvas Commerce geometry.</p>
+            </div>
+
+            <div class="route-tabs-bar" role="tablist" aria-label="Preview secondary storefront routes">
+              <button type="button" role="tab" class="route-tab-btn" id="tab-pdp" aria-selected="true" aria-controls="panel-pdp">Product Detail (/shop/[id])</button>
+              <button type="button" role="tab" class="route-tab-btn" id="tab-checkout" aria-selected="false" aria-controls="panel-checkout">Checkout (/checkout)</button>
+              <button type="button" role="tab" class="route-tab-btn" id="tab-account" aria-selected="false" aria-controls="panel-account">Auth &amp; Orders (/account)</button>
+            </div>
+          </div>
+
+          <!-- Route Tab 1: PDP Preview -->
+          <div id="panel-pdp" role="tabpanel" aria-labelledby="tab-pdp" class="route-panel surface-card">
+            <div class="pdp-grid">
+              <div>
+                <div class="pdp-gallery-stage" id="pdp-main-stage"></div>
+                <div class="pdp-thumb-row" role="group" aria-label="Switch PDP preview product">
+                  <button type="button" class="swatch-btn" data-pdp-id="tactile-field-chronograph" aria-pressed="true" aria-label="Inspect Tactile Field Chronograph"></button>
+                  <button type="button" class="swatch-btn" data-pdp-id="copper-gooseneck-kettle" aria-pressed="false" aria-label="Inspect Copper Gooseneck Kettle"></button>
+                  <button type="button" class="swatch-btn" data-pdp-id="monolith-mechanical-keypad" aria-pressed="false" aria-label="Inspect Monolith 65% Keyboard"></button>
+                </div>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 14px;">
+                <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
+                  <span class="product-badge product-badge--violet" style="position: static;" id="pdp-badge">LIMITED DROP</span>
+                  <span style="font-size: 0.75rem; color: var(--color-muted-gray);" id="pdp-sku">EC-008 · Everyday Carry</span>
+                </div>
+                <h3 style="margin: 0; font-size: clamp(1.375rem, 1.15rem + 1vw, 1.875rem); font-weight: 600; letter-spacing: -0.04em;" id="pdp-title">Tactile Field Chronograph</h3>
+                <div class="price-stack">
+                  <span style="font-size: 1.375rem; font-weight: 600;" class="tabular-nums" id="pdp-price">$195</span>
+                  <span style="font-size: 0.875rem; color: var(--color-muted-gray);" class="tabular-nums" id="pdp-stock">Low Stock (2 remaining)</span>
+                </div>
+                <p style="margin: 0; color: var(--color-muted-gray); line-height: 1.5;" id="pdp-desc">
+                  Bead-blasted 316L stainless field watch with sapphire crystal, luminous hands, and quick-release woven cord strap.
+                </p>
+
+                <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; padding-top: 6px;">
+                  <div class="qty-stepper" aria-label="Quantity selector">
+                    <button type="button" class="qty-btn" id="pdp-qty-minus" aria-label="Decrease quantity">-</button>
+                    <span class="qty-value" id="pdp-qty-val">1</span>
+                    <button type="button" class="qty-btn" id="pdp-qty-plus" aria-label="Increase quantity">+</button>
+                  </div>
+                  <button type="button" class="pill-btn pill-btn--primary" id="pdp-add-btn">Add to Bag</button>
+                </div>
+
+                <div>
+                  <details class="clean-details" open>
+                    <summary>Specifications &amp; Materials</summary>
+                    <p>Machined studio construction, replaceable hardware components, and serialized QC inspection prior to dispatch.</p>
+                  </details>
+                  <details class="clean-details">
+                    <summary>Carbon-Neutral Delivery &amp; Returns</summary>
+                    <p>Free shipping unlocked at $75 subtotal ($8 flat standard rate otherwise). 30-day unused return window.</p>
+                  </details>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Route Tab 2: Checkout Preview -->
+          <div id="panel-checkout" role="tabpanel" aria-labelledby="tab-checkout" class="route-panel" hidden>
+            <div class="split-grid">
+              <form class="surface-card" id="preview-checkout-form" style="display: flex; flex-direction: column; gap: 16px;">
+                <h3 style="margin: 0; font-size: 1.25rem; font-weight: 600; letter-spacing: -0.04em;">Shipping &amp; Simulated Checkout (Demo)</h3>
+                <div class="form-grid-2">
+                  <div class="field-group">
+                    <label for="chk-name" class="field-label">Full Name</label>
+                    <input id="chk-name" class="pill-input" type="text" value="MD Danish" autocomplete="name" required>
+                  </div>
+                  <div class="field-group">
+                    <label for="chk-email" class="field-label">Email Address</label>
+                    <input id="chk-email" class="pill-input" type="email" value="danish.demo@codealpha.dev" autocomplete="email" required>
+                  </div>
+                </div>
+                <div class="form-grid-2">
+                  <div class="field-group">
+                    <label for="chk-city" class="field-label">City</label>
+                    <input id="chk-city" class="pill-input" type="text" value="Bengaluru" autocomplete="address-level2" required>
+                  </div>
+                  <div class="field-group">
+                    <label for="chk-zip" class="field-label">Postal Code</label>
+                    <input id="chk-zip" class="pill-input" type="text" value="560001" autocomplete="postal-code" required>
+                  </div>
+                </div>
+                <div id="checkout-feedback" aria-live="polite" style="font-size: 0.875rem; color: var(--color-violet-accent); font-weight: 500;"></div>
+                <div>
+                  <button type="submit" class="pill-btn pill-btn--primary">Place Simulated Demo Order</button>
+                </div>
+              </form>
+
+              <div class="surface-card" style="display: flex; flex-direction: column; gap: 12px;">
+                <h3 style="margin: 0; font-size: 1.125rem; font-weight: 600; letter-spacing: -0.03em;">Bag Summary</h3>
+                <div id="checkout-summary-body" style="font-size: 0.875rem;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Route Tab 3: Auth & Orders Preview -->
+          <div id="panel-account" role="tabpanel" aria-labelledby="tab-account" class="route-panel" hidden>
+            <div class="split-grid">
+              <div class="surface-card" style="display: flex; flex-direction: column; gap: 14px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                  <div style="width: 48px; height: 48px; border-radius: 9999px; background-color: var(--color-canvas-mist); border: 1px solid var(--color-faint-border); display: inline-flex; align-items: center; justify-content: center; font-weight: 600;">MD</div>
+                  <div>
+                    <h3 style="margin: 0; font-size: 1.125rem; font-weight: 600;">MD Danish (Demo Session)</h3>
+                    <div style="font-size: 0.8125rem; color: var(--color-muted-gray);">danish.demo@codealpha.dev</div>
+                  </div>
+                </div>
+                <p style="margin: 0; color: var(--color-muted-gray);">
+                  Auth &amp; order history routes preserve existing <code style="font-family: monospace; font-size: 0.8em;">localStorage</code> persistence during v2 adoption.
+                </p>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                  <span class="announcement-badge"><span class="violet-dot" aria-hidden="true"></span> Saved Address Ready</span>
+                  <span class="announcement-badge">Demo Account Active</span>
+                </div>
+              </div>
+
+              <div class="surface-card" style="display: flex; flex-direction: column; gap: 10px;">
+                <h3 style="margin: 0; font-size: 1.125rem; font-weight: 600;">Recent Sample Orders</h3>
+                <div class="order-line">
+                  <div>
+                    <div style="font-weight: 500;">ORD-2026-0119</div>
+                    <div style="font-size: 0.75rem; color: var(--color-muted-gray);">Copper Gooseneck Kettle · In Transit</div>
+                  </div>
+                  <span class="tabular-nums" style="font-weight: 600;">$84</span>
+                </div>
+                <div class="order-line" style="border-bottom: 0;">
+                  <div>
+                    <div style="font-weight: 500;">ORD-2026-0104</div>
+                    <div style="font-size: 0.75rem; color: var(--color-muted-gray);">Chrono Brass Desk Lamp + Pen · Delivered</div>
+                  </div>
+                  <span class="tabular-nums" style="font-weight: 600;">$176</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <!-- Dark Brand Footer (#000000 Ink Black) -->
+      <footer class="site-footer" aria-label="Storefront footer">
+        <div class="footer-inner">
+          <div class="footer-grid">
+            <div>
+              <div class="wordmark wordmark--footer">
+                <span>simple</span><span class="wordmark-period" aria-hidden="true"></span>
+              </div>
+              <p style="margin: 12px 0 0; max-width: 34ch; color: var(--color-cool-stone); font-size: 0.875rem; line-height: 1.5;">
+                Floating Shopping Constellation — White Canvas Commerce v2 preview for the CodeAlpha Simple E-commerce Store.
+              </p>
+            </div>
+            <div>
+              <h2 class="footer-heading">Catalog</h2>
+              <ul class="footer-links">
+                <li><a href="#catalog-section" class="footer-link">Audio &amp; Desk Craft</a></li>
+                <li><a href="#catalog-section" class="footer-link">Everyday Carry</a></li>
+                <li><a href="#catalog-section" class="footer-link">Home Objects</a></li>
+                <li><a href="#catalog-section" class="footer-link">Apparel &amp; Goods</a></li>
+              </ul>
+            </div>
+            <div>
+              <h2 class="footer-heading">Storefront</h2>
+              <ul class="footer-links">
+                <li><a href="#secondary-routes" class="footer-link">Product Detail Template</a></li>
+                <li><a href="#secondary-routes" class="footer-link">Checkout Flow Preview</a></li>
+                <li><a href="#secondary-routes" class="footer-link">Orders &amp; Profile</a></li>
+              </ul>
+            </div>
+            <div>
+              <h2 class="footer-heading">System Spec</h2>
+              <ul class="footer-links">
+                <li><span class="footer-link">Canvas: #F2F4F5 / White #FFFFFF</span></li>
+                <li><span class="footer-link">Single Accent: Violet #5433EB</span></li>
+                <li><span class="footer-link">Inter 400 / 500 / 600</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="footer-bottom">
+            <span>CodeAlpha Internship · Simple E-commerce Store · Phase 4C Design Preview</span>
+            <span>Production frontend/src untouched until user approval</span>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Native <dialog closedby="any"> Shopping Bag Slide-Over -->
+  <dialog id="cart-drawer-dialog" class="drawer-dialog drawer-dialog--right" closedby="any" aria-labelledby="cart-dialog-title">
+    <div class="drawer-header">
+      <h2 id="cart-dialog-title" style="margin: 0; font-size: 1.125rem; font-weight: 600; letter-spacing: -0.03em;">Shopping Bag</h2>
+      <button type="button" class="icon-btn" id="cart-close-btn" aria-label="Close shopping bag">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <path d="M18 6 6 18M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="drawer-body">
+      <div style="display: flex; flex-direction: column; gap: 6px; padding-bottom: 10px; border-bottom: 1px solid var(--color-faint-border);">
+        <div id="shipping-progress-copy" style="font-size: 0.75rem; color: var(--color-slate-ink); font-weight: 500;">
+          Add $75 for free studio shipping
+        </div>
+        <div class="shipping-track" aria-hidden="true">
+          <div class="shipping-fill" id="shipping-progress-bar" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <div id="cart-items-list" style="display: flex; flex-direction: column; gap: 10px;"></div>
+    </div>
+
+    <div class="drawer-footer">
+      <div style="display: flex; justify-content: space-between; font-size: 0.875rem;">
+        <span style="color: var(--color-muted-gray);">Subtotal</span>
+        <span id="cart-subtotal-val" class="tabular-nums" style="font-weight: 600;">$0</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; font-size: 0.8125rem;">
+        <span style="color: var(--color-muted-gray);">Estimated Shipping</span>
+        <span id="cart-shipping-val" class="tabular-nums">$0</span>
+      </div>
+      <button type="button" class="pill-btn pill-btn--primary" id="cart-checkout-btn">Proceed to Checkout Preview</button>
+    </div>
+  </dialog>
+
+  <!-- Native <dialog closedby="any"> Mobile Navigation Drawer (< 1024px) -->
+  <dialog id="mobile-nav-dialog" class="drawer-dialog drawer-dialog--left" closedby="any" aria-labelledby="mobile-nav-title">
+    <div class="drawer-header">
+      <div class="wordmark wordmark--compact" id="mobile-nav-title">
+        <span>simple</span><span class="wordmark-period" aria-hidden="true"></span>
+      </div>
+      <button type="button" class="icon-btn" id="mobile-nav-close" aria-label="Close navigation menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <path d="M18 6 6 18M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+    <div class="drawer-body">
+      <nav aria-label="Mobile drawer links" style="display: flex; flex-direction: column; gap: 8px;">
+        <a href="#top" class="pill-btn pill-btn--subtle" style="justify-content: flex-start;" data-close-mobile-nav>Home Constellation</a>
+        <a href="#catalog-section" class="pill-btn pill-btn--subtle" style="justify-content: flex-start;" data-close-mobile-nav>Shop Catalog (12)</a>
+        <a href="#secondary-routes" class="pill-btn pill-btn--subtle" style="justify-content: flex-start;" data-jump-route="pdp" data-close-mobile-nav>Product Detail (/shop/[id])</a>
+        <a href="#secondary-routes" class="pill-btn pill-btn--subtle" style="justify-content: flex-start;" data-jump-route="checkout" data-close-mobile-nav>Checkout (/checkout)</a>
+        <a href="#secondary-routes" class="pill-btn pill-btn--subtle" style="justify-content: flex-start;" data-jump-route="account" data-close-mobile-nav>Account &amp; Orders (/account)</a>
+      </nav>
+    </div>
+  </dialog>
+
+  <!-- Native <dialog closedby="any"> Mobile Catalog Filter Sheet (< 1024px) -->
+  <dialog id="filter-drawer-dialog" class="drawer-dialog drawer-dialog--right" closedby="any" aria-labelledby="filter-dialog-title">
+    <div class="drawer-header">
+      <h2 id="filter-dialog-title" style="margin: 0; font-size: 1.125rem; font-weight: 600;">Filter &amp; Sort</h2>
+      <button type="button" class="icon-btn" id="filter-close-btn" aria-label="Close filters">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <path d="M18 6 6 18M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+    <div class="drawer-body" style="gap: 16px;">
+      <div>
+        <div class="field-label" style="margin-bottom: 8px;">Department</div>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;" id="drawer-category-list">
+          <button type="button" class="pill-btn pill-btn--outline" data-drawer-cat="All">All</button>
+          <button type="button" class="pill-btn pill-btn--outline" data-drawer-cat="Audio & Desk Craft">Audio &amp; Desk Craft</button>
+          <button type="button" class="pill-btn pill-btn--outline" data-drawer-cat="Everyday Carry">Everyday Carry</button>
+          <button type="button" class="pill-btn pill-btn--outline" data-drawer-cat="Home Objects">Home Objects</button>
+          <button type="button" class="pill-btn pill-btn--outline" data-drawer-cat="Apparel & Goods">Apparel &amp; Goods</button>
+        </div>
+      </div>
+
+      <label style="display: flex; align-items: center; gap: 10px; min-block-size: 44px; cursor: pointer;">
+        <input type="checkbox" id="drawer-instock-toggle" style="width: 18px; height: 18px; accent-color: #5433eb;">
+        <span style="font-weight: 500;">In-stock objects only</span>
+      </label>
+    </div>
+    <div class="drawer-footer">
+      <button type="button" class="pill-btn pill-btn--primary" id="filter-apply-btn">Show Results</button>
+    </div>
+  </dialog>
+
+  <script>
+    (function () {
+      'use strict';
+
+      // Exact 12 catalog products from frontend/src/data/products.ts
+      var SAMPLE_PRODUCTS = [
+        { id: 'chrono-brass-desk-lamp', sku: 'AT-014', title: 'Chrono Brass Desk Lamp', category: 'Audio & Desk Craft', price: 128, compareAtPrice: 150, stockCount: 14, badge: 'BESTSELLER', stage: 'mist', svgId: 'lamp', featured: true, desc: 'Spun brass shade on weighted plinth with warm studio optic.' },
+        { id: 'tactile-field-chronograph', sku: 'EC-008', title: 'Tactile Field Chronograph', category: 'Everyday Carry', price: 195, compareAtPrice: null, stockCount: 2, badge: 'LIMITED DROP', stage: 'slate', svgId: 'watch', featured: true, desc: 'Bead-blasted 316L stainless field watch with sapphire crystal.' },
+        { id: 'copper-gooseneck-kettle', sku: 'HO-019', title: 'Copper Gooseneck Kettle', category: 'Home Objects', price: 84, compareAtPrice: null, stockCount: 9, badge: 'NEW ARRIVAL', stage: 'ash', svgId: 'kettle', featured: true, isNewArrival: true, desc: 'Balanced pour-over kettle with counterweight handle.' },
+        { id: 'waxed-canvas-utility-tote', sku: 'AG-004', title: 'Waxed Canvas Utility Tote', category: 'Apparel & Goods', price: 64, compareAtPrice: null, stockCount: 18, badge: '', stage: 'stone', svgId: 'tote', featured: true, desc: '18oz dry-waxed duck canvas everyday studio carryall.' },
+        { id: 'monolith-mechanical-keypad', sku: 'AT-021', title: 'Monolith 65% Mechanical Keyboard', category: 'Audio & Desk Craft', price: 168, compareAtPrice: 185, stockCount: 7, badge: 'BESTSELLER', stage: 'slate', svgId: 'keyboard', featured: false, isNewArrival: true, desc: 'Gasket-mounted anodized aluminum typing chassis.' },
+        { id: 'studio-monitor-isolation-stands', sku: 'AT-032', title: 'Acoustic Monitor Isolation Stands (Pair)', category: 'Audio & Desk Craft', price: 92, compareAtPrice: null, stockCount: 11, badge: '', stage: 'mist', svgId: 'stands', featured: false, desc: 'Decoupled elastomer steel risers angled at 7 degrees.' },
+        { id: 'machined-brass-bolt-pen', sku: 'EC-012', title: 'Machined Brass Bolt-Action Pen', category: 'Everyday Carry', price: 48, compareAtPrice: null, stockCount: 22, badge: 'NEW ARRIVAL', stage: 'stone', svgId: 'pen', featured: false, isNewArrival: true, desc: 'Turned C36000 brass pocket pen with crisp bolt detent.' },
+        { id: 'modular-cordura-tech-pouch', sku: 'EC-019', title: 'Modular Ballistic Tech Organiser', category: 'Everyday Carry', price: 54, compareAtPrice: 64, stockCount: 3, badge: '', stage: 'ash', svgId: 'pouch', featured: false, desc: 'Weather-sealed 1000D cordura cable and drive sleeve.' },
+        { id: 'silent-sweep-atelier-clock', sku: 'HO-024', title: 'Silent Sweep Atelier Desk Clock', category: 'Home Objects', price: 76, compareAtPrice: null, stockCount: 15, badge: 'NEW ARRIVAL', stage: 'mist', svgId: 'clock', featured: false, isNewArrival: true, desc: 'Continuous sweep quartz movement housed in brushed alloy.' },
+        { id: 'fluted-stoneware-carafe-set', sku: 'HO-031', title: 'Fluted Stoneware Carafe & Tumbler', category: 'Home Objects', price: 58, compareAtPrice: null, stockCount: 0, badge: 'Sold Out', stage: 'stone', svgId: 'carafe', featured: false, desc: 'Matte raw stoneware bedside decanter with nested cup.' },
+        { id: 'heavyweight-canvas-chore-coat', sku: 'AG-011', title: 'Heavyweight Duck Canvas Chore Coat', category: 'Apparel & Goods', price: 142, compareAtPrice: 165, stockCount: 6, badge: 'LIMITED DROP', stage: 'slate', svgId: 'jacket', featured: false, desc: 'Unwashed 14oz cotton duck work jacket with bar-tacked pockets.' },
+        { id: 'full-grain-leather-field-folio', sku: 'AG-018', title: 'Full-Grain Leather A5 Field Folio', category: 'Apparel & Goods', price: 78, compareAtPrice: null, stockCount: 12, badge: '', stage: 'ash', svgId: 'folio', featured: false, desc: 'Vegetable-tanned harness leather notebook and card wrap.' }
+      ];
+
+      // Zero-gradient, flat studio object vectors aligned to neutral palette (#332F2D, #665A54, #ACB0AA, #CCCCCC, #FFFFFF)
+      function renderStudioSvg(svgId, variant) {
+        var darkBackdrop = variant === 'dark';
+        var primary = darkBackdrop ? '#FFFFFF' : '#332F2D';
+        var secondary = darkBackdrop ? '#ACB0AA' : '#665A54';
+        var highlight = darkBackdrop ? '#CCCCCC' : '#ACB0AA';
+
+        var shapes = {
+          lamp: '<path d="M56 36h48l16 32H40l16-32Z" fill="' + primary + '"/><rect x="76" y="68" width="8" height="44" rx="2" fill="' + secondary + '"/><rect x="52" y="112" width="56" height="10" rx="5" fill="' + primary + '"/><circle cx="102" cy="84" r="5" fill="' + highlight + '"/>',
+          watch: '<rect x="64" y="20" width="32" height="120" rx="10" fill="' + secondary + '"/><circle cx="80" cy="80" r="34" fill="' + primary + '"/><circle cx="80" cy="80" r="24" fill="' + highlight + '"/><path d="M80 62v18l12 8" stroke="' + (darkBackdrop ? '#332F2D' : '#FFFFFF') + '" stroke-width="4" stroke-linecap="round" fill="none"/>',
+          kettle: '<path d="M54 58h52l8 54H46l8-54Z" fill="' + primary + '"/><path d="M106 72c18 0 22 24 8 34" stroke="' + secondary + '" stroke-width="7" stroke-linecap="round" fill="none"/><path d="M50 102c-16-8-22-26-26-44" stroke="' + highlight + '" stroke-width="6" stroke-linecap="round" fill="none"/><rect x="64" y="46" width="32" height="10" rx="4" fill="' + secondary + '"/>',
+          tote: '<path d="M60 54V42c0-10 8-18 20-18s20 8 20 18v12" stroke="' + secondary + '" stroke-width="7" fill="none"/><rect x="40" y="54" width="80" height="72" rx="12" fill="' + primary + '"/><rect x="54" y="74" width="52" height="30" rx="6" fill="' + highlight + '"/>',
+          keyboard: '<rect x="24" y="54" width="112" height="52" rx="10" fill="' + primary + '"/><rect x="34" y="64" width="92" height="12" rx="3" fill="' + highlight + '"/><rect x="34" y="82" width="60" height="12" rx="3" fill="' + secondary + '"/><rect x="98" y="82" width="28" height="12" rx="3" fill="' + highlight + '"/>',
+          stands: '<path d="M32 62h38l8 52H26l6-52Z" fill="' + primary + '"/><path d="M90 62h38l6 52H82l8-52Z" fill="' + secondary + '"/><rect x="28" y="114" width="48" height="8" rx="4" fill="' + highlight + '"/><rect x="84" y="114" width="48" height="8" rx="4" fill="' + highlight + '"/>',
+          pen: '<rect x="70" y="28" width="20" height="92" rx="8" fill="' + primary + '"/><path d="M70 116l10 20 10-20H70Z" fill="' + secondary + '"/><rect x="86" y="42" width="8" height="32" rx="4" fill="' + highlight + '"/>',
+          pouch: '<rect x="34" y="48" width="92" height="64" rx="14" fill="' + primary + '"/><rect x="34" y="72" width="92" height="6" fill="' + highlight + '"/><circle cx="102" cy="75" r="5" fill="' + secondary + '"/>',
+          clock: '<circle cx="80" cy="80" r="46" fill="' + primary + '"/><circle cx="80" cy="80" r="36" fill="' + highlight + '"/><path d="M80 54v26l16 10" stroke="' + (darkBackdrop ? '#332F2D' : '#FFFFFF') + '" stroke-width="5" stroke-linecap="round" fill="none"/>',
+          carafe: '<path d="M62 34h36l6 24 10 58H46l10-58 6-24Z" fill="' + primary + '"/><rect x="52" y="96" width="56" height="22" rx="8" fill="' + highlight + '"/>',
+          jacket: '<path d="M52 38h56l20 26-14 14-8-10v56H54V68l-8 10-14-14 20-26Z" fill="' + primary + '"/><rect x="64" y="74" width="32" height="36" rx="4" fill="' + secondary + '"/>',
+          folio: '<rect x="44" y="34" width="72" height="92" rx="10" fill="' + primary + '"/><rect x="96" y="54" width="24" height="28" rx="6" fill="' + highlight + '"/><circle cx="108" cy="68" r="4" fill="' + secondary + '"/>'
+        };
+
+        return '<svg viewBox="0 0 160 160" style="width:76%;height:76%;max-width:176px;max-height:176px;" aria-hidden="true">' + (shapes[svgId] || shapes.lamp) + '</svg>';
+      }
+
+      var state = {
+        category: 'All',
+        query: '',
+        sort: 'featured',
+        inStockOnly: false,
+        cart: [
+          { id: 'chrono-brass-desk-lamp', qty: 1 }
+        ]
+      };
+
+      var els = {
+        constLeft: document.getElementById('constellation-left'),
+        constRight: document.getElementById('constellation-right'),
+        darkSpotlightArt: document.getElementById('dark-spotlight-art'),
+        spotlightMainStage: document.getElementById('spotlight-main-stage'),
+        spotlightAngleLabel: document.getElementById('spotlight-angle-label'),
+        spotlightAddBtn: document.getElementById('spotlight-add-btn'),
+        productGrid: document.getElementById('product-grid'),
+        catalogCount: document.getElementById('catalog-count'),
+        searchInput: document.getElementById('catalog-search-input'),
+        searchClearBtn: document.getElementById('search-clear-btn'),
+        searchForm: document.getElementById('hero-search-form'),
+        sortSelect: document.getElementById('catalog-sort-select'),
+        cartDialog: document.getElementById('cart-drawer-dialog'),
+        mobileNavDialog: document.getElementById('mobile-nav-dialog'),
+        filterDialog: document.getElementById('filter-drawer-dialog'),
+        cartItemsList: document.getElementById('cart-items-list'),
+        cartSubtotalVal: document.getElementById('cart-subtotal-val'),
+        cartShippingVal: document.getElementById('cart-shipping-val'),
+        shippingBar: document.getElementById('shipping-progress-bar'),
+        shippingCopy: document.getElementById('shipping-progress-copy'),
+        checkoutSummaryBody: document.getElementById('checkout-summary-body')
+      };
+
+      function getProduct(id) {
+        for (var i = 0; i < SAMPLE_PRODUCTS.length; i++) {
+          if (SAMPLE_PRODUCTS[i].id === id) return SAMPLE_PRODUCTS[i];
+        }
+        return SAMPLE_PRODUCTS[0];
+      }
+
+      function addToCart(id, qty) {
+        var product = getProduct(id);
+        if (!product || product.stockCount === 0) return;
+        var amount = qty || 1;
+        var found = false;
+        for (var i = 0; i < state.cart.length; i++) {
+          if (state.cart[i].id === id) {
+            state.cart[i].qty = Math.min(product.stockCount, state.cart[i].qty + amount);
+            found = true;
+            break;
+          }
+        }
+        if (!found) {
+          state.cart.push({ id: id, qty: Math.min(product.stockCount, amount) });
+        }
+        renderCart();
+      }
+
+      function updateCartQty(id, delta) {
+        var next = [];
+        for (var i = 0; i < state.cart.length; i++) {
+          var item = state.cart[i];
+          if (item.id === id) {
+            var p = getProduct(id);
+            var q = Math.min(p.stockCount, item.qty + delta);
+            if (q > 0) next.push({ id: id, qty: q });
+          } else {
+            next.push(item);
+          }
+        }
+        state.cart = next;
+        renderCart();
+      }
+
+      function renderCart() {
+        var totalQty = 0;
+        var subtotal = 0;
+        var html = '';
+
+        for (var i = 0; i < state.cart.length; i++) {
+          var p = getProduct(state.cart[i].id);
+          totalQty += state.cart[i].qty;
+          subtotal += p.price * state.cart[i].qty;
+          html += '<div style="display:flex;align-items:center;gap:12px;padding:10px;border:1px solid var(--color-faint-border);border-radius:20px;">' +
+            '<div class="stage-tone--' + p.stage + '" style="width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;padding:8px;flex-shrink:0;">' +
+            renderStudioSvg(p.svgId, (p.stage === 'slate' || p.stage === 'ash') ? 'dark' : 'light') +
+            '</div>' +
+            '<div style="flex:1;min-width:0;">' +
+            '<div style="font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + p.title + '</div>' +
+            '<div class="tabular-nums" style="font-size:0.75rem;color:var(--color-muted-gray);">$' + p.price + ' each</div>' +
+            '</div>' +
+            '<div class="qty-stepper">' +
+            '<button type="button" class="qty-btn" data-cart-dec="' + p.id + '" aria-label="Decrease quantity of ' + p.title + '">-</button>' +
+            '<span class="qty-value">' + state.cart[i].qty + '</span>' +
+            '<button type="button" class="qty-btn" data-cart-inc="' + p.id + '" aria-label="Increase quantity of ' + p.title + '">+</button>' +
+            '</div>' +
+            '</div>';
+        }
+
+        if (!html) {
+          html = '<p style="color:var(--color-muted-gray);margin:16px 0;">Your bag is empty. Add any in-stock studio object to preview shipping calculation.</p>';
+        }
+
+        els.cartItemsList.innerHTML = html;
+
+        var badges = document.querySelectorAll('[data-cart-badge]');
+        for (var b = 0; b < badges.length; b++) {
+          badges[b].textContent = String(totalQty);
+          badges[b].setAttribute('data-empty', totalQty === 0 ? 'true' : 'false');
+        }
+
+        var threshold = 75;
+        var shipping = subtotal === 0 ? 0 : (subtotal >= threshold ? 0 : 8);
+        var pct = Math.min(100, Math.round((subtotal / threshold) * 100));
+        els.shippingBar.style.width = pct + '%';
+        if (subtotal >= threshold) {
+          els.shippingCopy.textContent = 'Free studio shipping unlocked ($75+ threshold met)';
+        } else {
+          els.shippingCopy.textContent = 'Add $' + (threshold - subtotal) + ' more for free studio shipping';
+        }
+
+        els.cartSubtotalVal.textContent = '$' + subtotal;
+        els.cartShippingVal.textContent = subtotal === 0 ? '$0' : (shipping === 0 ? 'Free' : '$' + shipping);
+
+        els.checkoutSummaryBody.innerHTML =
+          '<div class="order-line"><span>Items (' + totalQty + ')</span><span class="tabular-nums">$' + subtotal + '</span></div>' +
+          '<div class="order-line"><span>Estimated Shipping</span><span class="tabular-nums">' + (subtotal === 0 ? '$0' : (shipping === 0 ? 'Free' : '$' + shipping)) + '</span></div>' +
+          '<div class="order-line" style="border-bottom:0;font-weight:600;font-size:1rem;"><span>Total (USD)</span><span class="tabular-nums">$' + (subtotal + shipping) + '</span></div>';
+      }
+
+      var CONSTELLATION_LABELS = {
+        'chrono-brass-desk-lamp': 'Lamp',
+        'tactile-field-chronograph': 'Watch',
+        'copper-gooseneck-kettle': 'Kettle',
+        'waxed-canvas-utility-tote': 'Tote',
+        'monolith-mechanical-keypad': 'Keypad',
+        'studio-monitor-isolation-stands': 'Stands',
+        'machined-brass-bolt-pen': 'Pen',
+        'modular-cordura-tech-pouch': 'Pouch'
+      };
+
+      function renderConstellation() {
+        var leftItems = SAMPLE_PRODUCTS.slice(0, 4);
+        var rightItems = SAMPLE_PRODUCTS.slice(4, 8);
+
+        function buildWingHtml(items) {
+          return items.map(function (p) {
+            var isDark = p.stage === 'slate' || p.stage === 'ash';
+            var label = CONSTELLATION_LABELS[p.id] || p.title;
+            return '<a href="#catalog-section" class="constellation-tile" data-constellation-pick="' + p.id + '">' +
+              '<div class="constellation-tile-stage stage-tone--' + p.stage + '">' +
+              renderStudioSvg(p.svgId, isDark ? 'dark' : 'light') +
+              '</div>' +
+              '<div class="constellation-tile-label">' +
+              '<span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + label + '</span>' +
+              '<span class="constellation-tile-price">$' + p.price + '</span>' +
+              '</div>' +
+              '</a>';
+          }).join('');
+        }
+
+        els.constLeft.innerHTML = buildWingHtml(leftItems);
+        els.constRight.innerHTML = buildWingHtml(rightItems);
+        els.darkSpotlightArt.innerHTML = renderStudioSvg('lamp', 'dark');
+      }
+
+      function setSpotlightView(view) {
+        var labels = {
+          front: 'View: Front Studio Elevation',
+          profile: 'View: Brass Canopy Profile',
+          darkroom: 'View: Dark Studio Backdrop'
+        };
+        var isDark = view === 'darkroom';
+        els.spotlightAngleLabel.textContent = labels[view] || labels.front;
+        els.spotlightMainStage.style.backgroundColor = isDark ? 'var(--color-slate-ink)' : (view === 'profile' ? 'var(--color-faint-border)' : 'var(--color-canvas-mist)');
+        els.spotlightMainStage.innerHTML = renderStudioSvg(view === 'profile' ? 'clock' : 'lamp', isDark ? 'dark' : 'light');
+
+        var swButtons = document.querySelectorAll('[data-swatch-view]');
+        for (var i = 0; i < swButtons.length; i++) {
+          var v = swButtons[i].getAttribute('data-swatch-view');
+          swButtons[i].setAttribute('aria-pressed', v === view ? 'true' : 'false');
+          swButtons[i].style.backgroundColor = v === 'darkroom' ? 'var(--color-slate-ink)' : 'var(--color-canvas-mist)';
+          swButtons[i].innerHTML = renderStudioSvg(v === 'profile' ? 'clock' : 'lamp', v === 'darkroom' ? 'dark' : 'light');
+        }
+      }
+
+      function getFilteredProducts() {
+        var q = state.query.trim().toLowerCase();
+        var list = SAMPLE_PRODUCTS.filter(function (p) {
+          var matchCat = state.category === 'All' || p.category === state.category;
+          var matchStock = !state.inStockOnly || p.stockCount > 0;
+          var matchQuery = !q ||
+            p.title.toLowerCase().indexOf(q) !== -1 ||
+            p.category.toLowerCase().indexOf(q) !== -1 ||
+            p.sku.toLowerCase().indexOf(q) !== -1 ||
+            p.desc.toLowerCase().indexOf(q) !== -1;
+          return matchCat && matchStock && matchQuery;
+        });
+
+        if (state.sort === 'price-asc') {
+          list.sort(function (a, b) { return a.price - b.price; });
+        } else if (state.sort === 'price-desc') {
+          list.sort(function (a, b) { return b.price - a.price; });
+        } else if (state.sort === 'newest') {
+          list.sort(function (a, b) { return (b.isNewArrival ? 1 : 0) - (a.isNewArrival ? 1 : 0); });
+        }
+        return list;
+      }
+
+      function renderCatalog() {
+        var items = getFilteredProducts();
+        els.catalogCount.textContent = 'Showing ' + items.length + ' of ' + SAMPLE_PRODUCTS.length + ' studio objects';
+
+        if (!items.length) {
+          els.productGrid.innerHTML = '<div class="empty-state-card" style="grid-column: 1 / -1;">' +
+            '<h3 style="margin:0;font-size:1.125rem;font-weight:600;">No objects match those filters</h3>' +
+            '<p style="margin:0;color:var(--color-muted-gray);">Reset search or department filters to view all 12 catalog pieces.</p>' +
+            '<button type="button" class="pill-btn pill-btn--primary" id="reset-filters-inline">Reset Filters</button>' +
+            '</div>';
+          return;
+        }
+
+        els.productGrid.innerHTML = items.map(function (p) {
+          var isDark = p.stage === 'slate' || p.stage === 'ash';
+          var badgeHtml = '';
+          if (p.badge) {
+            var badgeCls = p.stockCount === 0 ? 'product-badge--soldout' :
+              (p.badge === 'LIMITED DROP' ? 'product-badge--violet' : (isDark ? 'product-badge--frosted' : 'product-badge--solid'));
+            badgeHtml = '<span class="product-badge ' + badgeCls + '">' + p.badge + '</span>';
+          }
+
+          var stockLabel = p.stockCount === 0 ? 'Sold Out' : (p.stockCount <= 3 ? 'Low stock (' + p.stockCount + ')' : 'In Stock');
+          var compareHtml = p.compareAtPrice ? '<span class="price-compare tabular-nums">$' + p.compareAtPrice + '</span>' : '';
+
+          return '<article class="product-card">' +
+            '<a href="#secondary-routes" class="product-stage-link stage-tone--' + p.stage + '" data-inspect-pdp="' + p.id + '" aria-label="Inspect ' + p.title + '">' +
+            badgeHtml +
+            renderStudioSvg(p.svgId, isDark ? 'dark' : 'light') +
+            '</a>' +
+            '<div class="product-card-body">' +
+            '<div class="product-meta-row"><span>' + p.category + '</span><span class="tabular-nums">' + p.sku + '</span></div>' +
+            '<a href="#secondary-routes" class="product-title-link" data-inspect-pdp="' + p.id + '">' + p.title + '</a>' +
+            '<div style="font-size:0.75rem;color:var(--color-muted-gray);">' + stockLabel + '</div>' +
+            '<div class="product-card-footer">' +
+            '<div class="price-stack"><span class="price-current tabular-nums">$' + p.price + '</span>' + compareHtml + '</div>' +
+            '<button type="button" class="card-add-btn" data-add-id="' + p.id + '" ' + (p.stockCount === 0 ? 'disabled' : '') + '>' +
+            (p.stockCount === 0 ? 'Sold Out' : 'Add') +
+            '</button>' +
+            '</div>' +
+            '</div>' +
+            '</article>';
+        }).join('');
+      }
+
+      function syncCategoryPills() {
+        var catBtns = document.querySelectorAll('[data-category]');
+        for (var i = 0; i < catBtns.length; i++) {
+          var active = catBtns[i].getAttribute('data-category') === state.category;
+          catBtns[i].setAttribute('aria-pressed', active ? 'true' : 'false');
+        }
+        var drawerBtns = document.querySelectorAll('[data-drawer-cat]');
+        for (var j = 0; j < drawerBtns.length; j++) {
+          var dActive = drawerBtns[j].getAttribute('data-drawer-cat') === state.category;
+          drawerBtns[j].classList.toggle('pill-btn--primary', dActive);
+          drawerBtns[j].classList.toggle('pill-btn--outline', !dActive);
+        }
+      }
+
+      function setPdpProduct(id) {
+        var p = getProduct(id);
+        var isDark = p.stage === 'slate' || p.stage === 'ash';
+        var stage = document.getElementById('pdp-main-stage');
+        stage.style.backgroundColor = isDark ? 'var(--color-slate-ink)' : 'var(--color-canvas-mist)';
+        stage.innerHTML = renderStudioSvg(p.svgId, isDark ? 'dark' : 'light');
+        document.getElementById('pdp-badge').textContent = p.badge || 'STUDIO EDITION';
+        document.getElementById('pdp-sku').textContent = p.sku + ' · ' + p.category;
+        document.getElementById('pdp-title').textContent = p.title;
+        document.getElementById('pdp-price').textContent = '$' + p.price;
+        document.getElementById('pdp-stock').textContent = p.stockCount === 0 ? 'Currently Sold Out' : (p.stockCount <= 3 ? 'Low Stock (' + p.stockCount + ' remaining)' : 'In Stock (' + p.stockCount + ' available)');
+        document.getElementById('pdp-desc').textContent = p.desc;
+        var addBtn = document.getElementById('pdp-add-btn');
+        addBtn.setAttribute('data-pdp-active-id', p.id);
+        addBtn.disabled = p.stockCount === 0;
+        addBtn.textContent = p.stockCount === 0 ? 'Sold Out' : 'Add to Bag';
+
+        var thumbBtns = document.querySelectorAll('[data-pdp-id]');
+        for (var i = 0; i < thumbBtns.length; i++) {
+          var tid = thumbBtns[i].getAttribute('data-pdp-id');
+          var tp = getProduct(tid);
+          thumbBtns[i].setAttribute('aria-pressed', tid === p.id ? 'true' : 'false');
+          thumbBtns[i].innerHTML = renderStudioSvg(tp.svgId, (tp.stage === 'slate' || tp.stage === 'ash') ? 'dark' : 'light');
+        }
+      }
+
+      function switchRouteTab(targetName) {
+        var tabMap = {
+          pdp: { tab: 'tab-pdp', panel: 'panel-pdp' },
+          checkout: { tab: 'tab-checkout', panel: 'panel-checkout' },
+          account: { tab: 'tab-account', panel: 'panel-account' }
+        };
+        var keys = Object.keys(tabMap);
+        for (var i = 0; i < keys.length; i++) {
+          var k = keys[i];
+          var isMatch = k === targetName;
+          document.getElementById(tabMap[k].tab).setAttribute('aria-selected', isMatch ? 'true' : 'false');
+          document.getElementById(tabMap[k].panel).hidden = !isMatch;
+        }
+      }
+
+      // Light-dismiss fallback for browsers lacking native closedby="any"
+      function wireDialogDismiss(dialog) {
+        if (!('closedBy' in HTMLDialogElement.prototype)) {
+          dialog.addEventListener('click', function (ev) {
+            var r = dialog.getBoundingClientRect();
+            var outside = ev.clientX < r.left || ev.clientX > r.right || ev.clientY < r.top || ev.clientY > r.bottom;
+            if (outside) dialog.close();
+          });
+        }
+      }
+
+      wireDialogDismiss(els.cartDialog);
+      wireDialogDismiss(els.mobileNavDialog);
+      wireDialogDismiss(els.filterDialog);
+
+      // Global click delegation
+      document.addEventListener('click', function (ev) {
+        var catBtn = ev.target.closest('[data-category]');
+        if (catBtn) {
+          state.category = catBtn.getAttribute('data-category');
+          syncCategoryPills();
+          renderCatalog();
+          return;
+        }
+
+        var dCatBtn = ev.target.closest('[data-drawer-cat]');
+        if (dCatBtn) {
+          state.category = dCatBtn.getAttribute('data-drawer-cat');
+          syncCategoryPills();
+          renderCatalog();
+          return;
+        }
+
+        var shortcutBtn = ev.target.closest('[data-filter-shortcut]');
+        if (shortcutBtn) {
+          state.category = shortcutBtn.getAttribute('data-filter-shortcut');
+          syncCategoryPills();
+          renderCatalog();
+          document.getElementById('catalog-section').scrollIntoView();
+          return;
+        }
+
+        var swBtn = ev.target.closest('[data-swatch-view]');
+        if (swBtn) {
+          setSpotlightView(swBtn.getAttribute('data-swatch-view'));
+          return;
+        }
+
+        var addBtn = ev.target.closest('[data-add-id]');
+        if (addBtn) {
+          var pid = addBtn.getAttribute('data-add-id');
+          addToCart(pid, 1);
+          addBtn.setAttribute('data-added', 'true');
+          addBtn.textContent = 'Added';
+          setTimeout(function () {
+            addBtn.removeAttribute('data-added');
+            if (!addBtn.disabled) addBtn.textContent = 'Add';
+          }, 900);
+          return;
+        }
+
+        var openCartBtn = ev.target.closest('[data-open-cart]');
+        if (openCartBtn) {
+          els.cartDialog.showModal();
+          return;
+        }
+
+        var incBtn = ev.target.closest('[data-cart-inc]');
+        if (incBtn) {
+          updateCartQty(incBtn.getAttribute('data-cart-inc'), 1);
+          return;
+        }
+
+        var decBtn = ev.target.closest('[data-cart-dec]');
+        if (decBtn) {
+          updateCartQty(decBtn.getAttribute('data-cart-dec'), -1);
+          return;
+        }
+
+        var pdpBtn = ev.target.closest('[data-pdp-id], [data-inspect-pdp]');
+        if (pdpBtn) {
+          var targetPid = pdpBtn.getAttribute('data-pdp-id') || pdpBtn.getAttribute('data-inspect-pdp');
+          setPdpProduct(targetPid);
+          switchRouteTab('pdp');
+          return;
+        }
+
+        var jumpBtn = ev.target.closest('[data-jump-route]');
+        if (jumpBtn) {
+          switchRouteTab(jumpBtn.getAttribute('data-jump-route'));
+        }
+
+        if (ev.target.closest('[data-close-mobile-nav]')) {
+          if (els.mobileNavDialog.open) els.mobileNavDialog.close();
+        }
+
+        if (ev.target.id === 'reset-filters-inline') {
+          state.category = 'All';
+          state.query = '';
+          state.inStockOnly = false;
+          els.searchInput.value = '';
+          els.searchClearBtn.hidden = true;
+          document.getElementById('drawer-instock-toggle').checked = false;
+          syncCategoryPills();
+          renderCatalog();
+        }
+      });
+
+      // Specific controls
+      document.getElementById('rail-search-btn').addEventListener('click', function () {
+        els.searchInput.focus();
+      });
+      document.getElementById('mobile-search-jump').addEventListener('click', function () {
+        els.searchInput.focus();
+      });
+      document.getElementById('mobile-menu-open').addEventListener('click', function () {
+        els.mobileNavDialog.showModal();
+      });
+      document.getElementById('mobile-nav-close').addEventListener('click', function () {
+        els.mobileNavDialog.close();
+      });
+      document.getElementById('cart-close-btn').addEventListener('click', function () {
+        els.cartDialog.close();
+      });
+      document.getElementById('mobile-filter-open').addEventListener('click', function () {
+        els.filterDialog.showModal();
+      });
+      document.getElementById('filter-close-btn').addEventListener('click', function () {
+        els.filterDialog.close();
+      });
+      document.getElementById('filter-apply-btn').addEventListener('click', function () {
+        els.filterDialog.close();
+      });
+      document.getElementById('drawer-instock-toggle').addEventListener('change', function (e) {
+        state.inStockOnly = e.target.checked;
+        renderCatalog();
+      });
+      document.getElementById('cart-checkout-btn').addEventListener('click', function () {
+        els.cartDialog.close();
+        switchRouteTab('checkout');
+        document.getElementById('secondary-routes').scrollIntoView();
+      });
+      document.getElementById('spotlight-add-btn').addEventListener('click', function () {
+        addToCart('chrono-brass-desk-lamp', 1);
+        els.cartDialog.showModal();
+      });
+
+      // Search form & live clear
+      els.searchInput.addEventListener('input', function () {
+        state.query = els.searchInput.value;
+        els.searchClearBtn.hidden = !state.query;
+        renderCatalog();
+      });
+      els.searchClearBtn.addEventListener('click', function () {
+        els.searchInput.value = '';
+        state.query = '';
+        els.searchClearBtn.hidden = true;
+        renderCatalog();
+        els.searchInput.focus();
+      });
+      els.searchForm.addEventListener('submit', function (ev) {
+        ev.preventDefault();
+        state.query = els.searchInput.value;
+        renderCatalog();
+        document.getElementById('catalog-section').scrollIntoView();
+      });
+
+      els.sortSelect.addEventListener('change', function (ev) {
+        state.sort = ev.target.value;
+        renderCatalog();
+      });
+
+      document.getElementById('catalog-cycle-btn').addEventListener('click', function () {
+        var cats = ['All', 'Audio & Desk Craft', 'Everyday Carry', 'Home Objects', 'Apparel & Goods'];
+        var idx = cats.indexOf(state.category);
+        state.category = cats[(idx + 1) % cats.length];
+        syncCategoryPills();
+        renderCatalog();
+      });
+
+      // Route tabs
+      document.getElementById('tab-pdp').addEventListener('click', function () { switchRouteTab('pdp'); });
+      document.getElementById('tab-checkout').addEventListener('click', function () { switchRouteTab('checkout'); });
+      document.getElementById('tab-account').addEventListener('click', function () { switchRouteTab('account'); });
+
+      // PDP qty stepper
+      var pdpQty = 1;
+      document.getElementById('pdp-qty-minus').addEventListener('click', function () {
+        pdpQty = Math.max(1, pdpQty - 1);
+        document.getElementById('pdp-qty-val').textContent = String(pdpQty);
+      });
+      document.getElementById('pdp-qty-plus').addEventListener('click', function () {
+        pdpQty = Math.min(10, pdpQty + 1);
+        document.getElementById('pdp-qty-val').textContent = String(pdpQty);
+      });
+      document.getElementById('pdp-add-btn').addEventListener('click', function () {
+        var id = this.getAttribute('data-pdp-active-id') || 'tactile-field-chronograph';
+        addToCart(id, pdpQty);
+        els.cartDialog.showModal();
+      });
+
+      // Simulated Checkout Form Submit
+      document.getElementById('preview-checkout-form').addEventListener('submit', function (ev) {
+        ev.preventDefault();
+        var name = document.getElementById('chk-name').value || 'Guest';
+        document.getElementById('checkout-feedback').textContent = 'Simulated order ORD-2026-4810 confirmed for ' + name + ' (Demo Preview — zero real charge).';
+      });
+
+      // Initial hydration
+      renderConstellation();
+      setSpotlightView('front');
+      setPdpProduct('tactile-field-chronograph');
+      syncCategoryPills();
+      renderCatalog();
+      renderCart();
+    })();
+  </script>
+</body>
+</html>

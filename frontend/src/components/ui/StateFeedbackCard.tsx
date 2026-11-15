@@ -1,75 +1,46 @@
-import React from 'react';
 import Link from 'next/link';
 import { LineIcon } from './LineIcon';
-import { PillBadge } from './PillBadge';
+
+interface StateFeedbackCardProps {
+  icon?: 'alert' | 'check' | 'search' | 'bag' | 'user';
+  title: string;
+  description: string;
+  actionLabel?: string;
+  onAction?: () => void;
+  actionHref?: string;
+}
 
 export function StateFeedbackCard({
-  status,
-  badgeText,
+  icon = 'search',
   title,
-  message,
+  description,
   actionLabel,
-  actionHref,
   onAction,
-}: {
-  status: 'loading' | 'empty' | 'error' | 'success';
-  badgeText?: string;
-  title: string;
-  message: string;
-  actionLabel?: string;
-  actionHref?: string;
-  onAction?: () => void;
-}) {
-  const isError = status === 'error';
-  const isSuccess = status === 'success';
-
+  actionHref,
+}: StateFeedbackCardProps) {
   return (
-    <div
-      role={isError ? 'alert' : 'status'}
-      className={`rounded-card p-8 text-center border ${
-        isError
-          ? 'bg-charred-clove border-chili-red'
-          : isSuccess
-          ? 'bg-charred-clove border-tiger-gold'
-          : 'bg-dark-spice border-cardamom-brown'
-      }`}
-    >
-      <div className="flex justify-center mb-4">
-        <PillBadge tone={isError ? 'alert' : isSuccess ? 'gold' : 'spice'}>
-          {badgeText || status.toUpperCase()}
-        </PillBadge>
+    <div className="surface-card p-8 sm:p-10 text-center flex flex-col items-center justify-center gap-4 max-w-lg mx-auto">
+      <div className="w-12 h-12 rounded-pill bg-canvas-mist border border-faint-border text-ink-black flex items-center justify-center">
+        <LineIcon name={icon} size={22} />
       </div>
-
-      <div className="flex justify-center mb-3 text-tiger-gold">
-        <LineIcon
-          name={
-            isError
-              ? 'alert'
-              : isSuccess
-              ? 'check'
-              : status === 'empty'
-              ? 'bag'
-              : 'search'
-          }
-          size={28}
-        />
+      <div className="space-y-1.5">
+        <h3 className="text-lg font-semibold tracking-[-0.04em] text-ink-black">
+          {title}
+        </h3>
+        <p className="text-sm text-muted-gray max-w-md mx-auto">
+          {description}
+        </p>
       </div>
-
-      <h3 className="heading-card text-tiger-gold mb-2">{title}</h3>
-      <p className="text-sm text-warm-sand max-w-md mx-auto mb-6">{message}</p>
-
-      {actionLabel && actionHref && (
-        <Link href={actionHref} className="btn btn-primary">
-          <span>{actionLabel}</span>
-          <LineIcon name="arrow-right" size={16} />
+      {actionLabel && actionHref ? (
+        <Link href={actionHref} className="btn-primary mt-1">
+          {actionLabel}
         </Link>
-      )}
-
-      {actionLabel && onAction && !actionHref && (
-        <button type="button" onClick={onAction} className="btn btn-primary">
-          <span>{actionLabel}</span>
+      ) : null}
+      {actionLabel && onAction && !actionHref ? (
+        <button type="button" onClick={onAction} className="btn-primary mt-1">
+          {actionLabel}
         </button>
-      )}
+      ) : null}
     </div>
   );
 }

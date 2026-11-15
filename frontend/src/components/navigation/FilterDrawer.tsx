@@ -1,54 +1,64 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
-import { LineIcon } from '@/components/ui/LineIcon';
+import { useEffect, useRef } from 'react';
 import { DEPARTMENTS } from '@/data/products';
+import { LineIcon } from '@/components/ui/LineIcon';
+
+export type SortOption = 'featured' | 'price-asc' | 'price-desc' | 'newest';
+
+interface FilterDrawerProps {
+  isOpen: boolean;
+  onClose: () => void;
+  activeCategory: string;
+  onCategoryChange: (cat: string) => void;
+  inStockOnly: boolean;
+  onInStockChange: (val: boolean) => void;
+  sortBy: SortOption;
+  onSortChange: (val: SortOption) => void;
+  onReset: () => void;
+  resultCount: number;
+}
 
 export function FilterDrawer({
   isOpen,
   onClose,
-  selectedCategory,
-  onSelectCategory,
-  priceRange,
-  onSelectPriceRange,
-  onlyInStock,
-  onToggleInStock,
+  activeCategory,
+  onCategoryChange,
+  inStockOnly,
+  onInStockChange,
+  sortBy,
+  onSortChange,
   onReset,
-}: {
-  isOpen: boolean;
-  onClose: () => void;
-  selectedCategory: string;
-  onSelectCategory: (cat: string) => void;
-  priceRange: string;
-  onSelectPriceRange: (price: string) => void;
-  onlyInStock: boolean;
-  onToggleInStock: (val: boolean) => void;
-  onReset: () => void;
-}) {
-  const dialogRef = useRef<HTMLDialogElement | null>(null);
+  resultCount,
+}: FilterDrawerProps) {
+  const dialogRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
-    const dlg = dialogRef.current;
-    if (!dlg) return;
-    if (isOpen && !dlg.open) {
-      dlg.showModal();
-    } else if (!isOpen && dlg.open) {
-      dlg.close();
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+
+    if (isOpen && !dialog.open) {
+      dialog.showModal();
+    } else if (!isOpen && dialog.open) {
+      dialog.close();
     }
   }, [isOpen]);
 
   const handleBackdropClick = (e: React.MouseEvent<HTMLDialogElement>) => {
-    const dlg = dialogRef.current;
-    if (!dlg || e.target !== dlg) return;
+    const dialog = dialogRef.current;
+    if (!dialog || ('closedBy' in HTMLDialogElement.prototype)) return;
+    if (e.target !== dialog) return;
     if (e.clientX === 0 && e.clientY === 0) return;
-    const rect = dlg.getBoundingClientRect();
-    const clickedInDialog =
+
+    const rect = dialog.getBoundingClientRect();
+    const isInside =
       rect.top <= e.clientY &&
       e.clientY <= rect.top + rect.height &&
       rect.left <= e.clientX &&
       e.clientX <= rect.left + rect.width;
-    if (!clickedInDialog) {
-      onClose();
+
+    if (!isInside) {
+      dialog.close();
     }
   };
 
@@ -56,112 +66,121 @@ export function FilterDrawer({
     <dialog
       ref={dialogRef}
       id="filter-drawer-dialog"
-      className="drawer-dialog"
+      closedby="any"
+      aria-labelledby="filter-drawer-title"
       onClose={onClose}
       onClick={handleBackdropClick}
-      aria-labelledby="filter-drawer-title"
-      {...({ closedby: 'any' } as Record<string, string>)}
+      className="drawer-dialog"
     >
-      <div className="flex flex-col h-full justify-between gap-6">
-        <div className="space-y-6">
-          <div className="flex items-center justify-between pb-4 border-b border-dotted border-tiger-gold">
-            <h2 id="filter-drawer-title" className="heading-card text-tiger-gold">
-              FILTER CATALOG
-            </h2>
-            <button
-              type="button"
-              onClick={onClose}
-              className="btn-icon"
-              aria-label="Close filter drawer"
-            >
-              <LineIcon name="close" size={18} />
-            </button>
-          </div>
-
+      <div className="flex flex-col h-full bg-pure-white text-ink-black">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-faint-border">
           <div>
-            <h3 className="text-xs font-semibold uppercase tracking-widest text-warm-sand mb-3">
-              DEPARTMENT
-            </h3>
-            <div className="flex flex-col gap-2">
-              <button
-                type="button"
-                aria-pressed={selectedCategory === 'ALL'}
-                onClick={() => onSelectCategory('ALL')}
-                className="btn btn-ghost w-full justify-start"
-              >
-                All Departments
-              </button>
-              {DEPARTMENTS.map((dept) => (
-                <button
-                  key={dept.id}
-                  type="button"
-                  aria-pressed={selectedCategory === dept.name}
-                  onClick={() => onSelectCategory(dept.name)}
-                  className="btn btn-ghost w-full justify-between"
-                >
-                  <span>{dept.name}</span>
-                  <span className="text-[11px] opacity-80">({dept.itemCount})</span>
-                </button>
-              ))}
-            </div>
+            <h2 id="filter-drawer-title" className="text-lg font-semibold tracking-[-0.04em]">
+              Filter &amp; Sort
+            </h2>
+            <p className="text-xs text-muted-gray tabular-nums">
+              {resultCount} matching object{resultCount === 1 ? '' : 's'}
+            </p>
           </div>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close filters"
+            className="min-w-[44px] min-h-[44px] inline-flex items-center justify-center rounded-pill bg-canvas-mist border border-faint-border text-ink-black hover:border-ink-black transition-colors"
+          >
+            <LineIcon name="close" size={18} />
+          </button>
+        </div>
 
-          <div className="pt-4 border-t border-dotted border-tiger-gold">
-            <h3 className="text-xs font-semibold uppercase tracking-widest text-warm-sand mb-3">
-              PRICE CEILING
-            </h3>
-            <div className="grid grid-cols-2 gap-2">
-              {[
-                { id: 'ALL', label: 'All Prices' },
-                { id: 'UNDER_75', label: 'Under $75' },
-                { id: '75_TO_150', label: '$75 – $150' },
-                { id: 'OVER_150', label: '$150+' },
-              ].map((p) => (
-                <button
-                  key={p.id}
-                  type="button"
-                  aria-pressed={priceRange === p.id}
-                  onClick={() => onSelectPriceRange(p.id)}
-                  className="btn btn-ghost text-xs"
-                >
-                  {p.label}
-                </button>
-              ))}
+        <div className="flex-1 overflow-y-auto p-5 space-y-6">
+          <fieldset className="space-y-3 border-0 p-0 m-0">
+            <legend className="text-xs font-medium uppercase tracking-wide text-muted-gray mb-2">
+              Department
+            </legend>
+            <div className="flex flex-wrap gap-2">
+              {['All', ...DEPARTMENTS.map((d) => d.name)].map((cat) => {
+                const selected = activeCategory === cat;
+                return (
+                  <button
+                    key={cat}
+                    type="button"
+                    aria-pressed={selected}
+                    onClick={() => onCategoryChange(cat)}
+                    className={`min-h-[44px] px-4 py-2 rounded-pill text-sm font-medium transition-colors ${
+                      selected
+                        ? 'bg-ink-black text-pure-white border border-ink-black'
+                        : 'bg-pure-white text-ink-black border border-faint-border shadow-sm-soft hover:border-ink-black/40'
+                    }`}
+                  >
+                    {cat === 'All' ? 'All Objects' : cat}
+                  </button>
+                );
+              })}
             </div>
-          </div>
+          </fieldset>
 
-          <div className="pt-4 border-t border-dotted border-tiger-gold">
-            <label className="flex items-center justify-between gap-3 cursor-pointer min-h-[44px]">
-              <span className="text-xs font-semibold uppercase tracking-wider text-parchment-cream">
-                In-Stock Items Only
+          <fieldset className="space-y-2 border-0 p-0 m-0 pt-4 border-t border-faint-border">
+            <legend className="text-xs font-medium uppercase tracking-wide text-muted-gray mb-2">
+              Availability
+            </legend>
+            <label className="flex items-center justify-between gap-3 p-3.5 rounded-image bg-canvas-mist border border-faint-border cursor-pointer">
+              <span className="text-sm font-medium text-ink-black">
+                Show in-stock objects only
               </span>
               <input
                 type="checkbox"
-                checked={onlyInStock}
-                onChange={(e) => onToggleInStock(e.target.checked)}
-                className="w-5 h-5 accent-tiger-gold"
+                checked={inStockOnly}
+                onChange={(e) => onInStockChange(e.target.checked)}
+                className="w-5 h-5 accent-shop-violet rounded cursor-pointer"
               />
             </label>
-          </div>
+          </fieldset>
+
+          <fieldset className="space-y-2 border-0 p-0 m-0 pt-4 border-t border-faint-border">
+            <legend className="text-xs font-medium uppercase tracking-wide text-muted-gray mb-2">
+              Sort Order
+            </legend>
+            <div className="space-y-2">
+              {[
+                { value: 'featured' as const, label: 'Featured Selection' },
+                { value: 'price-asc' as const, label: 'Price: Low to High' },
+                { value: 'price-desc' as const, label: 'Price: High to Low' },
+                { value: 'newest' as const, label: 'New Arrivals First' },
+              ].map((opt) => (
+                <label
+                  key={opt.value}
+                  className="flex items-center justify-between gap-3 p-3.5 rounded-image border border-faint-border bg-pure-white hover:bg-canvas-mist cursor-pointer transition-colors"
+                >
+                  <span className="text-sm font-medium text-ink-black">{opt.label}</span>
+                  <input
+                    type="radio"
+                    name="drawer-sort-order"
+                    checked={sortBy === opt.value}
+                    onChange={() => onSortChange(opt.value)}
+                    className="w-4 h-4 accent-shop-violet cursor-pointer"
+                  />
+                </label>
+              ))}
+            </div>
+          </fieldset>
         </div>
 
-        <div className="pt-4 border-t border-dotted border-tiger-gold flex gap-3">
+        <div className="p-4 border-t border-faint-border bg-canvas-mist flex items-center gap-3">
           <button
             type="button"
             onClick={() => {
               onReset();
               onClose();
             }}
-            className="btn btn-ghost flex-1"
+            className="btn-secondary flex-1"
           >
             Reset
           </button>
-          <button type="button" onClick={onClose} className="btn btn-primary flex-1">
-            Apply Filters
+          <button type="button" onClick={onClose} className="btn-primary flex-1">
+            Apply ({resultCount})
           </button>
         </div>
       </div>
     </dialog>
   );
 }
-

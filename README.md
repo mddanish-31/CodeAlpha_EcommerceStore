@@ -4,11 +4,11 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-0EA5E9.svg)](LICENSE)
 [![Internship: CodeAlpha](https://img.shields.io/badge/CodeAlpha-Full%20Stack%20Internship-14B8A6.svg)](#codealpha-internship-context)
-[![Project Status: Planning & Documentation](https://img.shields.io/badge/Status-Planning%20%26%20Documentation-1E293B.svg)](#development-roadmap)
+[![Project Status: Frontend Implemented | Backend Planned](https://img.shields.io/badge/Status-Frontend%20Implemented%20%7C%20Backend%20Planned-1E293B.svg)](#development-roadmap)
 
-A planned full-stack e-commerce web application built for the **CodeAlpha Full Stack Development Internship**, targeting a decoupled Next.js storefront, an Express.js REST API, and MongoDB Atlas persistence.
+A planned full-stack e-commerce web application built for the **CodeAlpha Full Stack Development Internship**, featuring a completed **Next.js + TypeScript + Tailwind CSS** storefront (`simple.`, White Canvas Commerce v2 UI) with static demo catalog data and browser `localStorage` persistence, alongside a planned Express.js REST API and MongoDB Atlas backend.
 
-> **Current Stage:** Repository setup and core documentation are in progress (`M2` and `M3` Active). The documentation baseline is published; verified installation commands and REST API specifications remain deferred until application implementation begins in Phases 4–5.
+> **Current Stage:** Phases 1–4 (`M1`–`M5`) are complete — the responsive Next.js storefront (`frontend/`) and UI/UX documentation (`docs/`) are implemented and verified. Backend REST API (`Express.js`), MongoDB Atlas integration (`Mongoose`), server-side JWT authentication, and live deployment remain **Planned** for Phases 5–8.
 
 ---
 
@@ -33,11 +33,11 @@ A planned full-stack e-commerce web application built for the **CodeAlpha Full S
 | --- | --- | --- |
 | GitHub Repository & MIT License | **Implemented** | Public repository on `main` branch with `LICENSE` |
 | Secret & Artifact Exclusions (`.gitignore`) | **Implemented** | Excludes `.env`, `.env.*`, keys, `node_modules/`, and build outputs |
-| README Baseline & Hero Banner | **Active** | Core project plan documented; verified run scripts (`T-015`) and API specs (`T-016`) remain pending implementation |
-| Frontend Storefront (`Next.js` + `TypeScript` + `Tailwind CSS`) | **Planned** | Not yet scaffolded |
-| Backend REST API (`Node.js` + `Express.js` + `JWT`) | **Planned** | Not yet scaffolded |
-| Database Integration (`MongoDB Atlas` + `Mongoose`) | **Planned** | Not yet configured |
-| Testing, Polish & Deployment | **Planned** | Not yet executed |
+| UI/UX Design Specs & Preview (`docs/`) | **Implemented** | [Design System v2](docs/design-system-v2.md), [UX Blueprint v2](docs/frontend-ux-blueprint-v2.md), [Component Architecture](docs/frontend-component-architecture.md), and [Responsive Spec](docs/responsive-design-spec.md) |
+| Frontend Storefront (`Next.js` + `TypeScript` + `Tailwind CSS`) | **Implemented (Demo State)** | `11` App Router routes with static catalog (`12` products) and `localStorage` cart/demo-order/demo-auth state; no backend API connected yet |
+| Backend REST API (`Node.js` + `Express.js` + `JWT`) | **Planned** | Not yet scaffolded (Phase 5) |
+| Database Integration (`MongoDB Atlas` + `Mongoose`) | **Planned** | Not yet configured (Phase 6) |
+| Full-Stack Integration QA & Deployment | **Planned** | Not yet executed (Phases 7–8) |
 
 ---
 
@@ -55,32 +55,33 @@ Small retail storefronts often rely on either rigid templates or overly complex 
 
 ---
 
-## Planned Key Features
+## Features & Current Scope
 
-All application features below are **planned** and have **not** been implemented yet:
+### Implemented in Frontend (`localStorage` Demo Storefront)
+- **White Canvas Constellation Storefront (`/`):** 8-tile asymmetric product constellation hero, centered `<search>` pill bar, department pills, Slate Ink spotlight panel, interactive showcase preview, curated bestsellers grid, and demo newsletter form.
+- **Product Catalog & Filtering (`/shop` & `/shop/[id]`):** `12` curated demo objects across `4` departments with keyword search, department/sort/in-stock URL query sync, mobile `FilterDrawer`, stock guard on sold-out items, and multi-stage SVG product galleries.
+- **Shopping Bag & Simulated Checkout (`/cart` & `/checkout`):** Slide-over `<dialog closedby="any">` `CartDrawer`, `$75` free-shipping progress bar, client validation, and simulated `ORD-2026-XXXX` order generation persisted locally in browser storage.
+- **Demo Account & Utility Views (`/auth/login`, `/auth/register`, `/account`, `/about`, `/contact`, `404`):** Simulated sign-in with demo credentials helper, local order history display, craft story, and client-validated contact inquiry form.
 
-- **Product Listing & Product Details:** Browse products in a responsive catalog grid and inspect dedicated product detail views with pricing, descriptions, stock status, and imagery.
-- **Product Search & Category Filtering:** Search products by keyword and narrow results by category and price criteria.
-- **Shopping Cart:** Add items, adjust quantities, remove items, and compute order subtotals.
-- **User Registration & Login:** Account registration, password hashing, and JWT-based authentication.
-- **Checkout & Order Flow:** Convert cart contents into persisted orders and view user order history.
-- **Admin / Product Management *(Optional — Subject to Approved Scope)*:** Basic product inventory management if included in the approved implementation scope.
+### Planned Full-Stack Scope (Not Yet Implemented)
+- **Live Backend REST API:** Express.js routes for catalog CRUD, server-side cart/order persistence, and input validation.
+- **Database Persistence:** MongoDB Atlas clusters and Mongoose schemas for Users, Products, Carts, and Orders.
+- **Real Authentication & Authorization:** Password hashing and signed JWT verification middleware.
+- **Production Payments & Live Deployment:** External payment gateway integration and hosted deployment remain outside the current static demo scope.
 
 ---
 
-## Planned Technology Stack
+## Technology Stack
 
 | Layer | Technology | Status |
 | --- | --- | --- |
-| **Frontend Framework** | Next.js | Planned |
-| **Language** | TypeScript | Planned |
-| **Styling** | Tailwind CSS | Planned |
-| **Backend Runtime & Framework** | Node.js + Express.js | Planned |
-| **Database & ODM** | MongoDB Atlas + Mongoose | Planned |
-| **Authentication** | JSON Web Tokens (JWT) | Planned |
+| **Frontend Framework** | Next.js (`16.4.5`) | Implemented (static/client demo storefront) |
+| **Language** | TypeScript (`5.9.3`) | Implemented in `frontend/` |
+| **Styling** | Tailwind CSS (`3.4.19`) | Implemented (White Canvas Commerce v2 tokens) |
+| **Backend Runtime & Framework** | Node.js + Express.js | Planned (Phase 5) |
+| **Database & ODM** | MongoDB Atlas + Mongoose | Planned (Phase 6) |
+| **Authentication** | JSON Web Tokens (JWT) | Planned (Phase 5) |
 | **Version Control** | Git & GitHub | Implemented (`main` branch) |
-
-*Package versions, validation libraries, and client state choices remain subject to implementation in Phases 4–6.*
 
 ---
 
@@ -124,25 +125,22 @@ The system is planned as a decoupled client–server architecture separating the
 ```text
 CodeAlpha_EcommerceStore/
 ├── assets/
-│   └── ecommerce-banner.svg   # Animated SVG repository hero banner
-├── .gitignore                 # Excludes node_modules, .env*, keys, logs, and build artifacts
-├── LICENSE                    # MIT License
-└── README.md                  # Project documentation
+│   └── ecommerce-banner.svg                 # Animated SVG repository hero banner
+├── docs/
+│   ├── design-system-v2.md                  # Authoritative White Canvas Commerce design tokens
+│   ├── design-reference-mapping-v2.md       # Visual hierarchy & component mapping
+│   ├── frontend-ux-blueprint-v2.md          # Route & UX preservation blueprint
+│   ├── frontend-component-architecture.md   # Next.js components & client contracts
+│   ├── responsive-design-spec.md            # Viewport breakpoints & QA matrix summary
+│   ├── preview/shop-constellation-preview.html
+│   └── qa/                                  # Verified desktop & mobile QA screenshots
+├── frontend/                                # Implemented Next.js 16 + TypeScript storefront
+├── .gitignore                               # Excludes node_modules, .env*, keys, logs, and build artifacts
+├── LICENSE                                  # MIT License
+└── README.md                                # Project documentation
 ```
 
-*Empty `frontend/` and `backend/` folders exist locally for upcoming phases; because Git does not track empty directories, they will be committed once Phase 4–5 initialization begins.*
-
-### Planned Future Structure *(Subject to Phase 4–5 Implementation)*
-```text
-CodeAlpha_EcommerceStore/
-├── assets/
-│   └── ecommerce-banner.svg
-├── frontend/                  # Planned Next.js + TypeScript + Tailwind CSS storefront
-├── backend/                   # Planned Node.js + Express.js REST API & Mongoose models
-├── .gitignore
-├── LICENSE
-└── README.md
-```
+*`backend/` remains planned for Phase 5 initialization.*
 
 ---
 
@@ -150,33 +148,37 @@ CodeAlpha_EcommerceStore/
 
 | Phase | Milestone | Status |
 | --- | --- | --- |
-| **Phase 1** | Project Tracker Setup | **Complete** |
-| **Phase 2** | GitHub Repository Audit & Setup | **Active** |
-| **Phase 3** | Project Documentation (`README.md`) | **Active** |
-| **Phase 4** | Frontend UI/UX Design & Implementation | **Pending** |
-| **Phase 5** | Backend Architecture & REST API Development | **Pending** |
-| **Phase 6** | MongoDB Atlas & Mongoose Integration | **Pending** |
-| **Phase 7** | Testing, Security Checks & UI Polish | **Pending** |
-| **Phase 8** | Deployment, Final README Update & Submission | **Pending** |
+| **Phase 1** | Project Tracker Setup (`M1`) | **Complete** |
+| **Phase 2** | GitHub Repository Audit & Setup (`M2`) | **Complete** |
+| **Phase 3** | Project Documentation (`M3`) | **Complete** |
+| **Phase 4** | Frontend UI/UX Design & Implementation (`M4`, `M5`) | **Complete** |
+| **Phase 5** | Backend Architecture & REST API Development (`M6`, `M7`) | **Pending** |
+| **Phase 6** | MongoDB Atlas & Mongoose Integration (`M8`) | **Pending** |
+| **Phase 7** | Testing, Security Checks & UI Polish (`M9`–`M11`) | **Pending** |
+| **Phase 8** | Deployment, Final README Update & Submission (`M12`) | **Pending** |
 
 ---
 
-## Installation & Setup *(Provisional)*
+## Running the Frontend Locally
 
-Application code (`frontend/` and `backend/`) does not exist yet, so **verified install and run commands are not yet available**.
+Only the Next.js storefront (`frontend/`) exists today; backend API setup remains pending Phase 5.
 
-### Verified Today
 ```bash
 git clone https://github.com/mddanish-31/CodeAlpha_EcommerceStore.git
-cd CodeAlpha_EcommerceStore
+cd CodeAlpha_EcommerceStore/frontend
+npm install
+npm run dev
 ```
 
-### Provisional Steps *(Pending Phases 4–5 Implementation)*
-1. Install backend dependencies inside `backend/` and configure local environment variables.
-2. Install frontend dependencies inside `frontend/` and configure the API base URL.
-3. Start the Express API server and the Next.js development server.
+Verified frontend scripts defined in [`frontend/package.json`](frontend/package.json):
+- `npm run dev` — start the Next.js development server (`http://localhost:3000`)
+- `npm run build` — create the production static/SSG build
+- `npm run typecheck` — run TypeScript type checking (`tsc --noEmit`)
+- `npm run lint` — run configured check script (`tsc --noEmit`)
 
-*Verified package manager commands and local ports will be documented here once implemented and tested.*
+### Planned Backend & Full-Stack Setup *(Pending Phases 5–6)*
+1. Scaffold Express.js server in `backend/` and configure local environment variables.
+2. Connect MongoDB Atlas via Mongoose and replace `frontend/src/data/products.ts` / `localStorage` demo flows with REST API calls.
 
 ---
 

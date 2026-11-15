@@ -1,74 +1,78 @@
 'use client';
 
-import React from 'react';
 import { useStore } from '@/context/StoreContext';
+import { SAMPLE_PRODUCTS } from '@/data/products';
 import { Breadcrumbs } from '@/components/navigation/Breadcrumbs';
-import { FreeShippingBar } from '@/components/cart/FreeShippingBar';
 import { CartItemRow } from '@/components/cart/CartItemRow';
 import { CartSummaryCard } from '@/components/cart/CartSummaryCard';
 import { StateFeedbackCard } from '@/components/ui/StateFeedbackCard';
-import { PillBadge } from '@/components/ui/PillBadge';
+import { ProductGrid } from '@/components/product/ProductGrid';
 
 export default function CartPage() {
   const { cart, cartCount, clearCart } = useStore();
 
-  return (
-    <div className="store-container py-10 sm:py-14">
-      <Breadcrumbs
-        items={[
-          { label: 'Home', href: '/' },
-          { label: 'Shopping Cart' },
-        ]}
-      />
+  const inCartIds = new Set(cart.map((c) => c.product.id));
+  const suggestions = SAMPLE_PRODUCTS.filter(
+    (p) => !inCartIds.has(p.id) && p.stockCount > 0
+  ).slice(0, 4);
 
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
-        <div>
-          <span className="text-[11px] font-semibold uppercase tracking-widest text-tiger-gold block mb-1.5">
-            ORDER PREPARATION
-          </span>
-          <h1 className="heading-section">SHOPPING CART</h1>
-        </div>
-        <div className="flex items-center gap-3">
-          <PillBadge tone="charred">{cartCount} ITEMS IN CART</PillBadge>
-          {cart.length > 0 && (
-            <button
-              type="button"
-              onClick={clearCart}
-              className="btn-link text-xs"
-            >
-              Clear Cart
+  return (
+    <div className="store-container pt-6 sm:pt-8 pb-8 space-y-12">
+      <div className="space-y-6">
+        <Breadcrumbs
+          items={[
+            { label: 'Home', href: '/' },
+            { label: 'Shopping Bag' },
+          ]}
+        />
+
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="space-y-1">
+            <h1 className="display-hero m-0">Shopping Bag</h1>
+            <p className="text-sm text-canvas-secondary m-0 tabular-nums">
+              {cartCount === 0
+                ? 'No items currently selected'
+                : `${cartCount} studio object${cartCount === 1 ? '' : 's'} ready for simulated checkout`}
+            </p>
+          </div>
+
+          {cart.length > 0 ? (
+            <button type="button" onClick={clearCart} className="btn-secondary">
+              Clear Bag
             </button>
-          )}
+          ) : null}
         </div>
+
+        {cart.length === 0 ? (
+          <StateFeedbackCard
+            icon="bag"
+            title="Your shopping bag is currently empty"
+            description="Browse the White Canvas Studio catalog to add Everyday Carry, Desk Craft, Home Objects, or Apparel."
+            actionLabel="Browse Studio Catalog"
+            actionHref="/shop"
+          />
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            <div className="lg:col-span-8 space-y-3">
+              {cart.map((item) => (
+                <CartItemRow key={item.product.id} item={item} />
+              ))}
+            </div>
+            <div className="lg:col-span-4">
+              <CartSummaryCard />
+            </div>
+          </div>
+        )}
       </div>
 
-      {cart.length === 0 ? (
-        <StateFeedbackCard
-          status="empty"
-          badgeText="EMPTY SHOPPING CART"
-          title="YOUR CART IS CURRENTLY EMPTY"
-          message="Browse our curated departments to add desk lighting, field watches, pour-over kettles, or utility goods."
-          actionLabel="Explore Store Catalog"
-          actionHref="/shop"
-        />
-      ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          <div className="lg:col-span-8 space-y-4 min-w-0">
-            <div className="surface-card p-4">
-              <FreeShippingBar />
-            </div>
-
-            {cart.map((item) => (
-              <CartItemRow key={item.product.id} item={item} />
-            ))}
-          </div>
-
-          <div className="lg:col-span-4 sticky top-24">
-            <CartSummaryCard showCheckoutCta />
-          </div>
-        </div>
-      )}
+      {suggestions.length > 0 ? (
+        <section aria-labelledby="cart-suggestions-heading" className="space-y-5">
+          <h2 id="cart-suggestions-heading" className="heading-row m-0">
+            Pair with Your Selection
+          </h2>
+          <ProductGrid products={suggestions} columns="4" />
+        </section>
+      ) : null}
     </div>
   );
 }
-

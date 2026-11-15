@@ -1,50 +1,58 @@
 'use client';
 
-import React from 'react';
 import { LineIcon } from './LineIcon';
+
+interface QuantityStepperProps {
+  value: number;
+  min?: number;
+  max?: number;
+  onChange: (value: number) => void;
+  ariaLabel?: string;
+  compact?: boolean;
+}
 
 export function QuantityStepper({
   value,
   min = 1,
-  max = 10,
+  max = 99,
   onChange,
   ariaLabel = 'Quantity',
-}: {
-  value: number;
-  min?: number;
-  max?: number;
-  onChange: (nextQty: number) => void;
-  ariaLabel?: string;
-}) {
+  compact = false,
+}: QuantityStepperProps) {
+  const canDecrease = value > min;
+  const canIncrease = value < max;
+
+  const btnSize = compact ? 'min-w-[40px] min-h-[40px]' : 'min-w-[44px] min-h-[44px]';
+
   return (
     <div
-      className="inline-flex items-center rounded-pill bg-charred-clove border border-tiger-gold overflow-hidden"
+      className="inline-flex items-center rounded-pill bg-pure-white border border-ink-black/20 shadow-sm-soft p-0.5"
       role="group"
       aria-label={ariaLabel}
     >
       <button
         type="button"
-        onClick={() => onChange(Math.max(min, value - 1))}
-        disabled={value <= min}
+        onClick={() => canDecrease && onChange(value - 1)}
+        disabled={!canDecrease}
         aria-label="Decrease quantity"
-        className="min-w-[44px] min-h-[44px] inline-flex items-center justify-center text-tiger-gold hover:bg-tiger-gold hover:text-charred-clove disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-tiger-gold transition-colors cursor-pointer"
+        className={`${btnSize} inline-flex items-center justify-center rounded-pill text-ink-black hover:bg-canvas-mist disabled:opacity-35 disabled:cursor-not-allowed transition-colors`}
       >
-        <LineIcon name="minus" size={15} />
+        <LineIcon name="minus" size={14} />
       </button>
       <span
-        className="min-w-[38px] text-center font-bold text-sm text-parchment-cream tabular-nums px-2"
+        className="min-w-[2.25rem] px-1 text-center text-sm font-medium text-ink-black tabular-nums select-none"
         aria-live="polite"
       >
         {value}
       </span>
       <button
         type="button"
-        onClick={() => onChange(Math.min(max, value + 1))}
-        disabled={value >= max}
+        onClick={() => canIncrease && onChange(value + 1)}
+        disabled={!canIncrease}
         aria-label="Increase quantity"
-        className="min-w-[44px] min-h-[44px] inline-flex items-center justify-center text-tiger-gold hover:bg-tiger-gold hover:text-charred-clove disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-tiger-gold transition-colors cursor-pointer"
+        className={`${btnSize} inline-flex items-center justify-center rounded-pill text-ink-black hover:bg-canvas-mist disabled:opacity-35 disabled:cursor-not-allowed transition-colors`}
       >
-        <LineIcon name="plus" size={15} />
+        <LineIcon name="plus" size={14} />
       </button>
     </div>
   );

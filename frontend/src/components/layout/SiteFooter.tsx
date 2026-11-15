@@ -1,121 +1,119 @@
-import React from 'react';
 import Link from 'next/link';
-import { PillBadge } from '@/components/ui/PillBadge';
-import { DottedDivider } from './DottedDivider';
 
 export function SiteFooter() {
   return (
-    <footer className="bg-charred-clove border-t border-dotted border-tiger-gold pt-16 pb-10 mt-auto">
-      <div className="store-container">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-          <div>
-            <div className="font-display text-2xl font-bold tracking-tight uppercase text-tiger-gold">
-              SIMPLE E-COMMERCE STORE
-            </div>
-            <p className="text-xs text-warm-sand mt-3 leading-relaxed max-w-xs">
-              CodeAlpha Full Stack Development Internship storefront built with Next.js App Router, TypeScript, and Tailwind CSS using the Editorial Craft Market design system.
+    <footer className="bg-ink-black text-pure-white mt-16 lg:mt-20">
+      <div className="store-container py-12 lg:py-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 pb-10 border-b border-slate-ink">
+          <div className="space-y-3 sm:col-span-2 lg:col-span-1">
+            <Link
+              href="/"
+              aria-label="simple. Store Home"
+              className="inline-flex items-center text-[28px] font-semibold tracking-[-0.055em] text-pure-white leading-none"
+            >
+              <span>simple</span>
+              <span className="wordmark-dot" aria-hidden="true" />
+            </Link>
+            <p className="text-sm text-cool-stone max-w-xs leading-relaxed">
+              Floating Shopping Constellation — curated Everyday Carry, Home Objects, Desk Craft, and Studio Apparel.
             </p>
-            <div className="flex flex-wrap gap-2 mt-4">
-              <PillBadge tone="spice">NEXT.JS APP ROUTER</PillBadge>
-              <PillBadge tone="spice">TYPESCRIPT</PillBadge>
-              <PillBadge tone="spice">TAILWIND CSS</PillBadge>
-            </div>
+            <p className="text-xs text-violet-wash">
+              CodeAlpha Internship — Frontend Storefront (Demo State)
+            </p>
           </div>
 
-          <div>
-            <h2 className="text-[11px] font-semibold uppercase tracking-widest text-tiger-gold mb-3">
-              SHOP DEPARTMENTS
+          <nav aria-label="Catalog departments footer" className="space-y-3">
+            <h2 className="text-xs font-medium tracking-[-0.01em] uppercase text-violet-wash">
+              Departments
             </h2>
-            <ul className="space-y-2.5 text-xs text-warm-sand">
+            <ul className="space-y-2 text-sm text-cool-stone list-none p-0 m-0">
               <li>
-                <Link href="/shop?category=Audio+%26+Desk+Craft" className="hover:text-tiger-gold transition-colors">
-                  01 / Audio &amp; Desk Craft
+                <Link href="/shop?category=Audio+%26+Desk+Craft" className="hover:text-pure-white transition-colors py-0.5 inline-block">
+                  Audio &amp; Desk Craft
                 </Link>
               </li>
               <li>
-                <Link href="/shop?category=Everyday+Carry" className="hover:text-tiger-gold transition-colors">
-                  02 / Everyday Carry
+                <Link href="/shop?category=Everyday+Carry" className="hover:text-pure-white transition-colors py-0.5 inline-block">
+                  Everyday Carry
                 </Link>
               </li>
               <li>
-                <Link href="/shop?category=Home+Objects" className="hover:text-tiger-gold transition-colors">
-                  03 / Home Objects
+                <Link href="/shop?category=Home+Objects" className="hover:text-pure-white transition-colors py-0.5 inline-block">
+                  Home Objects
                 </Link>
               </li>
               <li>
-                <Link href="/shop?category=Apparel+%26+Goods" className="hover:text-tiger-gold transition-colors">
-                  04 / Apparel &amp; Goods
+                <Link href="/shop?category=Apparel+%26+Goods" className="hover:text-pure-white transition-colors py-0.5 inline-block">
+                  Apparel &amp; Goods
                 </Link>
               </li>
             </ul>
-          </div>
+          </nav>
 
-          <div>
-            <h2 className="text-[11px] font-semibold uppercase tracking-widest text-tiger-gold mb-3">
-              CUSTOMER JOURNEY
+          <nav aria-label="Storefront links footer" className="space-y-3">
+            <h2 className="text-xs font-medium tracking-[-0.01em] uppercase text-violet-wash">
+              Storefront
             </h2>
-            <ul className="space-y-2.5 text-xs text-warm-sand">
+            <ul className="space-y-2 text-sm text-cool-stone list-none p-0 m-0">
               <li>
-                <Link href="/shop" className="hover:text-tiger-gold transition-colors">
-                  All Products Catalog
+                <Link href="/shop" className="hover:text-pure-white transition-colors py-0.5 inline-block">
+                  Shop All Objects
                 </Link>
               </li>
               <li>
-                <Link href="/cart" className="hover:text-tiger-gold transition-colors">
-                  Shopping Cart
+                <Link href="/cart" className="hover:text-pure-white transition-colors py-0.5 inline-block">
+                  Shopping Bag
                 </Link>
               </li>
               <li>
-                <Link href="/checkout" className="hover:text-tiger-gold transition-colors">
-                  Demo Checkout Flow
+                <Link href="/checkout" className="hover:text-pure-white transition-colors py-0.5 inline-block">
+                  Simulated Checkout
                 </Link>
               </li>
               <li>
-                <Link href="/account" className="hover:text-tiger-gold transition-colors">
-                  Customer Account &amp; Orders
+                <Link href="/about" className="hover:text-pure-white transition-colors py-0.5 inline-block">
+                  About Us
                 </Link>
               </li>
             </ul>
-          </div>
+          </nav>
 
-          <div>
-            <h2 className="text-[11px] font-semibold uppercase tracking-widest text-tiger-gold mb-3">
-              STOREFRONT &amp; SUPPORT
+          <nav aria-label="Account and support footer" className="space-y-3">
+            <h2 className="text-xs font-medium tracking-[-0.01em] uppercase text-violet-wash">
+              Account &amp; Help
             </h2>
-            <ul className="space-y-2.5 text-xs text-warm-sand">
+            <ul className="space-y-2 text-sm text-cool-stone list-none p-0 m-0">
               <li>
-                <Link href="/about" className="hover:text-tiger-gold transition-colors">
-                  About the Project
+                <Link href="/auth/login" className="hover:text-pure-white transition-colors py-0.5 inline-block">
+                  Sign In
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="hover:text-tiger-gold transition-colors">
-                  Contact &amp; Support FAQ
+                <Link href="/auth/register" className="hover:text-pure-white transition-colors py-0.5 inline-block">
+                  Create Account
                 </Link>
               </li>
               <li>
-                <Link href="/auth/login" className="hover:text-tiger-gold transition-colors">
-                  Customer Sign In
+                <Link href="/account" className="hover:text-pure-white transition-colors py-0.5 inline-block">
+                  Account &amp; Orders
                 </Link>
               </li>
               <li>
-                <Link href="/auth/register" className="hover:text-tiger-gold transition-colors">
-                  Create Customer Account
+                <Link href="/contact" className="hover:text-pure-white transition-colors py-0.5 inline-block">
+                  Contact &amp; FAQ
                 </Link>
               </li>
             </ul>
-          </div>
+          </nav>
         </div>
 
-        <DottedDivider />
-
-        <div className="pt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs text-warm-sand">
-          <span>
-            © 2026 MD DANISH RAZA (@mddanish-31) • CodeAlpha Full Stack Development Internship • MIT License
-          </span>
-          <span>
-            Phase 4B Frontend Implementation — Sample Catalog &amp; Demo Checkout
-          </span>
+        <div className="pt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-cool-stone">
+          <p className="m-0">
+            © 2026 simple. Storefront — White Canvas Commerce. Interactive frontend preview (orders &amp; cart persisted in local browser storage).
+          </p>
+          <p className="m-0 text-cool-stone tabular-nums">
+            Free shipping at $75 USD
+          </p>
         </div>
       </div>
     </footer>

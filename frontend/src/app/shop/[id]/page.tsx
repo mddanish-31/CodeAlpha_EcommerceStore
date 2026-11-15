@@ -1,15 +1,30 @@
-import React from 'react';
-import Link from 'next/link';
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { SAMPLE_PRODUCTS } from '@/data/products';
 import { Breadcrumbs } from '@/components/navigation/Breadcrumbs';
 import { ProductGallery } from '@/components/product/ProductGallery';
 import { ProductBuyBox } from '@/components/product/ProductBuyBox';
-import { ProductCard } from '@/components/product/ProductCard';
-import { DottedDivider } from '@/components/layout/DottedDivider';
+import { ProductSpecsAccordion } from '@/components/product/ProductSpecsAccordion';
+import { ProductGrid } from '@/components/product/ProductGrid';
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
   return SAMPLE_PRODUCTS.map((p) => ({ id: p.id }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const product = SAMPLE_PRODUCTS.find((p) => p.id === id);
+  if (!product) {
+    return { title: 'Object Not Found' };
+  }
+  return {
+    title: product.title,
+    description: product.shortDescription,
+  };
 }
 
 export default async function ProductDetailPage({
@@ -24,25 +39,22 @@ export default async function ProductDetailPage({
     notFound();
   }
 
-  const relatedProducts = SAMPLE_PRODUCTS.filter(
+  const related = SAMPLE_PRODUCTS.filter(
     (p) => p.id !== product.id && p.category === product.category
-  ).slice(0, 4);
-
+  ).slice(0, 3);
   const fallbackRelated =
-    relatedProducts.length < 4
-      ? [
-          ...relatedProducts,
+    related.length >= 3
+      ? related
+      : [
+          ...related,
           ...SAMPLE_PRODUCTS.filter(
-            (p) =>
-              p.id !== product.id &&
-              !relatedProducts.some((r) => r.id === p.id)
-          ),
-        ].slice(0, 4)
-      : relatedProducts;
+            (p) => p.id !== product.id && !related.some((r) => r.id === p.id)
+          ).slice(0, 3 - related.length),
+        ];
 
   return (
-    <div>
-      <section className="store-container py-10 sm:py-14">
+    <div className="store-container pt-6 sm:pt-8 pb-8 space-y-12">
+      <div>
         <Breadcrumbs
           items={[
             { label: 'Home', href: '/' },
@@ -55,43 +67,26 @@ export default async function ProductDetailPage({
           ]}
         />
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          <div className="lg:col-span-6 min-w-0">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+          <div className="lg:col-span-7">
             <ProductGallery product={product} />
           </div>
-          <div className="lg:col-span-6 min-w-0">
+          <div className="lg:col-span-5">
             <ProductBuyBox product={product} />
           </div>
         </div>
+      </div>
+
+      <section aria-label="Product specifications and care">
+        <ProductSpecsAccordion product={product} />
       </section>
 
-      <DottedDivider />
-
-      <section
-        aria-labelledby="related-products-heading"
-        className="store-container py-12 sm:py-16"
-      >
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
-          <div>
-            <span className="text-[11px] font-semibold uppercase tracking-widest text-tiger-gold block mb-1.5">
-              COMPLEMENTARY OBJECTS
-            </span>
-            <h2 id="related-products-heading" className="heading-section">
-              YOU MAY ALSO LIKE
-            </h2>
-          </div>
-          <Link href="/shop" className="btn btn-ghost self-start sm:self-auto">
-            Back to Full Catalog
-          </Link>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {fallbackRelated.map((item) => (
-            <ProductCard key={item.id} product={item} />
-          ))}
-        </div>
+      <section aria-labelledby="related-objects-heading" className="space-y-5">
+        <h2 id="related-objects-heading" className="heading-row m-0">
+          Complementary Studio Objects
+        </h2>
+        <ProductGrid products={fallbackRelated} columns="3" />
       </section>
     </div>
   );
 }
-

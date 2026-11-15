@@ -1,249 +1,205 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Breadcrumbs } from '@/components/navigation/Breadcrumbs';
-import { PillBadge } from '@/components/ui/PillBadge';
 import { LineIcon } from '@/components/ui/LineIcon';
 
+const FAQS = [
+  {
+    q: 'Are orders or payments processed for real right now?',
+    a: 'No. During the current frontend milestone, checkout, login, and bag quantities simulate e-commerce flows using local browser storage (localStorage). No real charge occurs.',
+  },
+  {
+    q: 'How does the $75 free shipping rule calculate?',
+    a: 'Your Shopping Bag and Order Summary track subtotal in real time. Bags reaching $75 USD or above unlock $0 shipping automatically; smaller bags calculate an $8 flat shipping estimate.',
+  },
+  {
+    q: 'Why does the Fluted Stoneware Carafe show Sold Out?',
+    a: 'It intentionally demonstrates zero-stock state safeguards across cards, galleries, and the buy box, disabling Add to Bag actions while preserving inspection details.',
+  },
+  {
+    q: 'Will this storefront connect to a real backend database?',
+    a: 'Yes — Phase 5 (Express REST API + JWT Auth) and Phase 6 (MongoDB Atlas + Mongoose persistence) are the planned next milestones in the project tracker.',
+  },
+];
+
 export default function ContactPage() {
-  const [fullName, setFullName] = useState('');
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [orderRef, setOrderRef] = useState('');
+  const [topic, setTopic] = useState('Product Question');
   const [message, setMessage] = useState('');
-  const [error, setError] = useState<string | null>(null);
-  const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState('');
+  const [sentConfirmation, setSentConfirmation] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!fullName.trim()) {
-      setError('Please enter your name.');
+    if (name.trim().length < 2) {
+      setError('Please enter your name (at least 2 characters).');
       return;
     }
-    if (!email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
-      setError('Please enter a valid email address.');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      setError('Please enter a valid contact email address.');
       return;
     }
-    if (!message.trim() || message.trim().length < 10) {
+    if (message.trim().length < 10) {
       setError('Please enter a message of at least 10 characters.');
       return;
     }
-    setError(null);
-    setSubmitted(true);
+    setError('');
+    setSentConfirmation(
+      `Demo inquiry recorded for ${name.trim()} (${topic}). In Phase 5 this form will dispatch to the Express backend.`
+    );
+    setName('');
+    setEmail('');
+    setMessage('');
   };
 
   return (
-    <div className="store-container py-10 sm:py-14">
+    <div className="store-container pt-6 sm:pt-8 pb-8 space-y-8">
       <Breadcrumbs
         items={[
           { label: 'Home', href: '/' },
-          { label: 'Contact & Support FAQ' },
+          { label: 'Contact & FAQ' },
         ]}
       />
 
-      <div className="mb-8">
-        <span className="text-[11px] font-semibold uppercase tracking-widest text-tiger-gold block mb-1.5">
-          CUSTOMER CARE &amp; INQUIRIES
-        </span>
-        <h1 className="heading-section">CONTACT &amp; SUPPORT</h1>
-      </div>
+      <header className="space-y-2 max-w-2xl">
+        <h1 className="display-hero m-0">Contact &amp; Frequently Asked Questions</h1>
+        <p className="text-sm sm:text-base text-canvas-secondary m-0">
+          Review shipping thresholds, stock demo behaviors, and send a preview inquiry below.
+        </p>
+      </header>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        {/* Left: Inquiry Form */}
-        <section
-          aria-labelledby="contact-form-heading"
-          className="lg:col-span-7 surface-card p-6 sm:p-8 min-w-0"
-        >
-          <div className="flex items-center justify-between flex-wrap gap-2 mb-4">
-            <h2
-              id="contact-form-heading"
-              className="heading-card text-tiger-gold"
-            >
-              SEND A DISPATCH INQUIRY
-            </h2>
-            <PillBadge tone="spice">DEMO SUPPORT FORM</PillBadge>
-          </div>
-
-          {submitted ? (
-            <div
-              role="status"
-              className="rounded-card bg-charred-clove border border-tiger-gold p-6 space-y-3"
-            >
-              <PillBadge tone="gold">INQUIRY RECEIVED (DEMO)</PillBadge>
-              <h3 className="heading-card text-parchment-cream">
-                THANK YOU, {fullName}
-              </h3>
-              <p className="text-xs text-warm-sand leading-relaxed">
-                Your demo inquiry has been validated. In the full-stack application, support messages are routed to our customer care queue.
-              </p>
-              <button
-                type="button"
-                onClick={() => {
-                  setSubmitted(false);
-                  setFullName('');
-                  setEmail('');
-                  setOrderRef('');
-                  setMessage('');
-                }}
-                className="btn btn-ghost text-xs"
-              >
-                Send Another Message
-              </button>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} noValidate className="space-y-4">
-              {error && (
-                <div
-                  role="alert"
-                  className="rounded-card bg-charred-clove border border-chili-red p-3.5 text-xs text-parchment-cream flex items-center gap-2"
-                >
-                  <span className="text-chili-red">
-                    <LineIcon name="alert" size={16} />
-                  </span>
-                  <span>{error}</span>
-                </div>
-              )}
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label
-                    htmlFor="contact-name"
-                    className="block text-xs font-semibold uppercase tracking-wider text-warm-sand mb-1.5"
-                  >
-                    Full Name *
-                  </label>
-                  <input
-                    id="contact-name"
-                    name="name"
-                    type="text"
-                    autoComplete="name"
-                    required
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
-                    placeholder="Your full name"
-                    className="input-pill"
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="contact-email"
-                    className="block text-xs font-semibold uppercase tracking-wider text-warm-sand mb-1.5"
-                  >
-                    Email Address *
-                  </label>
-                  <input
-                    id="contact-email"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
-                    spellCheck={false}
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="you@example.com"
-                    className="input-pill"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label
-                  htmlFor="contact-order-id"
-                  className="block text-xs font-semibold uppercase tracking-wider text-warm-sand mb-1.5"
-                >
-                  Order Reference ID (Optional)
-                </label>
-                <input
-                  id="contact-order-id"
-                  name="orderRef"
-                  type="text"
-                  value={orderRef}
-                  onChange={(e) => setOrderRef(e.target.value)}
-                  placeholder="e.g., ORD-2026-0104"
-                  className="input-pill"
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="contact-message"
-                  className="block text-xs font-semibold uppercase tracking-wider text-warm-sand mb-1.5"
-                >
-                  Message *
-                </label>
-                <textarea
-                  id="contact-message"
-                  name="message"
-                  rows={4}
-                  required
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  placeholder="How can we help with your order or product specification inquiry?"
-                  className="textarea-surface"
-                />
-              </div>
-
-              <button type="submit" className="btn btn-primary">
-                <span>Send Inquiry</span>
-                <LineIcon name="arrow-right" size={16} />
-              </button>
-            </form>
-          )}
-        </section>
-
-        {/* Right: Exclusive FAQ Accordions */}
-        <section
-          aria-labelledby="faq-heading"
-          className="lg:col-span-5 surface-card p-6 sm:p-8"
-        >
-          <h2 id="faq-heading" className="heading-card text-tiger-gold mb-4">
-            FREQUENTLY ASKED QUESTIONS
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <section aria-labelledby="faq-section-heading" className="lg:col-span-6 space-y-4">
+          <h2 id="faq-section-heading" className="heading-row m-0">
+            Common Questions
           </h2>
 
-          <div className="border-t border-dotted border-tiger-gold">
-            <details
-              {...({ name: 'contact-faq' } as Record<string, string>)}
-              open
-              className="border-b border-dotted border-tiger-gold py-3.5"
-            >
-              <summary className="list-none flex items-center justify-between cursor-pointer text-xs font-semibold uppercase tracking-wider text-tiger-gold py-1">
-                <span>01 // How does Free Shipping work?</span>
-                <span aria-hidden="true">+</span>
-              </summary>
-              <p className="pt-2.5 text-xs text-parchment-cream leading-relaxed">
-                All orders totaling $75.00 or more automatically qualify for free tracked standard shipping. Orders under $75.00 carry a flat $8.00 shipping fee.
-              </p>
-            </details>
-
-            <details
-              {...({ name: 'contact-faq' } as Record<string, string>)}
-              className="border-b border-dotted border-tiger-gold py-3.5"
-            >
-              <summary className="list-none flex items-center justify-between cursor-pointer text-xs font-semibold uppercase tracking-wider text-tiger-gold py-1">
-                <span>02 // Is checkout connected to a live bank?</span>
-                <span aria-hidden="true">+</span>
-              </summary>
-              <p className="pt-2.5 text-xs text-parchment-cream leading-relaxed">
-                No. In Phase 4B, checkout is a frontend demonstration flow. No credit card details are requested or processed, and demo orders are saved locally in your browser session.
-              </p>
-            </details>
-
-            <details
-              {...({ name: 'contact-faq' } as Record<string, string>)}
-              className="border-b border-dotted border-tiger-gold py-3.5"
-            >
-              <summary className="list-none flex items-center justify-between cursor-pointer text-xs font-semibold uppercase tracking-wider text-tiger-gold py-1">
-                <span>03 // What is your return policy?</span>
-                <span aria-hidden="true">+</span>
-              </summary>
-              <p className="pt-2.5 text-xs text-parchment-cream leading-relaxed">
-                Unused items in original packaging are eligible for return or exchange within 30 days of delivery.
-              </p>
-            </details>
+          <div className="surface-card overflow-hidden divide-y divide-faint-border">
+            {FAQS.map((item, idx) => (
+              <details key={item.q} name="contact-faq" open={idx === 0} className="group">
+                <summary className="list-none cursor-pointer flex items-center justify-between gap-4 px-6 py-4 text-sm font-medium text-ink-black hover:bg-canvas-mist transition-colors">
+                  <span>{item.q}</span>
+                  <span className="text-slate-ink transition-transform duration-200 group-open:rotate-45 shrink-0">
+                    <LineIcon name="plus" size={16} />
+                  </span>
+                </summary>
+                <div className="px-6 pb-5 pt-1 text-sm text-muted-gray leading-relaxed">
+                  <p className="m-0">{item.a}</p>
+                </div>
+              </details>
+            ))}
           </div>
+        </section>
+
+        <section
+          aria-labelledby="contact-form-heading"
+          className="lg:col-span-6 surface-card p-6 sm:p-8 space-y-5"
+        >
+          <div className="space-y-1">
+            <h2 id="contact-form-heading" className="text-lg font-semibold tracking-[-0.04em] text-ink-black m-0">
+              Send a Studio Note (Demo Form)
+            </h2>
+            <p className="text-xs text-muted-gray m-0">
+              All fields validate client-side without external submission.
+            </p>
+          </div>
+
+          {error ? (
+            <div
+              role="alert"
+              className="p-3.5 rounded-image bg-canvas-mist border border-ink-black text-xs sm:text-sm font-medium text-ink-black flex items-start gap-2"
+            >
+              <LineIcon name="alert" size={16} className="shrink-0 mt-0.5" />
+              <span>Error: {error}</span>
+            </div>
+          ) : null}
+
+          {sentConfirmation ? (
+            <div
+              role="status"
+              className="p-4 rounded-image bg-canvas-mist border border-faint-border text-xs sm:text-sm font-medium text-ink-black flex items-start gap-2.5"
+            >
+              <LineIcon name="check" size={16} className="text-shop-violet shrink-0 mt-0.5" />
+              <span>{sentConfirmation}</span>
+            </div>
+          ) : null}
+
+          <form onSubmit={handleSubmit} noValidate aria-labelledby="contact-form-heading" className="space-y-4">
+            <div className="space-y-1.5">
+              <label htmlFor="contact-name" className="block text-xs font-medium text-slate-ink">
+                Full Name
+              </label>
+              <input
+                id="contact-name"
+                name="name"
+                type="text"
+                autoComplete="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Your name"
+                required
+                className="input-pill"
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <label htmlFor="contact-email" className="block text-xs font-medium text-slate-ink">
+                Email Address
+              </label>
+              <input
+                id="contact-email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@studio.example"
+                required
+                className="input-pill"
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <label htmlFor="contact-topic" className="block text-xs font-medium text-slate-ink">
+                Inquiry Topic
+              </label>
+              <select
+                id="contact-topic"
+                name="topic"
+                value={topic}
+                onChange={(e) => setTopic(e.target.value)}
+                className="input-pill cursor-pointer"
+              >
+                <option value="Product Question">Product Question</option>
+                <option value="Shipping & Returns">Shipping &amp; Returns</option>
+                <option value="Demo Feedback">Storefront Demo Feedback</option>
+              </select>
+            </div>
+
+            <div className="space-y-1.5">
+              <label htmlFor="contact-message" className="block text-xs font-medium text-slate-ink">
+                Message
+              </label>
+              <textarea
+                id="contact-message"
+                name="message"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                placeholder="Share your question or feedback (at least 10 characters)..."
+                required
+                className="textarea-card"
+              />
+            </div>
+
+            <button type="submit" className="btn-primary w-full justify-between">
+              <span>Send Demo Inquiry</span>
+              <LineIcon name="arrow-right" size={16} />
+            </button>
+          </form>
         </section>
       </div>
     </div>
   );
 }
-

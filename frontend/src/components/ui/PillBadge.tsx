@@ -1,24 +1,30 @@
-import React from 'react';
+export type BadgeTone =
+  | 'dark'
+  | 'light'
+  | 'violet-subtle'
+  | 'soldout'
+  | 'neutral';
 
-export type BadgeTone = 'gold' | 'spice' | 'charred' | 'alert';
-
-export function PillBadge({
-  tone = 'gold',
-  children,
-  className = '',
-}: {
+interface PillBadgeProps {
+  label: string;
   tone?: BadgeTone;
-  children: React.ReactNode;
   className?: string;
-}) {
-  const toneClass =
-    tone === 'gold'
-      ? 'badge-gold'
-      : tone === 'alert'
-      ? 'badge-alert'
-      : tone === 'charred'
-      ? 'badge-charred'
-      : 'badge-spice';
+}
 
-  return <span className={`badge ${toneClass} ${className}`}>{children}</span>;
+const TONE_MAP: Record<BadgeTone, string> = {
+  dark: 'bg-ink-black text-pure-white border border-ink-black',
+  light: 'bg-pure-white text-ink-black border border-faint-border shadow-sm-soft',
+  'violet-subtle': 'bg-violet-wash/35 text-ink-black border border-shop-violet/35',
+  soldout: 'bg-pure-white text-slate-ink border border-ink-black/40',
+  neutral: 'bg-canvas-mist text-slate-ink border border-faint-border',
+};
+
+export function PillBadge({ label, tone = 'light', className = '' }: PillBadgeProps) {
+  return (
+    <span
+      className={`inline-flex items-center px-3 py-1 rounded-pill text-[11px] font-medium tracking-[-0.01em] uppercase leading-none ${TONE_MAP[tone]} ${className}`}
+    >
+      {label}
+    </span>
+  );
 }

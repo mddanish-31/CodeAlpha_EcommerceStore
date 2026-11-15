@@ -1,35 +1,34 @@
-import React from 'react';
 import Link from 'next/link';
+import { LineIcon } from '@/components/ui/LineIcon';
 
-export interface BreadcrumbItem {
+interface CrumbItem {
   label: string;
   href?: string;
 }
 
-export function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
+export function Breadcrumbs({ items }: { items: CrumbItem[] }) {
   return (
-    <nav aria-label="Breadcrumb" className="mb-6">
-      <ol className="flex items-center flex-wrap gap-2 text-xs text-warm-sand list-none">
+    <nav aria-label="Breadcrumb" className="mb-5">
+      <ol className="flex flex-wrap items-center gap-1.5 text-xs sm:text-sm text-canvas-secondary">
         {items.map((item, idx) => {
           const isLast = idx === items.length - 1;
           return (
-            <li key={`${item.label}-${idx}`} className="flex items-center gap-2">
+            <li key={`${item.label}-${idx}`} className="inline-flex items-center gap-1.5">
+              {idx > 0 ? (
+                <LineIcon name="chevron-right" size={14} className="text-canvas-secondary shrink-0" />
+              ) : null}
               {item.href && !isLast ? (
                 <Link
                   href={item.href}
-                  className="hover:text-tiger-gold transition-colors"
+                  className="text-canvas-secondary hover:text-ink-black underline-offset-4 hover:underline transition-colors py-1"
                 >
                   {item.label}
                 </Link>
               ) : (
-                <span
-                  aria-current={isLast ? 'page' : undefined}
-                  className={isLast ? 'text-tiger-gold font-semibold' : ''}
-                >
+                <span className="font-medium text-ink-black" aria-current={isLast ? 'page' : undefined}>
                   {item.label}
                 </span>
               )}
-              {!isLast && <span aria-hidden="true">/</span>}
             </li>
           );
         })}

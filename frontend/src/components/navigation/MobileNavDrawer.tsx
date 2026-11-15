@@ -1,154 +1,146 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { useRouter, usePathname } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { useStore } from '@/context/StoreContext';
 import { LineIcon } from '@/components/ui/LineIcon';
-import { DEPARTMENTS } from '@/data/products';
+
+const DRAWER_LINKS = [
+  { href: '/', label: 'Home', description: 'Floating Shopping Constellation' },
+  { href: '/shop', label: 'Shop All Objects', description: 'Browse & filter 12 studio items' },
+  { href: '/cart', label: 'Shopping Bag', description: 'Review cart & shipping threshold' },
+  { href: '/account', label: 'Account & Orders', description: 'Profile & sample order history' },
+  { href: '/about', label: 'About Simple Store', description: 'Design system & craft principles' },
+  { href: '/contact', label: 'Contact & FAQ', description: 'Store policies & message form' },
+];
 
 export function MobileNavDrawer() {
-  const { isMobileNavOpen, closeMobileNav, cartCount, user } = useStore();
-  const dialogRef = useRef<HTMLDialogElement | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
-  const router = useRouter();
+  const { isMobileNavOpen, closeMobileNav, openCartDrawer, cartCount, user } = useStore();
+  const dialogRef = useRef<HTMLDialogElement>(null);
   const pathname = usePathname();
+  const prevPathnameRef = useRef(pathname);
 
   useEffect(() => {
-    const dlg = dialogRef.current;
-    if (!dlg) return;
-    if (isMobileNavOpen && !dlg.open) {
-      dlg.showModal();
-    } else if (!isMobileNavOpen && dlg.open) {
-      dlg.close();
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+
+    if (isMobileNavOpen && !dialog.open) {
+      dialog.showModal();
+    } else if (!isMobileNavOpen && dialog.open) {
+      dialog.close();
     }
   }, [isMobileNavOpen]);
 
-  // Close mobile drawer when route changes
   useEffect(() => {
-    closeMobileNav();
-  }, [pathname, closeMobileNav]);
+    if (prevPathnameRef.current !== pathname) {
+      prevPathnameRef.current = pathname;
+      if (isMobileNavOpen) {
+        closeMobileNav();
+      }
+    }
+  }, [pathname, isMobileNavOpen, closeMobileNav]);
 
   const handleBackdropClick = (e: React.MouseEvent<HTMLDialogElement>) => {
-    const dlg = dialogRef.current;
-    if (!dlg || e.target !== dlg) return;
+    const dialog = dialogRef.current;
+    if (!dialog || ('closedBy' in HTMLDialogElement.prototype)) return;
+    if (e.target !== dialog) return;
     if (e.clientX === 0 && e.clientY === 0) return;
-    const rect = dlg.getBoundingClientRect();
-    const clickedInDialog =
+
+    const rect = dialog.getBoundingClientRect();
+    const isInside =
       rect.top <= e.clientY &&
       e.clientY <= rect.top + rect.height &&
       rect.left <= e.clientX &&
       e.clientX <= rect.left + rect.width;
-    if (!clickedInDialog) {
-      closeMobileNav();
-    }
-  };
 
-  const handleSearchSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const trimmed = searchQuery.trim();
-    closeMobileNav();
-    router.push(trimmed ? `/shop?q=${encodeURIComponent(trimmed)}` : '/shop');
+    if (!isInside) {
+      dialog.close();
+    }
   };
 
   return (
     <dialog
       ref={dialogRef}
       id="mobile-nav-dialog"
-      className="drawer-dialog"
+      closedby="any"
+      aria-labelledby="mobile-nav-title"
       onClose={closeMobileNav}
       onClick={handleBackdropClick}
-      aria-labelledby="mobile-nav-title"
-      {...({ closedby: 'any' } as Record<string, string>)}
+      className="drawer-dialog drawer-left"
     >
-      <div className="flex flex-col h-full justify-between gap-6">
-        <div>
-          <div className="flex items-center justify-between pb-4 border-b border-dotted border-tiger-gold">
-            <h2 id="mobile-nav-title" className="heading-card text-tiger-gold">
-              STOREFRONT MENU
-            </h2>
-            <button
-              type="button"
-              onClick={closeMobileNav}
-              className="btn-icon"
-              aria-label="Close mobile navigation menu"
-            >
-              <LineIcon name="close" size={18} />
-            </button>
+      <div className="flex flex-col h-full bg-pure-white text-ink-black">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-faint-border">
+          <div id="mobile-nav-title" className="inline-flex items-center text-2xl font-semibold tracking-[-0.055em]">
+            <span>simple</span>
+            <span className="wordmark-dot" aria-hidden="true" />
           </div>
-
-          <search className="my-4" title="Mobile Storefront Search">
-            <form onSubmit={handleSearchSubmit} className="relative">
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-tiger-gold pointer-events-none">
-                <LineIcon name="search" size={16} />
-              </span>
-              <input
-                type="search"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search products or departments..."
-                aria-label="Search store catalog"
-                enterKeyHint="search"
-                className="input-pill pl-11 pr-4"
-              />
-            </form>
-          </search>
-
-          <nav aria-label="Mobile Primary Navigation" className="space-y-2.5">
-            <Link href="/" className="btn btn-ghost w-full justify-between">
-              <span>01 // HOME</span>
-              <LineIcon name="arrow-right" size={16} />
-            </Link>
-            <Link href="/shop" className="btn btn-primary w-full justify-between">
-              <span>02 // SHOP ALL PRODUCTS</span>
-              <LineIcon name="arrow-right" size={16} />
-            </Link>
-            <Link href="/cart" className="btn btn-ghost w-full justify-between">
-              <span>03 // SHOPPING CART ({cartCount})</span>
-              <LineIcon name="arrow-right" size={16} />
-            </Link>
-            <Link href="/account" className="btn btn-ghost w-full justify-between">
-              <span>04 // {user ? 'MY ACCOUNT & ORDERS' : 'ACCOUNT OVERVIEW'}</span>
-              <LineIcon name="arrow-right" size={16} />
-            </Link>
-            <Link href="/about" className="btn btn-ghost w-full justify-between">
-              <span>05 // ABOUT THE STORE</span>
-              <LineIcon name="arrow-right" size={16} />
-            </Link>
-            <Link href="/contact" className="btn btn-ghost w-full justify-between">
-              <span>06 // CONTACT &amp; FAQ</span>
-              <LineIcon name="arrow-right" size={16} />
-            </Link>
-          </nav>
-
-          <div className="mt-6 pt-4 border-t border-dotted border-tiger-gold">
-            <div className="text-[11px] font-semibold uppercase tracking-widest text-warm-sand mb-3">
-              BROWSE BY DEPARTMENT
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {DEPARTMENTS.map((dept) => (
-                <Link
-                  key={dept.id}
-                  href={`/shop?category=${encodeURIComponent(dept.name)}`}
-                  className="btn btn-ghost text-xs py-1.5 px-3"
-                >
-                  {dept.name}
-                </Link>
-              ))}
-            </div>
-          </div>
+          <button
+            type="button"
+            onClick={closeMobileNav}
+            aria-label="Close navigation menu"
+            className="min-w-[44px] min-h-[44px] inline-flex items-center justify-center rounded-pill bg-canvas-mist border border-faint-border text-ink-black hover:border-ink-black transition-colors"
+          >
+            <LineIcon name="close" size={18} />
+          </button>
         </div>
 
-        <div className="pt-4 border-t border-dotted border-tiger-gold flex items-center justify-between gap-2">
-          <Link href="/auth/login" className="btn btn-ghost flex-1">
-            Sign In
-          </Link>
-          <Link href="/auth/register" className="btn btn-primary flex-1">
-            Register
+        <nav aria-label="Mobile menu navigation" className="flex-1 overflow-y-auto p-4 space-y-2">
+          {DRAWER_LINKS.map((item) => {
+            const active =
+              item.href === '/'
+                ? pathname === '/'
+                : pathname === item.href || pathname.startsWith(`${item.href}/`);
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={closeMobileNav}
+                aria-current={active ? 'page' : undefined}
+                className={`flex items-center justify-between p-4 rounded-image border transition-colors ${
+                  active
+                    ? 'bg-canvas-mist border-ink-black text-ink-black'
+                    : 'bg-pure-white border-faint-border text-ink-black hover:bg-canvas-mist'
+                }`}
+              >
+                <div>
+                  <div className="text-sm font-medium">{item.label}</div>
+                  <div className="text-xs text-muted-gray">{item.description}</div>
+                </div>
+                <LineIcon name="chevron-right" size={16} className="text-slate-ink shrink-0" />
+              </Link>
+            );
+          })}
+        </nav>
+
+        <div className="p-4 border-t border-faint-border bg-canvas-mist space-y-2.5">
+          <button
+            type="button"
+            onClick={() => {
+              closeMobileNav();
+              openCartDrawer();
+            }}
+            className="btn-primary w-full justify-between"
+          >
+            <span className="inline-flex items-center gap-2">
+              <LineIcon name="bag" size={16} />
+              <span>Open Shopping Bag</span>
+            </span>
+            <span className="px-2 py-0.5 rounded-pill bg-shop-violet text-pure-white text-xs tabular-nums">
+              {cartCount}
+            </span>
+          </button>
+
+          <Link
+            href={user ? '/account' : '/auth/login'}
+            onClick={closeMobileNav}
+            className="btn-secondary w-full"
+          >
+            <LineIcon name="user" size={16} />
+            <span>{user ? `${user.fullName} (Account)` : 'Sign In or Register'}</span>
           </Link>
         </div>
       </div>
     </dialog>
   );
 }
-

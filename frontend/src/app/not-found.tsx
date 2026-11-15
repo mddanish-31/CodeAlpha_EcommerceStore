@@ -1,31 +1,32 @@
-import React from 'react';
 import Link from 'next/link';
-import { PillBadge } from '@/components/ui/PillBadge';
 import { LineIcon } from '@/components/ui/LineIcon';
 
 export default function NotFound() {
   return (
-    <div className="store-container py-16 sm:py-24 text-center">
-      <div className="max-w-xl mx-auto surface-card border-tiger-gold p-8 sm:p-12">
-        <div className="flex justify-center mb-4">
-          <PillBadge tone="alert">HTTP 404 // ROUTE NOT FOUND</PillBadge>
+    <div className="store-container py-12 sm:py-20">
+      <div className="surface-card p-8 sm:p-12 max-w-lg mx-auto text-center space-y-5">
+        <div className="text-5xl sm:text-6xl font-semibold tracking-[-0.055em] leading-none text-ink-black">
+          <span>404</span>
+          <span className="wordmark-dot" aria-hidden="true" />
         </div>
 
-        <h1 className="display-hero mb-2">404</h1>
-        <h2 className="heading-card text-parchment-cream mb-3">
-          PAGE LOST IN THE BAZAAR
-        </h2>
-        <p className="text-xs sm:text-sm text-warm-sand mb-8 leading-relaxed">
-          The product or page you requested could not be found in the Simple E-commerce Store catalog.
-        </p>
+        <div className="space-y-2">
+          <h1 className="text-2xl font-semibold tracking-[-0.045em] text-ink-black m-0">
+            Studio Page Not Found
+          </h1>
+          <p className="text-sm text-muted-gray max-w-sm mx-auto m-0 leading-relaxed">
+            The route or catalog object you requested is unavailable or has moved in this storefront layout.
+          </p>
+        </div>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-          <Link href="/shop" className="btn btn-primary w-full sm:w-auto">
-            <span>Browse All Products</span>
-            <LineIcon name="arrow-right" size={16} />
+        <div className="flex flex-col sm:flex-row gap-3 pt-2">
+          <Link href="/" className="btn-primary flex-1">
+            <LineIcon name="home" size={16} />
+            <span>Return Home</span>
           </Link>
-          <Link href="/" className="btn btn-ghost w-full sm:w-auto">
-            Return to Homepage
+          <Link href="/shop" className="btn-secondary flex-1">
+            <span>Browse Catalog</span>
+            <LineIcon name="arrow-right" size={16} />
           </Link>
         </div>
       </div>

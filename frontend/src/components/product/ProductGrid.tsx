@@ -1,39 +1,30 @@
-'use client';
-
-import React from 'react';
-import { Product } from '@/types/store';
+import type { Product } from '@/types/store';
 import { ProductCard } from './ProductCard';
-import { StateFeedbackCard } from '@/components/ui/StateFeedbackCard';
+
+interface ProductGridProps {
+  products: Product[];
+  columns?: '3' | '4';
+  showDescription?: boolean;
+}
 
 export function ProductGrid({
   products,
-  emptyTitle = 'NO MATCHING PRODUCTS FOUND',
-  emptyMessage = 'Try adjusting your search keywords, department filter, or price range.',
-  onResetFilters,
-}: {
-  products: Product[];
-  emptyTitle?: string;
-  emptyMessage?: string;
-  onResetFilters?: () => void;
-}) {
-  if (products.length === 0) {
-    return (
-      <StateFeedbackCard
-        status="empty"
-        badgeText="EMPTY CATALOG VIEW"
-        title={emptyTitle}
-        message={emptyMessage}
-        actionLabel={onResetFilters ? 'Reset All Filters' : 'Browse All Products'}
-        onAction={onResetFilters}
-        actionHref={onResetFilters ? undefined : '/shop'}
-      />
-    );
-  }
+  columns = '4',
+  showDescription = false,
+}: ProductGridProps) {
+  const colClass =
+    columns === '3'
+      ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
+      : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4';
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+    <div className={`grid ${colClass} gap-3 sm:gap-4`}>
       {products.map((product) => (
-        <ProductCard key={product.id} product={product} />
+        <ProductCard
+          key={product.id}
+          product={product}
+          showDescription={showDescription}
+        />
       ))}
     </div>
   );

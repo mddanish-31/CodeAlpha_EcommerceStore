@@ -1,88 +1,32 @@
-# Responsive Design Specification — Simple E-commerce Store
+# Responsive Design Specification — White Canvas Commerce (`simple.`)
 
-**Project:** Simple E-commerce Store (`CodeAlpha_EcommerceStore`)  
-**Target Stack:** Next.js + TypeScript + Tailwind CSS *(Planned — Phase 4B)*  
-**Core Rule:** Do not merely shrink the desktop layout. Adapt navigation, typography scale, filter ergonomics, and touch targets specifically for mobile, tablet, and desktop viewports.
+**Project:** CodeAlpha Internship — Simple E-commerce Store  
+**Status:** Verified in Headless Chromium (Phase 4D)  
+**Companion Preview:** [shop-constellation-preview.html](./preview/shop-constellation-preview.html)
 
----
-
-## 1. Breakpoint Strategy
-
-Aligned with standard Tailwind CSS mobile-first breakpoints and a `1440px` maximum editorial container:
-
-| Tier | Breakpoint Range | Tailwind Prefix | Container Padding | Max Container Width | Catalog Grid Columns |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **Mobile (Compact)** | `320px – 639px` | *(default)* | `16px` (`px-4`) | `100%` | `1` column (full-width cards) or `2` compact cards (`>= 420px`) |
-| **Tablet (Portrait & Landscape)** | `640px – 1023px` | `sm:` / `md:` | `24px` (`px-6`) | `100%` | `2` columns (`sm:`) → `3` columns (`md:`) |
-| **Desktop (Standard)** | `1024px – 1279px` | `lg:` | `32px` (`px-8`) | `1280px` | `3` or `4` columns |
-| **Desktop XL (Editorial Poster)** | `1280px – 1440px+` | `xl:` / `2xl:` | `40px` (`px-10`) | `1440px` | `4` columns (`gap: 20px`) |
+> [!NOTE]
+> Supersedes the v1 responsive spec. Verified in headless Chromium across all 11 App Router routes and all 8 required viewport widths (`88/88` checks passed with `0` horizontal overflow).
 
 ---
 
-## 2. Viewport-by-Viewport Behavior
+## 1. Breakpoint & Chrome Adaptation
 
-### 2.1 Desktop (`>= 1024px`)
-
-- **Sticky Header Navigation:** Full horizontal layout in a single `72px`-tall `#402011` bar:
-  - Left: Brand Wordmark + emblem.
-  - Center: 5 Ghost Outline Pill navigation buttons (`SHOP`, `CATEGORIES`, `NEW ARRIVALS`, `ABOUT`, `CONTACT`).
-  - Right: Inline expandable `<search>` Pill Input (`240px` width), `ACCOUNT` Ghost Pill button, and Cart Circular Icon Button + item counter pill.
-- **Hero Composition:** Asymmetric 12-column split (`7` columns left for `clamp(5.5rem, 9.5vw, 11.5rem)` `Antonio` poster headline + CTAs; `5` columns right for the studio product pedestal).
-- **Catalog Filtering (`/shop`):** Horizontal `<search>` toolbar with inline Category Pills, Price Filter select pill, and Sort dropdown all visible without opening a modal.
-- **Product Details (`/shop/[id]`):** Sticky left-column gallery (`55%` width) paired with scrolling right-column Buy Box & `<details>` specification accordions (`45%` width).
-- **Cart Drawer:** Slides in from the right edge (`width: 420px`, `height: 100dvh`) over a `rgba(40, 16, 6, 0.78)` backdrop scrim.
-- **Checkout (`/checkout`):** 2-column split (`60%` customer/shipping form on left, `40%` sticky Order Summary card on right).
-
----
-
-### 2.2 Tablet (`640px – 1023px`)
-
-- **Header Adaptation:**
-  - Inline `<search>` bar remains accessible in header (or secondary header row), while primary route links collapse into the `MENU` pill trigger below `1024px` to prevent pill wrapping.
-- **Hero Composition:**
-  - Stacked or 2-column balanced split (`60% / 40%` at `>= 768px`, stacked below `768px`). Headline scales fluidly via `clamp()` (`68px–104px`) with `0.86` line-height so words never clip horizontally.
-- **Catalog Grid:**
-  - `2` columns (`640px–767px`) and `3` columns (`768px–1023px`) with `16px–20px` grid gap.
-  - Category pills scroll horizontally (`overflow-x: auto; scrollbar-width: none`) with fade masks so all categories remain one tap away.
-- **Product Details (`/shop/[id]`):**
-  - At `768px–1023px`, maintains a `50% / 50%` 2-column layout; below `768px`, stacks the gallery above the Buy Box.
-- **Checkout (`/checkout`):**
-  - Stacks Order Summary inside a collapsible `<details>` banner at the top of the page (showing total in the `<summary>` bar) plus a full summary card above the `PLACE ORDER` button.
+| Breakpoint Width | Shell Chrome | Product Grid | Content Container / Offset | Drawer Behavior |
+| --- | --- | --- | --- | --- |
+| **`320px`** | Sticky white top header (`header.lg:hidden`), rail hidden | `1 col` | Full width (`px-4`), `2×2` compact hero tiles | `<dialog closedby="any">` full-height / bottom sheet |
+| **`375px`** | Sticky white top header, rail hidden | `1 col` (`2 col` compact category tiles) | Comfortable `44px` pill touch targets | `MobileNavDrawer`, `FilterDrawer`, `CartDrawer` |
+| **`390px`** | Sticky white top header, rail hidden | `1 col` | Zero clipping on breadcrumbs & stepper controls | Escape & backdrop light-dismiss enabled |
+| **`640px`** (`sm`) | Sticky white top header, rail hidden | `2 col` | Balanced 2-column forms & cart layout | Side/modal slide-over drawers |
+| **`768px`** (`md`) | Sticky white top header, rail hidden | `2 col` | 2-column home spotlight & constellation grouping | Native `.showModal()` focus trap |
+| **`1024px`** (`lg`) | **`64px` fixed white left nav rail visible**, mobile header hidden | `3 col` | `lg:pl-[64px]` shell offset, `max-w-[1200px]` centered | Inline desktop filters; slide-over `CartDrawer` |
+| **`1280px`** (`xl`) | **`64px` fixed left nav rail visible** | `3–4 col` | Spacious `1200px` centered canvas | Right-aligned slide-over `CartDrawer` |
+| **`1440px`** | **`64px` fixed left nav rail visible** | `4 col` | Full 8-tile asymmetric constellation framing centered `<search>` bar | Zero horizontal scroll (`scrollWidth <= innerWidth`) |
 
 ---
 
-### 2.3 Mobile (`320px – 639px`)
+## 2. Phase 4D Browser Verification Matrix Summary
 
-- **Dedicated Mobile Header & Navigation Drawer:**
-  - Top bar (`60px` height) houses: Brand Wordmark (left), Cart Icon Button with count pill + Hamburger/Menu Circular Icon Button (`44px × 44px` touch targets, right).
-  - Tapping the Menu button opens `<dialog id="mobile-nav-dialog" closedby="any">`: a full-height slide-over sheet (`#281006` Charred Clove) containing a prominent `<search>` Pill Input at the top, full-width Ghost Outline Pill links (`min-block-size: 48px`), category quick-chips, and Account actions.
-- **Hero Typography Scaling:**
-  - Display headline scales down cleanly via `clamp(3.25rem, 13vw, 4.75rem)` (`52px–76px`) with `line-height: 0.88` and `overflow-wrap: break-word`.
-  - Primary and Secondary CTA buttons stack full-width (`width: 100%`, `justify-content: center`, `min-block-size: 48px`).
-  - Featured Hero Product card sits directly below the CTA stack with compact padding (`16px`), keeping the primary `SHOP COLLECTION` CTA above the fold on a `390×844` viewport.
-- **Mobile Filter Interaction (`/shop`):**
-  - Instead of stacking 10 filter dropdowns that push products below the fold, mobile `/shop` displays a sticky 2-button control bar beneath the search input:
-    - Left: `FILTERS (count)` Ghost Pill button → opens `<dialog id="filter-drawer" closedby="any">` bottom sheet.
-    - Right: `SORT BY` Pill select.
-- **Product Cards on Mobile:**
-  - Single-column full-width cards (`320px–479px`) or 2-column compact cards (`480px–639px`) with `14px` padding, `16px` title, `16px` price, and a full-width `44px`-tall `ADD TO CART` pill button.
-- **Cart Drawer on Mobile:**
-  - Expands to `width: 100vw` (or `calc(100vw - 16px)`) with a sticky bottom checkout bar (`padding-bottom: env(safe-area-inset-bottom)`).
-- **Checkout Form on Mobile:**
-  - Single-column vertical stack; split fields (`City` / `Postal Code`) stack to `100%` width below `480px` to prevent cramped input typing; `font-size: 16px` (`1rem`) on `<input>` elements prevents involuntary iOS Safari viewport zoom on focus.
-
----
-
-## 3. Responsive Component Matrix
-
-| Feature / Element | Mobile (`< 640px`) | Tablet (`640px – 1023px`) | Desktop (`>= 1024px`) |
-| :--- | :--- | :--- | :--- |
-| **Hero Display Font Size** | `52px – 72px` (`line-height: 0.88`) | `72px – 112px` (`line-height: 0.85`) | `120px – 184px` (`line-height: 0.82`) |
-| **Section Headline Size** | `34px – 42px` | `44px – 54px` | `64px – 65px` |
-| **Section Vertical Padding** | `48px – 64px` | `72px – 88px` | `96px – 120px` |
-| **Primary Navigation** | Slide-over `<dialog>` Drawer | Slide-over `<dialog>` Drawer | Inline Ghost Outline Pills |
-| **Search Input Placement** | Top of Mobile Drawer + Sticky `/shop` bar | Header utility bar | Inline Header `<search>` pill |
-| **Catalog Filters** | Slide-up `<dialog>` Filter Sheet | Horizontal scrollable pills | Inline toolbar / sidebar rail |
-| **Product Grid Columns** | `1` column (or `2` at `>= 480px`) | `2` – `3` columns | `4` columns |
-| **Minimum Touch Target** | `44px × 44px` (`min-block-size: 44px`) | `44px × 44px` | `40px × 40px` (`>= 24px` WCAG AA) |
-| **Form Input Font Size** | `16px` (prevents mobile auto-zoom) | `15px` | `14px – 15px` |
+Verified automatically against production `next start` build across all `11` routes (`/`, `/shop`, `/shop/chrono-brass-desk-lamp`, `/cart`, `/checkout`, `/auth/login`, `/auth/register`, `/account`, `/about`, `/contact`, `/nonexistent-route-v2-check`) × all `8` exact widths (`320`, `375`, `390`, `640`, `768`, `1024`, `1280`, `1440`px):
+- **Layout Overflow:** `88/88` viewports measured `document.documentElement.scrollWidth <= window.innerWidth` and zero child elements protruding past viewport bounds.
+- **Navigation Switch:** `100%` pass — `< 1024px` displays sticky top bar and hides desktop rail; `>= 1024px` displays exact `64px` left rail and hides mobile bar.
+- **Design System Constraints:** `#F2F4F5` canvas background (`rgb(242, 244, 245)`), self-hosted `Inter` max weight `600`, zero `Antonio` font references, zero CSS gradients, and verified `#FFFFFF` spotlight heading on `#332F2D` Slate Ink panels.

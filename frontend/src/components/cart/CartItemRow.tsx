@@ -1,71 +1,92 @@
 'use client';
 
-import React from 'react';
 import Link from 'next/link';
-import { CartItem } from '@/types/store';
+import type { CartItem } from '@/types/store';
 import { useStore } from '@/context/StoreContext';
-import { ProductIllustration } from '@/components/ui/ProductIllustration';
 import { QuantityStepper } from '@/components/ui/QuantityStepper';
+import { LineIcon } from '@/components/ui/LineIcon';
+import { ProductIllustration, getProductStage } from '@/components/ui/ProductIllustration';
 
-export function CartItemRow({
-  item,
-  compact = false,
-}: {
+interface CartItemRowProps {
   item: CartItem;
   compact?: boolean;
-}) {
-  const { updateQuantity, removeFromCart, closeCartDrawer } = useStore();
+  onNavigate?: () => void;
+}
+
+export function CartItemRow({ item, compact = false, onNavigate }: CartItemRowProps) {
+  const { updateQuantity, removeFromCart } = useStore();
   const { product, quantity } = item;
-  const lineSubtotal = product.price * quantity;
+  const stage = getProductStage(product.imageSvgId);
+  const lineTotal = product.price * quantity;
 
   return (
-    <div className="surface-card p-3.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3.5">
-      <div className="flex items-center gap-3.5 w-full sm:w-auto">
+    <div
+      className={`rounded-image bg-pure-white border border-faint-border flex ${
+        compact ? 'items-center gap-3 p-3' : 'flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 sm:p-5'
+      }`}
+    >
+      <div className="flex items-center gap-3.5 min-w-0 flex-1">
         <Link
           href={`/shop/${product.id}`}
-          onClick={closeCartDrawer}
-          className="w-16 h-16 rounded-[4px] bg-charred-clove border border-cardamom-brown flex items-center justify-center p-2 shrink-0"
+          onClick={onNavigate}
+          aria-label={`View ${product.title}`}
+          className={`shrink-0 ${
+            compact ? 'w-14 h-14 rounded-tile p-2' : 'w-20 h-20 rounded-image p-2.5'
+          } ${stage.bgClass} flex items-center justify-center transition-opacity hover:opacity-90`}
         >
-          <ProductIllustration svgId={product.imageSvgId} className="w-12 h-12" />
+          <ProductIllustration
+            svgId={product.imageSvgId}
+            darkBackdrop={stage.darkBackdrop}
+            className="w-full h-full"
+          />
         </Link>
 
-        <div className="min-w-0 flex-1">
-          <div className="text-[11px] uppercase tracking-wider text-warm-sand">
+        <div className="min-w-0 flex-1 space-y-0.5">
+          <p className="text-[11px] font-medium uppercase tracking-wide text-muted-gray truncate m-0">
             {product.category}
-          </div>
+          </p>
           <Link
             href={`/shop/${product.id}`}
-            onClick={closeCartDrawer}
-            className="font-semibold text-sm text-parchment-cream hover:text-tiger-gold transition-colors block truncate"
+            onClick={onNavigate}
+            className="block text-sm font-medium text-ink-black hover:underline underline-offset-4 truncate"
           >
             {product.title}
           </Link>
-          <div className="text-xs text-warm-sand mt-0.5 tabular-nums">
-            Unit: ${product.price.toFixed(2)}
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-muted-gray tabular-nums">
+            <span>${product.price.toFixed(0)} each</span>
+            <span aria-hidden="true">·</span>
+            <span>SKU {product.sku}</span>
           </div>
         </div>
       </div>
 
-      <div className="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto pt-2 sm:pt-0 border-t sm:border-t-0 border-dotted border-tiger-gold/30">
+      <div
+        className={`flex items-center ${
+          compact ? 'gap-2 shrink-0' : 'justify-between sm:justify-end gap-4 pt-2 sm:pt-0 border-t sm:border-t-0 border-faint-border'
+        }`}
+      >
         <QuantityStepper
+          compact={compact}
           value={quantity}
           min={1}
-          max={product.stockCount || 10}
-          onChange={(next) => updateQuantity(product.id, next)}
+          max={Math.max(1, product.stockCount)}
           ariaLabel={`Quantity for ${product.title}`}
+          onChange={(nextQty) => updateQuantity(product.id, nextQty)}
         />
 
-        <div className="text-right min-w-[78px]">
-          <div className="font-bold text-base text-tiger-gold tabular-nums">
-            ${lineSubtotal.toFixed(2)}
-          </div>
+        <div className="flex items-center gap-2 shrink-0">
+          {!compact ? (
+            <span className="min-w-[4.5rem] text-right text-base font-semibold text-ink-black tabular-nums">
+              ${lineTotal.toFixed(2)}
+            </span>
+          ) : null}
           <button
             type="button"
             onClick={() => removeFromCart(product.id)}
-            aria-label={`Remove ${product.title} from cart`}
-            className="text-xs text-tiger-gold underline decoration-dotted underline-offset-4 hover:text-parchment-cream cursor-pointer py-1"
+            aria-label={`Remove ${product.title} from bag`}
+            className="min-w-[40px] min-h-[40px] inline-flex items-center justify-center rounded-pill border border-faint-border text-muted-gray hover:text-ink-black hover:border-ink-black hover:bg-canvas-mist transition-colors"
           >
-            {compact ? 'Remove' : 'Remove Item'}
+            <LineIcon name="trash" size={16} />
           </button>
         </div>
       </div>

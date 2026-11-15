@@ -1,27 +1,50 @@
 'use client';
 
-import React from 'react';
 import { useStore } from '@/context/StoreContext';
+import { LineIcon } from '@/components/ui/LineIcon';
 
-export function FreeShippingBar() {
-  const { subtotal, freeShippingThreshold } = useStore();
-  const remaining = Math.max(0, freeShippingThreshold - subtotal);
-  const progressPct = Math.min(100, Math.round((subtotal / freeShippingThreshold) * 100));
+interface FreeShippingBarProps {
+  subtotal?: number;
+  threshold?: number;
+}
+
+export function FreeShippingBar({ subtotal: propSubtotal, threshold: propThreshold }: FreeShippingBarProps) {
+  const { subtotal: storeSubtotal, freeShippingThreshold } = useStore();
+  const subtotal = propSubtotal ?? storeSubtotal;
+  const threshold = propThreshold ?? freeShippingThreshold;
+
+  const unlocked = subtotal >= threshold;
+  const remaining = Math.max(0, threshold - subtotal);
+  const pct = Math.min(100, Math.round((subtotal / threshold) * 100));
 
   return (
-    <div className="my-3.5">
-      <div className="flex items-center justify-between text-xs text-warm-sand mb-1.5">
-        <span>
-          {remaining === 0
-            ? 'Unlocked: Free Standard Shipping ($75+)'
-            : `Add $${remaining.toFixed(2)} more for FREE Standard Shipping`}
+    <div className="p-3.5 rounded-image bg-canvas-mist border border-faint-border space-y-2">
+      <div className="flex items-center justify-between gap-2 text-xs">
+        <span className="inline-flex items-center gap-1.5 font-medium text-ink-black">
+          {unlocked ? (
+            <LineIcon name="check" size={14} className="text-shop-violet shrink-0" />
+          ) : null}
+          <span>
+            {unlocked
+              ? `Free studio shipping unlocked ($${threshold}+ threshold met)`
+              : `Add $${remaining.toFixed(0)} more for free shipping`}
+          </span>
         </span>
-        <strong className="text-tiger-gold tabular-nums">{progressPct}%</strong>
+        <span className="font-medium text-canvas-secondary tabular-nums shrink-0">
+          {pct}%
+        </span>
       </div>
-      <div className="w-full h-2 bg-dark-spice rounded-pill overflow-hidden border border-cardamom-brown">
+      <div
+        className="w-full h-2 rounded-pill bg-pure-white border border-faint-border overflow-hidden"
+        role="progressbar"
+        aria-valuenow={pct}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-label="Free shipping threshold progress"
+      >
         <div
-          className="h-full bg-tiger-gold rounded-pill transition-all duration-200"
-          style={{ width: `${progressPct}%` }}
+          className="h-full rounded-pill bg-shop-violet transition-all duration-200"
+          style={{ width: `${pct}%` }}
         />
       </div>
     </div>

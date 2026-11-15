@@ -1,209 +1,179 @@
 'use client';
 
-import React, { Suspense, useState, useMemo, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { Suspense, useMemo, useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { SAMPLE_PRODUCTS } from '@/data/products';
 import { Breadcrumbs } from '@/components/navigation/Breadcrumbs';
 import { SearchFilterBar } from '@/components/forms/SearchFilterBar';
-import { FilterDrawer } from '@/components/navigation/FilterDrawer';
+import { FilterDrawer, type SortOption } from '@/components/navigation/FilterDrawer';
 import { ProductGrid } from '@/components/product/ProductGrid';
-import { PillBadge } from '@/components/ui/PillBadge';
+import { StateFeedbackCard } from '@/components/ui/StateFeedbackCard';
 
-function UrlParamsSync({
-  onCategory,
-  onQuery,
-  onSort,
-}: {
-  onCategory: (cat: string) => void;
-  onQuery: (q: string) => void;
-  onSort: (sort: string) => void;
-}) {
+function ShopCatalogContent() {
+  const router = useRouter();
   const searchParams = useSearchParams();
 
-  useEffect(() => {
-    const urlCat = searchParams.get('category');
-    const urlQ = searchParams.get('q');
-    const urlSort = searchParams.get('sort');
-    if (urlCat !== null) onCategory(urlCat);
-    if (urlQ !== null) onQuery(urlQ);
-    if (urlSort !== null) onSort(urlSort);
-  }, [searchParams, onCategory, onQuery, onSort]);
+  const initialQuery = searchParams.get('q') ?? '';
+  const initialCategory = searchParams.get('category') ?? 'All';
+  const initialSort = (searchParams.get('sort') as SortOption) || 'featured';
+  const initialStock = searchParams.get('inStock') === 'true';
 
-  return null;
-}
-
-export default function ShopPage() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('ALL');
-  const [priceRange, setPriceRange] = useState('ALL');
-  const [sortBy, setSortBy] = useState('FEATURED');
-  const [onlyInStock, setOnlyInStock] = useState(false);
+  const [query, setQuery] = useState(initialQuery);
+  const [activeCategory, setActiveCategory] = useState(initialCategory);
+  const [sortBy, setSortBy] = useState<SortOption>(initialSort);
+  const [inStockOnly, setInStockOnly] = useState(initialStock);
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
 
-  const filteredProducts = useMemo(() => {
-    const q = searchQuery.trim().toLowerCase();
-
-    const list = SAMPLE_PRODUCTS.filter((p) => {
-      if (selectedCategory !== 'ALL' && p.category !== selectedCategory) {
-        return false;
-      }
-      if (onlyInStock && p.stockCount <= 0) {
-        return false;
-      }
-      if (priceRange === 'UNDER_75' && p.price >= 75) {
-        return false;
-      }
-      if (priceRange === '75_TO_150' && (p.price < 75 || p.price > 150)) {
-        return false;
-      }
-      if (priceRange === 'OVER_150' && p.price <= 150) {
-        return false;
-      }
-      if (q) {
-        const haystack =
-          `${p.title} ${p.category} ${p.shortDescription} ${p.sku}`.toLowerCase();
-        if (!haystack.includes(q)) return false;
-      }
-      return true;
-    });
-
-    const sorted = [...list];
-    if (sortBy === 'PRICE_ASC') {
-      sorted.sort((a, b) => a.price - b.price);
-    } else if (sortBy === 'PRICE_DESC') {
-      sorted.sort((a, b) => b.price - a.price);
-    } else if (sortBy === 'NEWEST') {
-      sorted.sort((a, b) => (b.isNewArrival ? 1 : 0) - (a.isNewArrival ? 1 : 0));
+  useEffect(() => {
+    setQuery(searchParams.get('q') ?? '');
+    setActiveCategory(searchParams.get('category') ?? 'All');
+    const s = searchParams.get('sort') as SortOption;
+    if (s === 'featured' || s === 'price-asc' || s === 'price-desc' || s === 'newest') {
+      setSortBy(s);
     }
-    return sorted;
-  }, [searchQuery, selectedCategory, priceRange, sortBy, onlyInStock]);
+    setInStockOnly(searchParams.get('inStock') === 'true');
+  }, [searchParams]);
 
-  const activeFilterCount =
-    (selectedCategory !== 'ALL' ? 1 : 0) +
-    (priceRange !== 'ALL' ? 1 : 0) +
-    (onlyInStock ? 1 : 0) +
-    (searchQuery.trim() ? 1 : 0);
-
-  const handleResetAll = () => {
-    setSearchQuery('');
-    setSelectedCategory('ALL');
-    setPriceRange('ALL');
-    setSortBy('FEATURED');
-    setOnlyInStock(false);
+  const syncUrlParams = (
+    nextQ: string,
+    nextCat: string,
+    nextSort: SortOption,
+    nextStock: boolean
+  ) => {
+    const params = new URLSearchParams();
+    if (nextQ.trim()) params.set('q', nextQ.trim());
+    if (nextCat !== 'All') params.set('category', nextCat);
+    if (nextSort !== 'featured') params.set('sort', nextSort);
+    if (nextStock) params.set('inStock', 'true');
+    const qs = params.toString();
+    router.replace(qs ? `/shop?${qs}` : '/shop', { scroll: false });
   };
 
-  return (
-    <div className="store-container py-10 sm:py-14">
-      <Suspense fallback={null}>
-        <UrlParamsSync
-          onCategory={setSelectedCategory}
-          onQuery={setSearchQuery}
-          onSort={setSortBy}
-        />
-      </Suspense>
+  const handleQueryChange = (val: string) => {
+    setQuery(val);
+    syncUrlParams(val, activeCategory, sortBy, inStockOnly);
+  };
 
+  const handleCategoryChange = (cat: string) => {
+    setActiveCategory(cat);
+    syncUrlParams(query, cat, sortBy, inStockOnly);
+  };
+
+  const handleSortChange = (val: SortOption) => {
+    setSortBy(val);
+    syncUrlParams(query, activeCategory, val, inStockOnly);
+  };
+
+  const handleInStockChange = (val: boolean) => {
+    setInStockOnly(val);
+    syncUrlParams(query, activeCategory, sortBy, val);
+  };
+
+  const handleReset = () => {
+    setQuery('');
+    setActiveCategory('All');
+    setSortBy('featured');
+    setInStockOnly(false);
+    router.replace('/shop', { scroll: false });
+  };
+
+  const filteredProducts = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    const list = SAMPLE_PRODUCTS.filter((item) => {
+      const catMatch = activeCategory === 'All' || item.category === activeCategory;
+      const stockMatch = !inStockOnly || item.stockCount > 0;
+      const textMatch =
+        !q ||
+        item.title.toLowerCase().includes(q) ||
+        item.category.toLowerCase().includes(q) ||
+        item.sku.toLowerCase().includes(q) ||
+        item.shortDescription.toLowerCase().includes(q);
+      return catMatch && stockMatch && textMatch;
+    });
+
+    if (sortBy === 'price-asc') {
+      return [...list].sort((a, b) => a.price - b.price);
+    }
+    if (sortBy === 'price-desc') {
+      return [...list].sort((a, b) => b.price - a.price);
+    }
+    if (sortBy === 'newest') {
+      return [...list].sort((a, b) => Number(Boolean(b.isNewArrival)) - Number(Boolean(a.isNewArrival)));
+    }
+    return list;
+  }, [query, activeCategory, inStockOnly, sortBy]);
+
+  return (
+    <div className="store-container pt-6 sm:pt-8 pb-8 space-y-6">
       <Breadcrumbs
         items={[
           { label: 'Home', href: '/' },
-          { label: 'Shop All Products' },
+          { label: 'Shop All Objects' },
         ]}
       />
 
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
-        <div>
-          <span className="text-[11px] font-semibold uppercase tracking-widest text-tiger-gold block mb-1.5">
-            CURATED STOREFRONT CATALOG (SAMPLE DATA)
-          </span>
-          <h1 className="heading-section">
-            {selectedCategory === 'ALL' ? 'ALL PRODUCTS' : selectedCategory}
-          </h1>
-        </div>
-        <PillBadge tone="charred" className="self-start sm:self-auto">
-          SHOWING {filteredProducts.length} OF {SAMPLE_PRODUCTS.length} PRODUCTS
-        </PillBadge>
-      </div>
+      <header className="space-y-2">
+        <h1 className="display-hero m-0">Shop All Studio Objects</h1>
+        <p className="text-sm sm:text-base text-canvas-secondary max-w-2xl m-0">
+          Browse every item across Audio &amp; Desk Craft, Everyday Carry, Home Objects, and Apparel &amp; Goods. Filter cleanly by department, availability, or search term.
+        </p>
+      </header>
 
       <SearchFilterBar
-        searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
-        selectedCategory={selectedCategory}
-        onSelectCategory={setSelectedCategory}
-        priceRange={priceRange}
-        onSelectPriceRange={setPriceRange}
+        query={query}
+        onQueryChange={handleQueryChange}
+        activeCategory={activeCategory}
+        onCategoryChange={handleCategoryChange}
+        inStockOnly={inStockOnly}
+        onInStockChange={handleInStockChange}
         sortBy={sortBy}
-        onSelectSort={setSortBy}
-        onlyInStock={onlyInStock}
-        onToggleInStock={setOnlyInStock}
-        activeFilterCount={activeFilterCount}
+        onSortChange={handleSortChange}
         onOpenMobileFilters={() => setIsMobileFilterOpen(true)}
-        onResetAll={handleResetAll}
+        onReset={handleReset}
+        resultCount={filteredProducts.length}
+        totalCount={SAMPLE_PRODUCTS.length}
       />
 
-      {activeFilterCount > 0 && (
-        <div
-          aria-live="polite"
-          className="flex items-center flex-wrap gap-2 mb-6"
-        >
-          <span className="text-xs text-warm-sand mr-1">Active Filters:</span>
-          {selectedCategory !== 'ALL' && (
-            <button
-              type="button"
-              onClick={() => setSelectedCategory('ALL')}
-              className="badge badge-spice hover:border-tiger-gold cursor-pointer"
-            >
-              <span>Dept: {selectedCategory}</span>
-              <span aria-hidden="true">×</span>
-            </button>
-          )}
-          {priceRange !== 'ALL' && (
-            <button
-              type="button"
-              onClick={() => setPriceRange('ALL')}
-              className="badge badge-spice hover:border-tiger-gold cursor-pointer"
-            >
-              <span>Price: {priceRange.replace(/_/g, ' ')}</span>
-              <span aria-hidden="true">×</span>
-            </button>
-          )}
-          {onlyInStock && (
-            <button
-              type="button"
-              onClick={() => setOnlyInStock(false)}
-              className="badge badge-spice hover:border-tiger-gold cursor-pointer"
-            >
-              <span>In Stock Only</span>
-              <span aria-hidden="true">×</span>
-            </button>
-          )}
-          {searchQuery.trim() && (
-            <button
-              type="button"
-              onClick={() => setSearchQuery('')}
-              className="badge badge-spice hover:border-tiger-gold cursor-pointer"
-            >
-              <span>Search: &ldquo;{searchQuery.trim()}&rdquo;</span>
-              <span aria-hidden="true">×</span>
-            </button>
-          )}
-        </div>
+      {filteredProducts.length === 0 ? (
+        <StateFeedbackCard
+          icon="search"
+          title="No objects match your current filters"
+          description="Try clearing the search term, switching departments, or disabling the in-stock toggle."
+          actionLabel="Reset all filters"
+          onAction={handleReset}
+        />
+      ) : (
+        <ProductGrid products={filteredProducts} columns="4" showDescription />
       )}
-
-      <ProductGrid
-        products={filteredProducts}
-        onResetFilters={handleResetAll}
-      />
 
       <FilterDrawer
         isOpen={isMobileFilterOpen}
         onClose={() => setIsMobileFilterOpen(false)}
-        selectedCategory={selectedCategory}
-        onSelectCategory={setSelectedCategory}
-        priceRange={priceRange}
-        onSelectPriceRange={setPriceRange}
-        onlyInStock={onlyInStock}
-        onToggleInStock={setOnlyInStock}
-        onReset={handleResetAll}
+        activeCategory={activeCategory}
+        onCategoryChange={handleCategoryChange}
+        inStockOnly={inStockOnly}
+        onInStockChange={handleInStockChange}
+        sortBy={sortBy}
+        onSortChange={handleSortChange}
+        onReset={handleReset}
+        resultCount={filteredProducts.length}
       />
     </div>
+  );
+}
+
+export default function ShopPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="store-container pt-8 pb-12">
+          <div className="surface-card p-8 text-center text-sm text-muted-gray">
+            Loading catalog objects...
+          </div>
+        </div>
+      }
+    >
+      <ShopCatalogContent />
+    </Suspense>
   );
 }

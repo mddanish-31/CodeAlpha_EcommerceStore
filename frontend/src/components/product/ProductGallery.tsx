@@ -1,88 +1,123 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Product } from '@/types/store';
+import { useState } from 'react';
+import type { Product } from '@/types/store';
 import { PillBadge } from '@/components/ui/PillBadge';
-import { ProductIllustration } from '@/components/ui/ProductIllustration';
+import { ProductIllustration, getProductStage } from '@/components/ui/ProductIllustration';
 
-const GALLERY_ANGLES = [
-  { id: 'front', label: '01 // FRONT' },
-  { id: 'detail', label: '02 // DETAIL' },
-  { id: 'finish', label: '03 // FINISH' },
-  { id: 'scale', label: '04 // SCALE' },
+type StudioAngle = 'front' | 'detail' | 'darkroom';
+
+const STUDIO_ANGLES: Array<{
+  key: StudioAngle;
+  label: string;
+  caption: string;
+}> = [
+  { key: 'front', label: 'Front', caption: 'Front Studio Elevation' },
+  { key: 'detail', label: 'Profile', caption: 'Secondary Finish View' },
+  { key: 'darkroom', label: 'Darkroom', caption: 'High-Contrast Studio Stage' },
 ];
 
 export function ProductGallery({ product }: { product: Product }) {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const defaultStage = getProductStage(product.imageSvgId);
+  const [angle, setAngle] = useState<StudioAngle>('front');
 
-  const discountPct =
-    product.compareAtPrice && product.compareAtPrice > product.price
-      ? Math.round(
-          ((product.compareAtPrice - product.price) / product.compareAtPrice) * 100
-        )
-      : null;
+  const isDarkStage =
+    angle === 'darkroom'
+      ? true
+      : angle === 'detail'
+      ? false
+      : defaultStage.darkBackdrop;
+
+  const stageBgClass =
+    angle === 'darkroom'
+      ? 'bg-slate-ink'
+      : angle === 'detail'
+      ? 'bg-pure-white border border-faint-border'
+      : defaultStage.bgClass;
+
+  const currentCaption =
+    STUDIO_ANGLES.find((a) => a.key === angle)?.caption ?? 'Front Studio Elevation';
+
+  const badgeLabel =
+    product.stockCount === 0
+      ? 'Sold Out'
+      : product.badge ?? null;
 
   return (
-    <div>
-      <div
-        className="rounded-card bg-charred-clove border border-cardamom-brown aspect-[4/3.2] flex items-center justify-center relative p-8"
-        style={{
-          backgroundImage:
-            'radial-gradient(circle at 50% 45%, rgba(250, 174, 51, 0.16) 0%, transparent 68%)',
-        }}
-      >
-        <div className="absolute top-3.5 left-3.5 right-3.5 flex items-center justify-between flex-wrap gap-1.5">
-          <PillBadge tone="gold">
-            STUDIO VIEW 0{activeIndex + 1} / 04
-          </PillBadge>
-          {discountPct && (
-            <PillBadge tone="alert">
-              SAVE ${(product.compareAtPrice! - product.price).toFixed(2)} (-
-              {discountPct}%)
-            </PillBadge>
-          )}
-        </div>
-
+    <div className="space-y-3">
+      <div className="surface-card p-2">
         <div
-          className="transition-transform duration-200"
-          style={{
-            transform:
-              activeIndex === 1
-                ? 'scale(1.12)'
-                : activeIndex === 2
-                ? 'rotate(-4deg) scale(1.05)'
-                : activeIndex === 3
-                ? 'scale(0.92)'
-                : 'scale(1)',
-          }}
+          className={`relative product-stage-inner ${stageBgClass} p-8 sm:p-12 flex items-center justify-center`}
         >
-          <ProductIllustration
-            svgId={product.imageSvgId}
-            className="w-56 h-48 sm:w-64 sm:h-56"
-          />
+          {badgeLabel ? (
+            <div className="absolute top-4 left-4 z-10">
+              <PillBadge
+                label={badgeLabel}
+                tone={product.stockCount === 0 ? 'soldout' : 'light'}
+              />
+            </div>
+          ) : null}
+
+          <div className="transition-transform duration-200 flex items-center justify-center w-full h-full">
+            <ProductIllustration
+              svgId={product.imageSvgId}
+              darkBackdrop={isDarkStage}
+              className={`w-48 h-48 sm:w-64 sm:h-64 ${
+                angle === 'detail' ? 'scale-110 -rotate-3' : ''
+              }`}
+            />
+          </div>
+
+          <span className="absolute bottom-3 left-3 px-3 py-1 rounded-tile bg-pure-white/95 text-ink-black border border-faint-border text-xs font-medium shadow-sm-soft">
+            {currentCaption}
+          </span>
         </div>
       </div>
 
       <div
+        className="flex flex-wrap items-center gap-2.5"
         role="group"
-        aria-label="Product Gallery Views"
-        className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-3"
+        aria-label={`Studio perspectives for ${product.title}`}
       >
-        {GALLERY_ANGLES.map((angle, idx) => {
-          const isCurrent = idx === activeIndex;
+        {STUDIO_ANGLES.map((item) => {
+          const active = angle === item.key;
+          const swatchDark =
+            item.key === 'darkroom'
+              ? true
+              : item.key === 'detail'
+              ? false
+              : defaultStage.darkBackdrop;
+          const swatchBg =
+            item.key === 'darkroom'
+              ? 'bg-slate-ink'
+              : item.key === 'detail'
+              ? 'bg-canvas-mist'
+              : defaultStage.bgClass;
+
           return (
             <button
-              key={angle.id}
+              key={item.key}
               type="button"
-              aria-current={isCurrent ? 'true' : undefined}
-              onClick={() => setActiveIndex(idx)}
-              className={`rounded-card p-3 min-h-[48px] text-xs font-semibold uppercase tracking-wider border transition-colors cursor-pointer ${
-                isCurrent
-                  ? 'bg-charred-clove border-tiger-gold text-tiger-gold'
-                  : 'bg-dark-spice border-cardamom-brown text-warm-sand hover:border-tiger-gold hover:text-tiger-gold'
+              aria-pressed={active}
+              onClick={() => setAngle(item.key)}
+              className={`inline-flex items-center gap-2.5 p-1.5 pr-3.5 rounded-[16px] bg-pure-white border transition-colors ${
+                active
+                  ? 'border-shop-violet ring-2 ring-violet-wash/70'
+                  : 'border-faint-border hover:border-ink-black/40'
               }`}
             >
-              {angle.label}
+              <span
+                className={`w-10 h-10 rounded-tile ${swatchBg} flex items-center justify-center p-1.5 shrink-0`}
+              >
+                <ProductIllustration
+                  svgId={product.imageSvgId}
+                  darkBackdrop={swatchDark}
+                  className="w-full h-full"
+                />
+              </span>
+              <span className="text-xs font-medium text-ink-black">
+                {item.label}
+              </span>
             </button>
           );
         })}
@@ -90,4 +125,3 @@ export function ProductGallery({ product }: { product: Product }) {
     </div>
   );
 }
-
