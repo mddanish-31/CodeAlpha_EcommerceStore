@@ -23,7 +23,9 @@ export default function CheckoutPage() {
           </span>
           <h1 className="heading-section">CHECKOUT</h1>
         </div>
-        <PillBadge tone="spice">FRONTEND DEMO CHECKOUT</PillBadge>
+        <PillBadge tone="spice" className="self-start sm:self-auto">
+          FRONTEND DEMO CHECKOUT
+        </PillBadge>
       </div>
 
       <CheckoutForm />

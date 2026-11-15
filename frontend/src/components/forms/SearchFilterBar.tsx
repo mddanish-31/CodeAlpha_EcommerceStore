@@ -64,11 +64,11 @@ export function SearchFilterBar({
           )}
         </div>
 
-        <div className="flex items-center gap-2.5 flex-wrap sm:flex-nowrap">
+        <div className="flex items-center gap-2.5 flex-wrap">
           <button
             type="button"
             onClick={onOpenMobileFilters}
-            className="btn btn-ghost md:hidden flex-1"
+            className="btn btn-ghost md:hidden"
           >
             <LineIcon name="filter" size={16} />
             <span>
@@ -93,7 +93,7 @@ export function SearchFilterBar({
             </select>
           </div>
 
-          <div className="flex-1 sm:flex-initial">
+          <div className="flex-1 min-w-[175px] sm:flex-initial">
             <label htmlFor="sort-select" className="sr-only">
               Sort Products
             </label>
