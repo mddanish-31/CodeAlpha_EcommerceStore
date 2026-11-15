@@ -1,15 +1,11 @@
 'use client';
 
 import React from 'react';
-import { useStore } from '@/context/StoreContext';
 import { Breadcrumbs } from '@/components/navigation/Breadcrumbs';
 import { CheckoutForm } from '@/components/forms/CheckoutForm';
-import { StateFeedbackCard } from '@/components/ui/StateFeedbackCard';
 import { PillBadge } from '@/components/ui/PillBadge';
 
 export default function CheckoutPage() {
-  const { cart } = useStore();
-
   return (
     <div className="store-container py-10 sm:py-14">
       <Breadcrumbs
@@ -30,18 +26,8 @@ export default function CheckoutPage() {
         <PillBadge tone="spice">FRONTEND DEMO CHECKOUT</PillBadge>
       </div>
 
-      {cart.length === 0 ? (
-        <StateFeedbackCard
-          status="empty"
-          badgeText="NO ITEMS FOR CHECKOUT"
-          title="YOUR CART IS EMPTY"
-          message="Add one or more products from the catalog before proceeding to checkout."
-          actionLabel="Return to Shop"
-          actionHref="/shop"
-        />
-      ) : (
-        <CheckoutForm />
-      )}
+      <CheckoutForm />
     </div>
   );
 }
+

@@ -67,10 +67,18 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${antonio.variable} ${inter.variable}`}>
       <body>
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 btn btn-primary"
+        >
+          Skip to main content
+        </a>
         <StoreProvider>
           <AnnouncementBar />
           <SiteHeader />
-          <main className="flex-1">{children}</main>
+          <main id="main-content" className="flex-1">
+            {children}
+          </main>
           <SiteFooter />
           <CartDrawer />
           <MobileNavDrawer />
@@ -80,3 +88,4 @@ export default function RootLayout({
     </html>
   );
 }
+

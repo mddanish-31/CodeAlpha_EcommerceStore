@@ -16,7 +16,7 @@ export default function AboutPage() {
       />
 
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-        <div className="lg:col-span-7">
+        <div className="lg:col-span-7 min-w-0">
           <div className="flex flex-wrap gap-2 mb-4">
             <PillBadge tone="gold">EDITORIAL CRAFT MARKET</PillBadge>
             <PillBadge tone="spice">CODEALPHA FULL STACK INTERNSHIP</PillBadge>
@@ -100,3 +100,4 @@ export default function AboutPage() {
     </div>
   );
 }
+

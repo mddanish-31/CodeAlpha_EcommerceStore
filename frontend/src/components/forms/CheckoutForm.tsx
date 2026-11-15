@@ -6,6 +6,7 @@ import { useStore } from '@/context/StoreContext';
 import { OrderSummary, ShippingAddress } from '@/types/store';
 import { PillBadge } from '@/components/ui/PillBadge';
 import { LineIcon } from '@/components/ui/LineIcon';
+import { StateFeedbackCard } from '@/components/ui/StateFeedbackCard';
 import { DottedDivider } from '@/components/layout/DottedDivider';
 
 export function CheckoutForm() {
@@ -136,12 +137,25 @@ export function CheckoutForm() {
     );
   }
 
+  if (cart.length === 0) {
+    return (
+      <StateFeedbackCard
+        status="empty"
+        badgeText="NO ITEMS FOR CHECKOUT"
+        title="YOUR CART IS EMPTY"
+        message="Add one or more products from the catalog before proceeding to checkout."
+        actionLabel="Return to Shop"
+        actionHref="/shop"
+      />
+    );
+  }
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
       <form
         onSubmit={handleSubmit}
         noValidate
-        className="lg:col-span-7 space-y-6"
+        className="lg:col-span-7 space-y-6 min-w-0"
       >
         {/* Demo Mode Disclosure Banner */}
         <div className="rounded-card bg-charred-clove border border-tiger-gold p-4 flex items-start gap-3">
@@ -486,3 +500,4 @@ export function CheckoutForm() {
     </div>
   );
 }
+

@@ -31,7 +31,7 @@ export function ProductGallery({ product }: { product: Product }) {
             'radial-gradient(circle at 50% 45%, rgba(250, 174, 51, 0.16) 0%, transparent 68%)',
         }}
       >
-        <div className="absolute top-3.5 left-3.5 right-3.5 flex items-center justify-between gap-2">
+        <div className="absolute top-3.5 left-3.5 right-3.5 flex items-center justify-between flex-wrap gap-1.5">
           <PillBadge tone="gold">
             STUDIO VIEW 0{activeIndex + 1} / 04
           </PillBadge>
@@ -90,3 +90,4 @@ export function ProductGallery({ product }: { product: Product }) {
     </div>
   );
 }
+

@@ -56,10 +56,10 @@ export default async function ProductDetailPage({
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          <div className="lg:col-span-6">
+          <div className="lg:col-span-6 min-w-0">
             <ProductGallery product={product} />
           </div>
-          <div className="lg:col-span-6">
+          <div className="lg:col-span-6 min-w-0">
             <ProductBuyBox product={product} />
           </div>
         </div>
@@ -94,3 +94,4 @@ export default async function ProductDetailPage({
     </div>
   );
 }
+

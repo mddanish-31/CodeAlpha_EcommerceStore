@@ -51,7 +51,7 @@ export default function ContactPage() {
         {/* Left: Inquiry Form */}
         <section
           aria-labelledby="contact-form-heading"
-          className="lg:col-span-7 surface-card p-6 sm:p-8"
+          className="lg:col-span-7 surface-card p-6 sm:p-8 min-w-0"
         >
           <div className="flex items-center justify-between flex-wrap gap-2 mb-4">
             <h2
@@ -246,3 +246,4 @@ export default function ContactPage() {
     </div>
   );
 }
+

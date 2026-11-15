@@ -30,7 +30,7 @@ export function ProductCard({ product }: { product: Product }) {
               'radial-gradient(circle at 50% 50%, rgba(250, 174, 51, 0.14) 0%, transparent 70%)',
           }}
         >
-          <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between gap-1.5 pointer-events-none">
+          <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between flex-wrap gap-1.5 pointer-events-none">
             <span>
               {product.badge && (
                 <PillBadge
@@ -104,3 +104,4 @@ export function ProductCard({ product }: { product: Product }) {
     </article>
   );
 }
+

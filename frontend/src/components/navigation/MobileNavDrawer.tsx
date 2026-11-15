@@ -31,7 +31,8 @@ export function MobileNavDrawer() {
 
   const handleBackdropClick = (e: React.MouseEvent<HTMLDialogElement>) => {
     const dlg = dialogRef.current;
-    if (!dlg) return;
+    if (!dlg || e.target !== dlg) return;
+    if (e.clientX === 0 && e.clientY === 0) return;
     const rect = dlg.getBoundingClientRect();
     const clickedInDialog =
       rect.top <= e.clientY &&
@@ -150,3 +151,4 @@ export function MobileNavDrawer() {
     </dialog>
   );
 }
+

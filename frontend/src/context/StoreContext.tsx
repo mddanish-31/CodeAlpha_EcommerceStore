@@ -9,7 +9,6 @@ import {
   DemoUser,
 } from '@/types/store';
 import {
-  SAMPLE_PRODUCTS,
   INITIAL_DEMO_USER,
   INITIAL_SAMPLE_ORDERS,
 } from '@/data/products';
@@ -48,10 +47,7 @@ const STORAGE_KEY_USER = 'codealpha_ecommerce_user_v1';
 const FREE_SHIPPING_THRESHOLD = 75;
 const STANDARD_SHIPPING = 8;
 
-const DEFAULT_CART: CartItem[] = [
-  { product: SAMPLE_PRODUCTS[0], quantity: 1 },
-  { product: SAMPLE_PRODUCTS[3], quantity: 1 },
-];
+const DEFAULT_CART: CartItem[] = [];
 
 export function StoreProvider({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>(DEFAULT_CART);
@@ -285,3 +281,4 @@ export function useStore(): StoreContextValue {
   }
   return ctx;
 }
+

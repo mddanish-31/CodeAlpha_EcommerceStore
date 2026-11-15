@@ -53,7 +53,7 @@ export default function CartPage() {
         />
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          <div className="lg:col-span-8 space-y-4">
+          <div className="lg:col-span-8 space-y-4 min-w-0">
             <div className="surface-card p-4">
               <FreeShippingBar />
             </div>
@@ -71,3 +71,4 @@ export default function CartPage() {
     </div>
   );
 }
+

@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useStore } from '@/context/StoreContext';
 import { LineIcon } from '@/components/ui/LineIcon';
 import { FreeShippingBar } from './FreeShippingBar';
@@ -19,6 +20,11 @@ export function CartDrawer() {
     closeCartDrawer,
   } = useStore();
   const dialogRef = useRef<HTMLDialogElement | null>(null);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    closeCartDrawer();
+  }, [pathname, closeCartDrawer]);
 
   useEffect(() => {
     const dlg = dialogRef.current;
@@ -32,7 +38,8 @@ export function CartDrawer() {
 
   const handleBackdropClick = (e: React.MouseEvent<HTMLDialogElement>) => {
     const dlg = dialogRef.current;
-    if (!dlg) return;
+    if (!dlg || e.target !== dlg) return;
+    if (e.clientX === 0 && e.clientY === 0) return;
     const rect = dlg.getBoundingClientRect();
     const clickedInDialog =
       rect.top <= e.clientY &&
@@ -133,3 +140,4 @@ export function CartDrawer() {
     </dialog>
   );
 }
+

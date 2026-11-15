@@ -118,7 +118,7 @@ export default function AccountPage() {
               PERSONAL INFORMATION
             </h2>
 
-            <div className="space-y-3 text-xs">
+            <div className="space-y-3 text-xs break-words">
               <div>
                 <div className="text-warm-sand uppercase tracking-wider text-[11px]">
                   Full Name
@@ -289,3 +289,4 @@ export default function AccountPage() {
     </div>
   );
 }
+
