@@ -3,7 +3,7 @@
 **Project:** Simple E-commerce Store (`CodeAlpha_EcommerceStore`)  
 **Internship:** CodeAlpha Full Stack Development Internship  
 **Target Stack:** Next.js (App Router) + TypeScript + Tailwind CSS *(Planned — Phase 4B)*  
-**Design Authority:** [design-system.md](file:///c:/Users/mddan/Desktop/CodeAlpha_EcommerceStore/docs/design-system.md) & [design-reference-mapping.md](file:///c:/Users/mddan/Desktop/CodeAlpha_EcommerceStore/docs/design-reference-mapping.md)
+**Design Authority:** [design-system.md](./design-system.md) & [design-reference-mapping.md](./design-reference-mapping.md)
 
 > **Implementation Honesty Note:** All routes, UI flows, and data interactions below represent the **approved UX blueprint for Phase 4B implementation**. No frontend routes, backend REST APIs, authentication endpoints, or database schemas are claimed as implemented yet. Checkout does **not** integrate an external payment gateway.
 

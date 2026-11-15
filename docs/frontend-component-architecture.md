@@ -140,7 +140,7 @@ frontend/
 
 ## 4. Core TypeScript Domain Contracts (`types/store.ts`)
 
-These conceptual interfaces align directly with the planned entities in [README.md](file:///c:/Users/mddan/Desktop/CodeAlpha_EcommerceStore/README.md#L111-L117) (`Users`, `Products`, `Carts`, `Orders`) without locking in unapproved backend implementation details:
+These conceptual interfaces align directly with the planned entities in [README.md](../README.md#conceptual-database-entities-planned) (`Users`, `Products`, `Carts`, `Orders`) without locking in unapproved backend implementation details:
 
 ```ts
 export type ProductCategory =
