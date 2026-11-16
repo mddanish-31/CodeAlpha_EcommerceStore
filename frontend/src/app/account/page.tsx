@@ -33,8 +33,8 @@ export default function AccountPage() {
 
       <header className="flex flex-wrap items-center justify-between gap-4">
         <div className="space-y-1">
-          <h1 className="display-hero m-0">Account Dashboard</h1>
-          <p className="text-sm sm:text-base text-muted m-0">
+          <h1 className="heading-primary m-0">Account Dashboard</h1>
+          <p className="text-sm sm:text-base text-ink-muted m-0">
             Customer overview, active cart summary, saved delivery preferences, and order history.
           </p>
         </div>
@@ -75,18 +75,18 @@ export default function AccountPage() {
           {/* Top KPI Overview Strip */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="surface-card p-5 space-y-1">
-              <p className="text-xs font-medium text-muted m-0">Recorded Orders</p>
+              <p className="text-xs font-medium text-ink-muted m-0">Recorded Orders</p>
               <p className="text-2xl font-bold text-ink m-0 tabular-nums">{orders.length}</p>
-              <p className="text-xs text-muted m-0">Stored locally in this browser</p>
+              <p className="text-xs text-ink-muted m-0">Stored locally in this browser</p>
             </div>
 
             <div className="surface-card p-5 flex items-center justify-between gap-3">
               <div className="space-y-1">
-                <p className="text-xs font-medium text-muted m-0">Shopping Cart</p>
+                <p className="text-xs font-medium text-ink-muted m-0">Shopping Cart</p>
                 <p className="text-2xl font-bold text-ink m-0 tabular-nums">
                   {cartCount} item{cartCount === 1 ? '' : 's'} · ${subtotal.toFixed(2)}
                 </p>
-                <p className="text-xs text-muted m-0">
+                <p className="text-xs text-ink-muted m-0">
                   {subtotal >= 75 ? 'Free shipping unlocked' : 'Free shipping above $75'}
                 </p>
               </div>
@@ -100,9 +100,9 @@ export default function AccountPage() {
             </div>
 
             <div className="surface-card p-5 space-y-1">
-              <p className="text-xs font-medium text-muted m-0">Account Status</p>
-              <p className="text-lg font-semibold text-brand-dark m-0">Active Demo Session</p>
-              <p className="text-xs text-muted m-0">Member since {user.joinedDate}</p>
+              <p className="text-xs font-medium text-ink-muted m-0">Account Status</p>
+              <p className="text-lg font-semibold text-ink-secondary m-0">Active Demo Session</p>
+              <p className="text-xs text-ink-muted m-0">Member since {user.joinedDate}</p>
             </div>
           </div>
 
@@ -111,23 +111,23 @@ export default function AccountPage() {
             <div className="lg:col-span-4 space-y-4">
               <section className="surface-card p-6 space-y-4" aria-label="Customer profile">
                 <div className="flex items-center gap-3.5">
-                  <div className="w-12 h-12 rounded-pill bg-violet-soft border border-violet-border flex items-center justify-center font-semibold text-base text-brand-dark shrink-0">
+                  <div className="w-12 h-12 rounded-pill bg-surface-subtle border border-border flex items-center justify-center font-semibold text-base text-ink-secondary shrink-0">
                     {initials}
                   </div>
                   <div className="min-w-0">
                     <h2 className="text-base font-semibold text-ink truncate m-0">
                       {user.fullName}
                     </h2>
-                    <p className="text-xs text-muted truncate m-0">{user.email}</p>
+                    <p className="text-xs text-ink-muted truncate m-0">{user.email}</p>
                   </div>
                 </div>
 
-                <div className="flex flex-wrap gap-2 pt-2 border-t border-border-default">
-                  <PillBadge label="Demo Customer" tone="violet" />
+                <div className="flex flex-wrap gap-2 pt-2 border-t border-border">
+                  <PillBadge label="Demo Customer" tone="subtle" />
                   <PillBadge label={`Since ${user.joinedDate}`} tone="neutral" />
                 </div>
 
-                <p className="text-xs text-muted leading-relaxed m-0">
+                <p className="text-xs text-ink-muted leading-relaxed m-0">
                   Profile and order history stay stored in local browser storage until cleared or signed out.
                 </p>
               </section>
@@ -137,9 +137,9 @@ export default function AccountPage() {
                   <h2 className="text-sm font-semibold text-ink m-0">
                     Default Delivery Location
                   </h2>
-                  <span className="text-xs text-muted">Primary</span>
+                  <span className="text-xs text-ink-muted">Primary</span>
                 </div>
-                <address className="not-italic text-xs sm:text-sm text-muted leading-relaxed space-y-0.5">
+                <address className="not-italic text-xs sm:text-sm text-ink-muted leading-relaxed space-y-0.5">
                   <p className="font-medium text-ink m-0">{user.defaultAddress.fullName}</p>
                   <p className="m-0">{user.defaultAddress.streetAddress}</p>
                   <p className="m-0">
@@ -159,28 +159,28 @@ export default function AccountPage() {
               aria-label="Order history"
               className="lg:col-span-8 surface-card p-6 sm:p-8 space-y-5"
             >
-              <div className="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-border-default">
+              <div className="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-border">
                 <div className="space-y-0.5">
                   <h2 className="heading-sub m-0">Recent Orders</h2>
-                  <p className="text-xs text-muted m-0">
+                  <p className="text-xs text-ink-muted m-0">
                     Pre-seeded demo orders paired with any simulated checkouts completed in this browser.
                   </p>
                 </div>
-                <span className="text-xs font-medium text-muted tabular-nums">
+                <span className="text-xs font-medium text-ink-muted tabular-nums">
                   {orders.length} order{orders.length === 1 ? '' : 's'}
                 </span>
               </div>
 
               {orders.length === 0 ? (
-                <p className="text-sm text-muted m-0">No orders recorded yet.</p>
+                <p className="text-sm text-ink-muted m-0">No orders recorded yet.</p>
               ) : (
                 <div className="space-y-4">
                   {orders.map((order) => (
                     <article
                       key={order.orderId}
-                      className="p-4 sm:p-5 rounded-image bg-page-bg border border-border-default space-y-3.5"
+                      className="p-4 sm:p-5 rounded-image bg-background border border-border space-y-3.5"
                     >
-                      <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-border-default">
+                      <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-border">
                         <div className="space-y-0.5">
                           <div className="flex flex-wrap items-center gap-2">
                             <span className="text-sm font-semibold text-ink tabular-nums">
@@ -188,10 +188,10 @@ export default function AccountPage() {
                             </span>
                             <PillBadge
                               label={order.status}
-                              tone={order.status === 'Delivered' ? 'dark' : 'violet'}
+                              tone={order.status === 'Delivered' ? 'accent' : 'subtle'}
                             />
                           </div>
-                          <p className="text-xs text-muted m-0 tabular-nums">
+                          <p className="text-xs text-ink-muted m-0 tabular-nums">
                             Placed on {order.createdAt} · Ship to {order.shippingAddress.city}
                           </p>
                         </div>
@@ -200,7 +200,7 @@ export default function AccountPage() {
                           <div className="text-base font-bold text-ink tabular-nums">
                             ${order.totalAmount.toFixed(2)}
                           </div>
-                          <div className="text-[11px] text-muted tabular-nums">
+                          <div className="text-[11px] text-ink-muted tabular-nums">
                             {order.shippingCost === 0
                               ? 'Free shipping'
                               : `$${order.shippingCost} shipping`}
@@ -217,7 +217,7 @@ export default function AccountPage() {
                               className="flex items-center justify-between gap-3 text-xs sm:text-sm"
                             >
                               <div className="flex items-center gap-3 min-w-0">
-                                <div className="w-10 h-10 rounded-lg bg-surface-subtle border border-border-default overflow-hidden shrink-0">
+                                <div className="w-10 h-10 rounded-lg bg-surface-subtle border border-border overflow-hidden shrink-0">
                                   <ProductMedia
                                     src={media.src}
                                     alt={media.alt}
@@ -227,10 +227,10 @@ export default function AccountPage() {
                                 </div>
                                 <Link
                                   href={`/shop/${item.product.id}`}
-                                  className="text-ink font-medium hover:text-brand-violet hover:underline underline-offset-4 truncate inline-flex items-center gap-1.5"
+                                  className="text-ink font-medium hover:text-accent hover:underline underline-offset-4 truncate inline-flex items-center gap-1.5"
                                 >
                                   <span className="truncate">{item.product.title}</span>
-                                  <span className="text-muted shrink-0">× {item.quantity}</span>
+                                  <span className="text-ink-muted shrink-0">× {item.quantity}</span>
                                 </Link>
                               </div>
                               <span className="font-semibold text-ink tabular-nums shrink-0">

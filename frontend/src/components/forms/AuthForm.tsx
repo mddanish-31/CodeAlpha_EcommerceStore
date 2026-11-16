@@ -71,21 +71,23 @@ export function AuthForm({ mode }: AuthFormProps) {
   };
 
   return (
-    <div className="surface-card p-6 sm:p-8 max-w-md w-full mx-auto space-y-6">
-      <div className="space-y-2.5 text-center">
+    <div className="surface-card p-6 sm:p-10 max-w-md w-full mx-auto space-y-6">
+      <div className="space-y-3 text-center">
         <div className="inline-flex items-center justify-center gap-2 text-lg font-semibold tracking-tight text-ink">
           <span
-            className="w-8 h-8 rounded-lg bg-brand-violet text-surface inline-flex items-center justify-center"
+            className="w-9 h-9 rounded-lg bg-accent text-surface inline-flex items-center justify-center shrink-0"
             aria-hidden="true"
           >
-            <LineIcon name="layers" size={16} />
+            <LineIcon name="layers" size={18} />
           </span>
-          <span>CodeAlpha Store</span>
+          <span className="font-serif text-[20px] tracking-tight">
+            CodeAlpha <span className="text-ink-secondary">Store</span>
+          </span>
         </div>
-        <h1 className="text-2xl font-semibold tracking-tight text-ink m-0">
+        <h1 className="heading-primary m-0">
           {isRegister ? 'Create your demo account' : 'Sign in to your account'}
         </h1>
-        <p className="text-sm text-muted m-0">
+        <p className="text-sm text-ink-secondary m-0 leading-relaxed">
           {isRegister
             ? 'Frontend demo registration stored locally in browser storage.'
             : 'Access your sample order history and saved shipping details.'}
@@ -93,10 +95,10 @@ export function AuthForm({ mode }: AuthFormProps) {
       </div>
 
       {user ? (
-        <div className="p-3.5 rounded-image bg-violet-soft border border-violet-border text-xs text-brand-dark flex items-center justify-between gap-2">
+        <div className="p-3.5 rounded-image bg-accent text-surface border border-accent text-xs sm:text-sm flex items-center justify-between gap-2.5">
           <span className="truncate">Signed in as {user.email}.</span>
-          <Link href="/account" className="font-semibold text-brand-dark underline underline-offset-4 shrink-0">
-            Account
+          <Link href="/account" className="font-semibold text-surface underline underline-offset-4 shrink-0">
+            Open Account
           </Link>
         </div>
       ) : null}
@@ -104,14 +106,14 @@ export function AuthForm({ mode }: AuthFormProps) {
       {error ? (
         <div
           role="alert"
-          className="p-3.5 rounded-image bg-page-bg border border-brand-violet text-xs sm:text-sm font-medium text-ink flex items-start gap-2.5"
+          className="p-3.5 rounded-image bg-surface-subtle border border-error text-xs sm:text-sm font-medium text-error flex items-start gap-2.5"
         >
-          <LineIcon name="alert" size={16} className="text-brand-violet shrink-0 mt-0.5" />
+          <LineIcon name="alert" size={16} className="text-error shrink-0 mt-0.5" />
           <span>{error}</span>
         </div>
       ) : null}
 
-      <form onSubmit={handleSubmit} noValidate className="space-y-4">
+      <form onSubmit={handleSubmit} noValidate className="space-y-5">
         {isRegister ? (
           <div className="space-y-1.5">
             <label htmlFor="auth-name" className="block text-xs font-medium text-ink-secondary">
@@ -158,13 +160,13 @@ export function AuthForm({ mode }: AuthFormProps) {
               aria-pressed={showPassword}
               aria-label={showPassword ? 'Hide password' : 'Show password'}
               onClick={() => setShowPassword((prev) => !prev)}
-              className="inline-flex items-center gap-1 text-xs font-medium text-muted hover:text-ink py-1 px-2 rounded-lg"
+              className="inline-flex items-center gap-1 text-xs font-medium text-ink-secondary hover:text-ink py-1 px-2 rounded-control border border-transparent hover:border-border transition-colors"
             >
               <LineIcon name={showPassword ? 'eye-off' : 'eye'} size={14} />
               <span>{showPassword ? 'Hide' : 'Show'}</span>
             </button>
           </div>
-          <p id="auth-password-hint" className="text-xs text-muted m-0">
+          <p id="auth-password-hint" className="text-xs text-ink-muted m-0">
             Minimum 8 characters (frontend demo validation).
           </p>
           <input
@@ -205,7 +207,7 @@ export function AuthForm({ mode }: AuthFormProps) {
               type="checkbox"
               checked={rememberMe}
               onChange={(e) => setRememberMe(e.target.checked)}
-              className="w-4 h-4 accent-brand-violet rounded cursor-pointer"
+              className="w-4 h-4 accent-accent rounded cursor-pointer"
             />
             <span>Keep demo session stored on this browser</span>
           </label>
@@ -225,18 +227,18 @@ export function AuthForm({ mode }: AuthFormProps) {
         </div>
       </form>
 
-      <div className="pt-4 border-t border-border-default text-center text-xs text-muted">
+      <div className="pt-4 border-t border-border text-center text-xs text-ink-muted">
         {isRegister ? (
           <>
             Already have a demo session?{' '}
-            <Link href="/auth/login" className="font-semibold text-brand-violet hover:text-brand-dark underline underline-offset-4">
+            <Link href="/auth/login" className="font-semibold text-accent hover:text-accent-hover underline underline-offset-4">
               Sign in instead
             </Link>
           </>
         ) : (
           <>
             New to CodeAlpha Store?{' '}
-            <Link href="/auth/register" className="font-semibold text-brand-violet hover:text-brand-dark underline underline-offset-4">
+            <Link href="/auth/register" className="font-semibold text-accent hover:text-accent-hover underline underline-offset-4">
               Create demo account
             </Link>
           </>

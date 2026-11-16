@@ -23,10 +23,10 @@ export function ProductBuyBox({ product }: { product: Product }) {
     <div className="surface-card p-6 sm:p-8 space-y-5">
       <div className="space-y-2">
         <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
-          <span className="font-semibold uppercase tracking-wider text-brand-dark">
+          <span className="font-semibold uppercase tracking-wider text-ink-secondary">
             {product.category}
           </span>
-          <span className="tabular-nums text-muted">SKU {product.sku}</span>
+          <span className="tabular-nums text-ink-muted">SKU {product.sku}</span>
         </div>
 
         <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-ink leading-tight m-0">
@@ -39,7 +39,7 @@ export function ProductBuyBox({ product }: { product: Product }) {
           ${product.price.toFixed(2)}
         </span>
         {product.compareAtPrice ? (
-          <span className="text-base text-muted line-through tabular-nums">
+          <span className="text-base text-ink-muted line-through tabular-nums">
             ${product.compareAtPrice.toFixed(2)}
           </span>
         ) : null}
@@ -47,18 +47,18 @@ export function ProductBuyBox({ product }: { product: Product }) {
 
       <div className="flex items-center gap-2 text-xs sm:text-sm">
         {soldOut ? (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-pill bg-surface-subtle border border-border-default text-ink-secondary font-medium">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-pill bg-surface-subtle border border-border text-ink-secondary font-medium">
             <LineIcon name="alert" size={14} />
             <span>Sold Out — Currently Unavailable</span>
           </span>
         ) : lowStock ? (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-pill bg-violet-soft border border-violet-border text-brand-dark font-medium tabular-nums">
-            <LineIcon name="check" size={14} className="text-brand-violet" />
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-pill bg-accent text-surface border border-accent font-medium tabular-nums">
+            <LineIcon name="check" size={14} className="text-surface" />
             <span>Low Stock · Only {product.stockCount} remaining</span>
           </span>
         ) : (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-pill bg-page-bg border border-border-default text-ink font-medium tabular-nums">
-            <LineIcon name="check" size={14} className="text-brand-violet" />
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-pill bg-surface-subtle border border-border text-ink font-medium tabular-nums">
+            <LineIcon name="check" size={14} className="text-ink-secondary" />
             <span>In Stock ({product.stockCount} available)</span>
           </span>
         )}
@@ -68,7 +68,7 @@ export function ProductBuyBox({ product }: { product: Product }) {
         {product.description}
       </p>
 
-      <div className="pt-4 border-t border-border-default space-y-4">
+      <div className="pt-4 border-t border-border space-y-4">
         <div className="flex flex-wrap items-center gap-3">
           {!soldOut ? (
             <QuantityStepper
@@ -113,12 +113,12 @@ export function ProductBuyBox({ product }: { product: Product }) {
         ) : null}
       </div>
 
-      <div className="p-4 rounded-image bg-page-bg border border-border-default text-xs text-ink-secondary space-y-1">
+      <div className="p-4 rounded-image bg-surface-subtle border border-border text-xs text-ink-secondary space-y-1">
         <p className="font-semibold text-ink m-0 flex items-center gap-1.5">
-          <LineIcon name="truck" size={15} className="text-brand-violet" />
+          <LineIcon name="truck" size={15} className="text-ink-secondary" />
           <span>Shipping Policy</span>
         </p>
-        <p className="text-muted m-0">
+        <p className="text-ink-muted m-0">
           Free shipping above $75; flat $8 standard rate otherwise. Items and cart state persist in browser storage.
         </p>
       </div>

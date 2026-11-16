@@ -28,8 +28,8 @@ export default function CartPage() {
 
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="space-y-1">
-            <h1 className="display-hero m-0">Shopping Cart</h1>
-            <p className="text-sm text-muted m-0 tabular-nums">
+            <h1 className="heading-primary m-0">Shopping Cart</h1>
+            <p className="text-sm text-ink-muted m-0 tabular-nums">
               {cartCount === 0
                 ? 'Your shopping cart is currently empty'
                 : `${cartCount} curated object${cartCount === 1 ? '' : 's'} ready for simulated checkout`}

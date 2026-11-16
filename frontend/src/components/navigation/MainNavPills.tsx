@@ -28,8 +28,8 @@ export function MainNavPills({ className = '' }: { className?: string }) {
             aria-current={isActive ? 'page' : undefined}
             className={`inline-flex items-center min-h-[44px] px-4 py-2 rounded-control text-sm font-medium transition-colors ${
               isActive
-                ? 'bg-brand-violet text-surface border border-brand-violet'
-                : 'bg-surface text-ink border border-border-default shadow-card-subtle hover:bg-page-bg'
+                ? 'bg-accent text-surface border border-accent'
+                : 'bg-surface text-ink border border-border hover:bg-background'
             }`}
           >
             {item.label}

@@ -65,7 +65,7 @@ export default function ContactPage() {
 
       <header className="space-y-2 max-w-2xl">
         <h1 className="display-hero m-0">Contact &amp; Frequently Asked Questions</h1>
-        <p className="text-sm sm:text-base text-muted m-0">
+        <p className="text-sm sm:text-base text-ink-muted m-0">
           Review shipping calculations, stock behavior, and test client-side inquiry validation below.
         </p>
       </header>
@@ -76,16 +76,16 @@ export default function ContactPage() {
             Storefront Questions
           </h2>
 
-          <div className="surface-card overflow-hidden divide-y divide-border-default">
+          <div className="surface-card overflow-hidden divide-y divide-border">
             {FAQS.map((item, idx) => (
               <details key={item.q} name="contact-faq" open={idx === 0} className="group">
-                <summary className="list-none cursor-pointer flex items-center justify-between gap-4 px-6 py-4 text-sm font-semibold text-ink hover:bg-page-bg transition-colors">
+                <summary className="list-none cursor-pointer flex items-center justify-between gap-4 px-6 py-4 text-sm font-semibold text-ink hover:bg-background transition-colors">
                   <span>{item.q}</span>
-                  <span className="text-brand-violet transition-transform duration-200 group-open:rotate-45 shrink-0">
+                  <span className="text-accent transition-transform duration-200 group-open:rotate-45 shrink-0">
                     <LineIcon name="plus" size={16} />
                   </span>
                 </summary>
-                <div className="px-6 pb-5 pt-1 text-sm text-muted leading-relaxed">
+                <div className="px-6 pb-5 pt-1 text-sm text-ink-muted leading-relaxed">
                   <p className="m-0">{item.a}</p>
                 </div>
               </details>
@@ -101,7 +101,7 @@ export default function ContactPage() {
             <h2 id="contact-form-heading" className="heading-sub m-0">
               Send a Store Inquiry
             </h2>
-            <p className="text-xs text-muted m-0">
+            <p className="text-xs text-ink-muted m-0">
               All fields validate client-side (demo confirmation only; no external API configured).
             </p>
           </div>
@@ -109,9 +109,9 @@ export default function ContactPage() {
           {error ? (
             <div
               role="alert"
-              className="p-3.5 rounded-image bg-page-bg border border-brand-violet text-xs sm:text-sm font-medium text-ink flex items-start gap-2"
+              className="p-3.5 rounded-image bg-surface-subtle border border-error text-xs sm:text-sm font-medium text-error flex items-start gap-2"
             >
-              <LineIcon name="alert" size={16} className="text-brand-violet shrink-0 mt-0.5" />
+              <LineIcon name="alert" size={16} className="text-error shrink-0 mt-0.5" />
               <span>{error}</span>
             </div>
           ) : null}
@@ -119,9 +119,9 @@ export default function ContactPage() {
           {sentConfirmation ? (
             <div
               role="status"
-              className="p-4 rounded-image bg-violet-soft border border-violet-border text-xs sm:text-sm font-medium text-brand-dark flex items-start gap-2.5"
+              className="p-4 rounded-image bg-surface-subtle border border-border text-xs sm:text-sm font-medium text-ink-secondary flex items-start gap-2.5"
             >
-              <LineIcon name="check" size={16} className="text-brand-violet shrink-0 mt-0.5" />
+              <LineIcon name="check" size={16} className="text-ink-secondary shrink-0 mt-0.5" />
               <span>{sentConfirmation}</span>
             </div>
           ) : null}

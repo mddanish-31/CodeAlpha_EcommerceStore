@@ -65,8 +65,10 @@ export function ProductGallery({ product }: { product: Product }) {
                   product.stockCount === 0
                     ? 'soldout'
                     : product.badge === 'LIMITED DROP'
-                    ? 'violet'
-                    : 'dark'
+                    ? 'accent'
+                    : product.badge === 'NEW ARRIVAL'
+                    ? 'subtle'
+                    : 'accent'
                 }
               />
             </div>
@@ -83,7 +85,7 @@ export function ProductGallery({ product }: { product: Product }) {
             fallbackLabel={product.title}
           />
 
-          <span className="absolute bottom-3 left-3 px-3 py-1 rounded-pill bg-surface/95 text-ink border border-border-default text-xs font-medium shadow-card-subtle">
+          <span className="absolute bottom-3 left-3 px-3 py-1 rounded-pill bg-surface text-ink border border-border text-xs font-medium">
             {activeView.caption}
           </span>
         </div>
@@ -103,9 +105,7 @@ export function ProductGallery({ product }: { product: Product }) {
               aria-pressed={active}
               onClick={() => setView(item.key)}
               className={`flex items-center gap-2.5 p-2 rounded-control bg-surface border text-left transition-colors ${
-                active
-                  ? 'border-brand-violet ring-2 ring-violet-border'
-                  : 'border-border-default hover:border-ink-secondary/40'
+                active ? 'border-accent ring-1 ring-accent' : 'border-border hover:border-ink-secondary/40'
               }`}
             >
               <span className="w-11 h-11 rounded-lg bg-surface-subtle overflow-hidden shrink-0">

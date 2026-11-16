@@ -54,17 +54,17 @@ export function NewsletterForm() {
           role="alert"
           className="inline-flex items-center gap-1.5 text-xs font-medium text-ink m-0"
         >
-          <LineIcon name="alert" size={14} className="text-brand-violet shrink-0" />
-          <span>{error}</span>
+          <LineIcon name="alert" size={14} className="text-error shrink-0" />
+          <span className="text-error">{error}</span>
         </p>
       ) : null}
 
       {submittedEmail ? (
         <p
           role="status"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-control bg-violet-soft border border-violet-border text-xs font-medium text-brand-dark m-0"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-control bg-surface-subtle border border-border text-xs font-medium text-ink-secondary m-0"
         >
-          <LineIcon name="check" size={14} className="text-brand-violet shrink-0" />
+          <LineIcon name="check" size={14} className="text-ink-secondary shrink-0" />
           <span>Demo subscription noted for {submittedEmail}.</span>
         </p>
       ) : null}

@@ -1,9 +1,4 @@
-export type BadgeTone =
-  | 'dark'
-  | 'light'
-  | 'violet'
-  | 'soldout'
-  | 'neutral';
+export type BadgeTone = 'accent' | 'subtle' | 'soldout' | 'neutral';
 
 interface PillBadgeProps {
   label: string;
@@ -12,11 +7,10 @@ interface PillBadgeProps {
 }
 
 const TONE_MAP: Record<BadgeTone, string> = {
-  dark: 'bg-ink text-surface border border-ink',
-  light: 'bg-surface text-ink border border-border-default shadow-card-subtle',
-  violet: 'bg-violet-soft text-brand-dark border border-violet-border',
-  soldout: 'bg-surface-subtle text-ink-secondary border border-border-default',
-  neutral: 'bg-surface-subtle text-ink-secondary border border-border-default',
+  accent: 'bg-accent text-surface border border-accent',
+  subtle: 'bg-surface-subtle text-ink-secondary border border-border',
+  soldout: 'bg-surface-subtle text-ink-secondary border border-border',
+  neutral: 'bg-surface-subtle text-ink-secondary border border-border',
 };
 
 export function PillBadge({ label, tone = 'neutral', className = '' }: PillBadgeProps) {

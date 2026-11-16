@@ -20,12 +20,12 @@ export function StateFeedbackCard({
 }: StateFeedbackCardProps) {
   return (
     <div className="surface-card p-8 sm:p-10 text-center flex flex-col items-center justify-center gap-4 max-w-lg mx-auto">
-      <div className="w-12 h-12 rounded-pill bg-violet-soft border border-violet-border text-brand-violet flex items-center justify-center">
+      <div className="w-12 h-12 rounded-pill bg-surface-subtle border border-border text-ink-secondary flex items-center justify-center">
         <LineIcon name={icon} size={22} />
       </div>
       <div className="space-y-1.5">
         <h2 className="heading-sub m-0">{title}</h2>
-        <p className="text-sm text-muted max-w-md mx-auto m-0 leading-relaxed">
+        <p className="text-sm text-ink-muted max-w-md mx-auto m-0 leading-relaxed">
           {description}
         </p>
       </div>

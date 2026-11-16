@@ -26,7 +26,7 @@ export function QuantityStepper({
 
   return (
     <div
-      className="inline-flex items-center rounded-control bg-surface border border-border-default shadow-card-subtle p-0.5"
+      className="inline-flex items-center rounded-control bg-surface border border-border p-0.5"
       role="group"
       aria-label={ariaLabel}
     >

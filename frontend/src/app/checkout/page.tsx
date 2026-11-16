@@ -19,8 +19,8 @@ export default function CheckoutPage() {
       />
 
       <header className="space-y-1.5">
-        <h1 className="display-hero m-0">Simulated Checkout</h1>
-        <p className="text-sm sm:text-base text-muted m-0 max-w-2xl">
+        <h1 className="heading-primary m-0">Simulated Checkout</h1>
+        <p className="text-sm sm:text-base text-ink-muted m-0 max-w-2xl">
           Verify shipping calculation and order confirmation flow. No real payment or backend order API runs in this frontend milestone.
         </p>
       </header>

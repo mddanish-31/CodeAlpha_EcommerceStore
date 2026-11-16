@@ -18,13 +18,13 @@ function getBadgeConfig(product: Product): { label: string; tone: BadgeTone } | 
     return { label: 'Sold Out', tone: 'soldout' };
   }
   if (product.badge === 'BESTSELLER') {
-    return { label: 'Bestseller', tone: 'dark' };
+    return { label: 'Bestseller', tone: 'accent' };
   }
   if (product.badge === 'LIMITED DROP') {
-    return { label: 'Limited Drop', tone: 'violet' };
+    return { label: 'Limited Drop', tone: 'accent' };
   }
   if (product.badge === 'NEW ARRIVAL') {
-    return { label: 'New Arrival', tone: 'light' };
+    return { label: 'New Arrival', tone: 'subtle' };
   }
   return null;
 }
@@ -62,36 +62,36 @@ export function ProductCard({ product, showDescription = false }: ProductCardPro
         </Link>
 
         <div className="p-4 sm:p-5 space-y-2">
-          <div className="flex items-center justify-between gap-2 text-xs text-muted">
-            <span className="font-medium text-brand-dark truncate">{product.category}</span>
+          <div className="flex items-center justify-between gap-2 text-xs text-ink-muted">
+            <span className="font-medium text-ink-secondary truncate">{product.category}</span>
             <span className="tabular-nums shrink-0">{product.sku}</span>
           </div>
 
           <h3 className="text-base font-semibold text-ink leading-snug m-0">
             <Link
               href={`/shop/${product.id}`}
-              className="hover:text-brand-violet transition-colors focus-visible:underline"
+              className="hover:text-accent transition-colors focus-visible:underline"
             >
               {product.title}
             </Link>
           </h3>
 
-          <p className="text-xs sm:text-sm text-muted line-clamp-2 m-0 leading-relaxed">
+          <p className="text-xs sm:text-sm text-ink-secondary line-clamp-2 m-0 leading-relaxed">
             {showDescription ? product.description : product.shortDescription}
           </p>
 
           <p className="text-xs m-0 pt-0.5 flex items-center gap-1.5">
             {soldOut ? (
               <span className="font-medium text-ink-secondary inline-flex items-center gap-1">
-                <LineIcon name="alert" size={13} className="text-muted" />
+                <LineIcon name="alert" size={13} className="text-ink-muted" />
                 <span>Out of stock</span>
               </span>
             ) : lowStock ? (
-              <span className="font-medium text-brand-dark tabular-nums">
+              <span className="font-medium text-ink-secondary tabular-nums">
                 Low stock · {product.stockCount} left
               </span>
             ) : (
-              <span className="text-muted tabular-nums">
+              <span className="text-ink-muted tabular-nums">
                 In stock ({product.stockCount})
               </span>
             )}
@@ -99,13 +99,13 @@ export function ProductCard({ product, showDescription = false }: ProductCardPro
         </div>
       </div>
 
-      <div className="px-4 sm:px-5 pb-4 pt-3 flex items-center justify-between gap-2 border-t border-border-default">
+      <div className="px-4 sm:px-5 pb-4 pt-3 flex items-center justify-between gap-2 border-t border-border">
         <div className="flex items-baseline gap-1.5 min-w-0">
           <span className="text-lg font-bold text-ink tabular-nums">
             ${product.price}
           </span>
           {product.compareAtPrice ? (
-            <span className="text-xs text-muted line-through tabular-nums">
+            <span className="text-xs text-ink-muted line-through tabular-nums">
               ${product.compareAtPrice}
             </span>
           ) : null}
@@ -116,7 +116,7 @@ export function ProductCard({ product, showDescription = false }: ProductCardPro
           disabled={soldOut}
           onClick={() => addToCart(product, 1)}
           aria-label={soldOut ? `${product.title} is sold out` : `Add ${product.title} to cart`}
-          className="min-h-[44px] px-3.5 py-2 rounded-control text-xs font-semibold transition-colors shrink-0 inline-flex items-center gap-1.5 bg-brand-violet text-surface hover:bg-brand-dark disabled:bg-surface-subtle disabled:text-muted disabled:border disabled:border-border-default disabled:cursor-not-allowed"
+          className="min-h-[44px] px-3.5 py-2 rounded-control text-xs font-semibold transition-colors shrink-0 inline-flex items-center gap-1.5 bg-accent text-surface hover:bg-accent-hover disabled:bg-surface-subtle disabled:text-ink-muted disabled:border disabled:border-border disabled:cursor-not-allowed"
         >
           {soldOut ? (
             <span>Sold Out</span>

@@ -106,7 +106,7 @@ function ShopCatalogContent() {
   }, [query, activeCategory, inStockOnly, sortBy]);
 
   return (
-    <div className="store-container pt-6 sm:pt-8 pb-8 space-y-6">
+    <div className="store-container pt-6 sm:pt-8 pb-10 space-y-8">
       <Breadcrumbs
         items={[
           { label: 'Home', href: '/' },
@@ -116,7 +116,7 @@ function ShopCatalogContent() {
 
       <header className="space-y-2">
         <h1 className="display-hero m-0">Shop All Objects</h1>
-        <p className="text-sm sm:text-base text-muted max-w-2xl m-0">
+        <p className="text-sm sm:text-base text-ink-muted max-w-2xl m-0">
           Browse our 12 curated products across Audio &amp; Desk Craft, Everyday Carry, Home Objects, and Apparel &amp; Goods.
         </p>
       </header>
@@ -128,7 +128,7 @@ function ShopCatalogContent() {
           className="hidden lg:block lg:col-span-3 surface-card p-5 space-y-6 lg:sticky lg:top-24"
         >
           <div className="space-y-3">
-            <h2 className="text-xs font-semibold uppercase tracking-wider text-muted m-0">
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-ink-muted m-0">
               Departments
             </h2>
             <ul className="space-y-1.5 list-none p-0 m-0">
@@ -139,8 +139,8 @@ function ShopCatalogContent() {
                   onClick={() => handleCategoryChange('All')}
                   className={`w-full min-h-[40px] px-3 py-2 rounded-control text-sm flex items-center justify-between gap-2 transition-colors ${
                     activeCategory === 'All'
-                      ? 'bg-violet-soft text-brand-dark font-semibold border border-violet-border'
-                      : 'text-ink-secondary hover:bg-page-bg hover:text-ink border border-transparent'
+                      ? 'bg-accent text-surface font-semibold border border-accent'
+                      : 'text-ink-secondary hover:bg-background hover:text-ink border border-transparent'
                   }`}
                 >
                   <span>All Products</span>
@@ -157,8 +157,8 @@ function ShopCatalogContent() {
                       onClick={() => handleCategoryChange(dept.name)}
                       className={`w-full min-h-[40px] px-3 py-2 rounded-control text-sm flex items-center justify-between gap-2 text-left transition-colors ${
                         selected
-                          ? 'bg-violet-soft text-brand-dark font-semibold border border-violet-border'
-                          : 'text-ink-secondary hover:bg-page-bg hover:text-ink border border-transparent'
+                          ? 'bg-accent text-surface font-semibold border border-accent'
+                          : 'text-ink-secondary hover:bg-background hover:text-ink border border-transparent'
                       }`}
                     >
                       <span className="truncate">{dept.name}</span>
@@ -172,17 +172,17 @@ function ShopCatalogContent() {
             </ul>
           </div>
 
-          <div className="pt-5 border-t border-border-default space-y-3">
-            <h2 className="text-xs font-semibold uppercase tracking-wider text-muted m-0">
+          <div className="pt-5 border-t border-border space-y-3">
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-ink-muted m-0">
               Availability
             </h2>
-            <label className="flex items-center justify-between gap-3 p-3 rounded-image bg-page-bg border border-border-default cursor-pointer hover:border-brand-violet/40 transition-colors">
+            <label className="flex items-center justify-between gap-3 p-3 rounded-image bg-background border border-border cursor-pointer hover:border-accent transition-colors">
               <span className="text-sm font-medium text-ink">In stock only</span>
               <input
                 type="checkbox"
                 checked={inStockOnly}
                 onChange={(e) => handleInStockChange(e.target.checked)}
-                className="w-4 h-4 accent-brand-violet rounded cursor-pointer"
+                className="w-4 h-4 accent-accent rounded cursor-pointer"
               />
             </label>
           </div>
@@ -250,7 +250,7 @@ export default function ShopPage() {
     <Suspense
       fallback={
         <div className="store-container pt-8 pb-12">
-          <div className="surface-card p-8 text-center text-sm text-muted">
+          <div className="surface-card p-8 text-center text-sm text-ink-muted">
             Loading catalog objects...
           </div>
         </div>

@@ -19,11 +19,11 @@ export default function HomePage() {
   return (
     <div className="space-y-16 lg:space-y-20 pb-8">
       {/* SECTION B: Editorial Product Hero */}
-      <section aria-label="Featured storefront hero" className="bg-surface border-b border-border-default">
+      <section aria-label="Featured storefront hero" className="bg-surface border-b border-border">
         <div className="store-container py-10 sm:py-14 lg:py-16 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           <div className="lg:col-span-6 space-y-6">
-            <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-pill bg-violet-soft border border-violet-border text-xs font-semibold text-brand-dark">
-              <span className="w-2 h-2 rounded-pill bg-brand-violet shrink-0" aria-hidden="true" />
+            <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-pill bg-surface-subtle border border-border text-xs font-semibold text-ink-secondary">
+              <span className="w-2 h-2 rounded-pill bg-accent shrink-0" aria-hidden="true" />
               <span>CodeAlpha Store · 12 Curated Studio Goods</span>
             </span>
 
@@ -31,7 +31,7 @@ export default function HomePage() {
               <h1 className="display-hero m-0">
                 Curated Everyday Objects for Work, Home and Life
               </h1>
-              <p className="text-base sm:text-lg text-muted max-w-xl m-0 leading-relaxed">
+              <p className="text-base sm:text-lg text-ink-muted max-w-xl m-0 leading-relaxed">
                 Thoughtful tools, durable essentials and timeless goods for a better everyday.
               </p>
             </div>
@@ -46,17 +46,17 @@ export default function HomePage() {
               </a>
             </div>
 
-            <dl className="grid grid-cols-3 gap-4 pt-6 border-t border-border-default m-0 max-w-lg">
+            <dl className="grid grid-cols-3 gap-4 pt-6 border-t border-border m-0 max-w-lg">
               <div>
-                <dt className="text-xs text-muted">Departments</dt>
+                <dt className="text-xs text-ink-muted">Departments</dt>
                 <dd className="m-0 text-lg font-semibold text-ink tabular-nums">4 Curated</dd>
               </div>
               <div>
-                <dt className="text-xs text-muted">Catalog Items</dt>
+                <dt className="text-xs text-ink-muted">Catalog Items</dt>
                 <dd className="m-0 text-lg font-semibold text-ink tabular-nums">12 Objects</dd>
               </div>
               <div>
-                <dt className="text-xs text-muted">Free Shipping</dt>
+                <dt className="text-xs text-ink-muted">Free Shipping</dt>
                 <dd className="m-0 text-lg font-semibold text-ink tabular-nums">Above $75</dd>
               </div>
             </dl>
@@ -75,59 +75,18 @@ export default function HomePage() {
                   fallbackLabel="CodeAlpha Store Hero Collection"
                 />
               </div>
-              <div className="px-2 pt-3 pb-1 flex flex-wrap items-center justify-between gap-2 text-xs text-muted">
+              <div className="px-2 pt-3 pb-1 flex flex-wrap items-center justify-between gap-2 text-xs text-ink-muted">
                 <span className="font-medium text-ink-secondary">
                   Featured Desk Setup: Chrono Brass Lamp · Monolith 65% Keyboard · Copper Kettle
                 </span>
                 <Link
                   href="/shop/chrono-brass-desk-lamp"
-                  className="font-semibold text-brand-violet hover:text-brand-dark inline-flex items-center gap-1 shrink-0"
+                  className="font-semibold text-accent hover:text-accent-hover inline-flex items-center gap-1 shrink-0"
                 >
                   <span>Inspect Lamp</span>
                   <LineIcon name="chevron-right" size={14} />
                 </Link>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION C: Truthful Storefront Benefits */}
-      <section aria-label="Shopping benefits" className="store-container">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
-          <div className="surface-card p-6 flex items-start gap-4">
-            <div className="w-10 h-10 rounded-control bg-violet-soft border border-violet-border text-brand-violet flex items-center justify-center shrink-0">
-              <LineIcon name="truck" size={20} />
-            </div>
-            <div className="space-y-1">
-              <h2 className="text-sm font-semibold text-ink m-0">Free Shipping Above $75</h2>
-              <p className="text-xs sm:text-sm text-muted m-0 leading-relaxed">
-                Orders over $75 qualify automatically for $0 shipping ($8 flat standard shipping below $75).
-              </p>
-            </div>
-          </div>
-
-          <div className="surface-card p-6 flex items-start gap-4">
-            <div className="w-10 h-10 rounded-control bg-violet-soft border border-violet-border text-brand-violet flex items-center justify-center shrink-0">
-              <LineIcon name="grid" size={20} />
-            </div>
-            <div className="space-y-1">
-              <h2 className="text-sm font-semibold text-ink m-0">Four Curated Departments</h2>
-              <p className="text-xs sm:text-sm text-muted m-0 leading-relaxed">
-                Browse balanced desk craft, carry tools, home brew gear, and utilitarian canvas goods.
-              </p>
-            </div>
-          </div>
-
-          <div className="surface-card p-6 flex items-start gap-4">
-            <div className="w-10 h-10 rounded-control bg-violet-soft border border-violet-border text-brand-violet flex items-center justify-center shrink-0">
-              <LineIcon name="check" size={20} />
-            </div>
-            <div className="space-y-1">
-              <h2 className="text-sm font-semibold text-ink m-0">Saved Local Session State</h2>
-              <p className="text-xs sm:text-sm text-muted m-0 leading-relaxed">
-                Shopping cart, demo profile, and simulated orders persist across reloads in browser storage.
-              </p>
             </div>
           </div>
         </div>
@@ -144,13 +103,13 @@ export default function HomePage() {
             <h2 id="departments-heading" className="display-section m-0">
               Shop by Department
             </h2>
-            <p className="text-sm text-muted m-0">
+            <p className="text-sm text-ink-muted m-0">
               Explore all 4 curated departments across our 12-item catalog
             </p>
           </div>
           <Link
             href="/shop"
-            className="text-sm font-semibold text-brand-violet hover:text-brand-dark inline-flex items-center gap-1"
+            className="text-sm font-semibold text-accent hover:text-accent-hover inline-flex items-center gap-1"
           >
             <span>Browse all products</span>
             <LineIcon name="arrow-right" size={15} />
@@ -182,18 +141,18 @@ export default function HomePage() {
                 <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-2">
                   <div className="space-y-1">
                     <div className="flex items-center justify-between gap-2">
-                      <h3 className="text-base font-semibold text-ink group-hover:text-brand-violet transition-colors m-0">
+                      <h3 className="text-base font-semibold text-ink group-hover:text-accent transition-colors m-0">
                         {dept.name}
                       </h3>
-                      <span className="text-xs font-medium text-brand-dark bg-violet-soft px-2 py-0.5 rounded-pill shrink-0 tabular-nums">
+                      <span className="text-xs font-medium text-ink-secondary bg-surface-subtle px-2 py-0.5 rounded-pill shrink-0 tabular-nums">
                         {dept.itemCount} items
                       </span>
                     </div>
-                    <p className="text-xs text-muted m-0 line-clamp-2 leading-relaxed">
+                    <p className="text-xs text-ink-muted m-0 line-clamp-2 leading-relaxed">
                       {dept.tagline}
                     </p>
                   </div>
-                  <span className="text-xs font-semibold text-brand-violet inline-flex items-center gap-1 pt-1">
+                  <span className="text-xs font-semibold text-accent inline-flex items-center gap-1 pt-1">
                     <span>Explore {dept.name}</span>
                     <LineIcon name="chevron-right" size={14} />
                   </span>
@@ -211,7 +170,7 @@ export default function HomePage() {
             <h2 id="best-sellers-heading" className="display-section m-0">
               Best Sellers
             </h2>
-            <p className="text-sm text-muted m-0">
+            <p className="text-sm text-ink-muted m-0">
               Highlighted catalog favorites ready for immediate dispatch simulation
             </p>
           </div>
@@ -231,13 +190,13 @@ export default function HomePage() {
             <h2 id="new-arrivals-heading" className="display-section m-0">
               New Arrivals
             </h2>
-            <p className="text-sm text-muted m-0">
+            <p className="text-sm text-ink-muted m-0">
               Fresh studio releases across mechanical input, pour-over brewing, and desk timekeeping
             </p>
           </div>
           <Link
             href="/shop?sort=newest"
-            className="text-sm font-semibold text-brand-violet hover:text-brand-dark inline-flex items-center gap-1"
+            className="text-sm font-semibold text-accent hover:text-accent-hover inline-flex items-center gap-1"
           >
             <span>See all new arrivals</span>
             <LineIcon name="arrow-right" size={15} />
@@ -251,13 +210,13 @@ export default function HomePage() {
       <section aria-label="Newsletter updates" className="store-container">
         <div className="surface-card p-6 sm:p-10 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center">
           <div className="lg:col-span-6 space-y-2">
-            <span className="text-xs font-semibold uppercase tracking-wider text-brand-violet">
+            <span className="text-xs font-semibold uppercase tracking-wider text-accent">
               Store Updates
             </span>
             <h2 className="display-section m-0">
               Follow upcoming studio releases
             </h2>
-            <p className="text-sm text-muted m-0 leading-relaxed">
+            <p className="text-sm text-ink-muted m-0 leading-relaxed">
               Sign up for release notifications on restocks and seasonal drops. Emails validate client-side as a frontend demo.
             </p>
           </div>

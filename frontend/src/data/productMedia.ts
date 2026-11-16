@@ -134,3 +134,4 @@ export function getProductMedia(product: Pick<Product, 'id' | 'title' | 'categor
     }
   );
 }
+

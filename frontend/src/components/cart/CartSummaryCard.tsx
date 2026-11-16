@@ -25,18 +25,18 @@ export function CartSummaryCard({
     >
       <div className="flex items-center justify-between gap-2">
         <h2 className="heading-sub m-0">Order Summary</h2>
-        <span className="text-xs font-medium text-muted tabular-nums">
+        <span className="text-xs font-medium text-ink-muted tabular-nums">
           {cartCount} item{cartCount === 1 ? '' : 's'}
         </span>
       </div>
 
       {showItemThumbnails && cart.length > 0 ? (
-        <ul className="space-y-3 list-none p-0 m-0 pt-2 border-t border-border-default">
+        <ul className="space-y-3 list-none p-0 m-0 pt-2 border-t border-border">
           {cart.map((item) => {
             const media = getProductMedia(item.product);
             return (
               <li key={item.product.id} className="flex items-center gap-3 text-sm">
-                <div className="w-12 h-12 rounded-control bg-surface-subtle border border-border-default overflow-hidden shrink-0">
+                <div className="w-12 h-12 rounded-control bg-surface-subtle border border-border overflow-hidden shrink-0">
                   <ProductMedia
                     src={media.src}
                     alt={media.alt}
@@ -48,7 +48,7 @@ export function CartSummaryCard({
                   <p className="text-xs font-medium text-ink truncate m-0">
                     {item.product.title}
                   </p>
-                  <p className="text-[11px] text-muted m-0 tabular-nums">
+                  <p className="text-[11px] text-ink-muted m-0 tabular-nums">
                     Qty {item.quantity} × ${item.product.price}
                   </p>
                 </div>
@@ -63,16 +63,16 @@ export function CartSummaryCard({
 
       <FreeShippingBar />
 
-      <dl className="space-y-2.5 text-sm border-t border-b border-border-default py-4 m-0">
+      <dl className="space-y-2.5 text-sm border-t border-b border-border py-4 m-0">
         <div className="flex items-center justify-between gap-2">
-          <dt className="text-muted">Subtotal</dt>
+          <dt className="text-ink-muted">Subtotal</dt>
           <dd className="m-0 font-medium text-ink tabular-nums">
             ${subtotal.toFixed(2)}
           </dd>
         </div>
 
         <div className="flex items-center justify-between gap-2">
-          <dt className="text-muted">Estimated Shipping</dt>
+          <dt className="text-ink-muted">Estimated Shipping</dt>
           <dd className="m-0 font-medium text-ink tabular-nums">
             {cartCount === 0
               ? '$0.00'
@@ -82,7 +82,7 @@ export function CartSummaryCard({
           </dd>
         </div>
 
-        <div className="flex items-center justify-between gap-2 pt-2 border-t border-border-default">
+        <div className="flex items-center justify-between gap-2 pt-2 border-t border-border">
           <dt className="text-base font-semibold text-ink">Total</dt>
           <dd className="m-0 text-lg font-bold text-ink tabular-nums">
             ${totalAmount.toFixed(2)}
@@ -108,7 +108,7 @@ export function CartSummaryCard({
         </div>
       ) : null}
 
-      <p className="text-xs text-muted leading-relaxed m-0">
+      <p className="text-xs text-ink-muted leading-relaxed m-0">
         Demo storefront calculation. Free shipping threshold is $75 ($8 flat rate otherwise). No real payment occurs.
       </p>
     </aside>

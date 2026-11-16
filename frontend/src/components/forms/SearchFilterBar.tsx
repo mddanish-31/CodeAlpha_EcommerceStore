@@ -41,12 +41,12 @@ export function SearchFilterBar({
         <search role="search" className="w-full sm:flex-1 sm:max-w-md">
           <form
             onSubmit={(e) => e.preventDefault()}
-            className="flex items-center gap-2 h-11 pl-3.5 pr-1.5 rounded-control bg-page-bg border border-border-default focus-within:border-brand-violet focus-within:bg-surface focus-within:ring-2 focus-within:ring-violet-border/50 transition-colors"
+            className="flex items-center gap-2 h-11 pl-3.5 pr-1.5 rounded-control bg-background border border-border focus-within:border-accent focus-within:bg-surface focus-within:ring-1 focus-within:ring-accent transition-colors"
           >
             <label htmlFor="shop-search-input" className="sr-only">
               Search store products
             </label>
-            <LineIcon name="search" size={17} className="text-muted shrink-0" />
+            <LineIcon name="search" size={17} className="text-ink-muted shrink-0" />
             <input
               id="shop-search-input"
               name="q"
@@ -54,14 +54,14 @@ export function SearchFilterBar({
               value={query}
               onChange={(e) => onQueryChange(e.target.value)}
               placeholder="Search brass lamp, watch, kettle, SKU..."
-              className="flex-1 min-w-0 bg-transparent border-0 text-base sm:text-sm text-ink placeholder:text-muted focus:outline-none py-1"
+              className="flex-1 min-w-0 bg-transparent border-0 text-base sm:text-sm text-ink placeholder:text-ink-secondary focus:outline-none py-1"
             />
             {query ? (
               <button
                 type="button"
                 onClick={() => onQueryChange('')}
                 aria-label="Clear search query"
-                className="min-w-[36px] min-h-[36px] inline-flex items-center justify-center rounded-lg text-muted hover:text-ink hover:bg-surface-subtle transition-colors"
+                className="min-w-[36px] min-h-[36px] inline-flex items-center justify-center rounded-lg text-ink-muted hover:text-ink hover:bg-surface-subtle transition-colors"
               >
                 <LineIcon name="close" size={15} />
               </button>
@@ -87,7 +87,7 @@ export function SearchFilterBar({
               id="shop-sort-select"
               value={sortBy}
               onChange={(e) => onSortChange(e.target.value as SortOption)}
-              className="w-full sm:w-auto min-h-[44px] px-3.5 py-2 rounded-control bg-surface border border-border-default text-sm font-medium text-ink focus:border-brand-violet focus:outline-none cursor-pointer"
+              className="w-full sm:w-auto min-h-[44px] px-3.5 py-2 rounded-control bg-surface border border-border text-sm font-medium text-ink focus:border-accent focus:outline-none cursor-pointer"
             >
               <option value="featured">Sort: Featured</option>
               <option value="price-asc">Price: Low to High</option>
@@ -98,7 +98,7 @@ export function SearchFilterBar({
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-muted px-0.5">
+      <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-ink-muted px-0.5">
         <div className="flex flex-wrap items-center gap-2">
           <span className="tabular-nums font-medium text-ink-secondary">
             Showing {resultCount} of {totalCount} items
@@ -107,7 +107,7 @@ export function SearchFilterBar({
             <button
               type="button"
               onClick={() => onCategoryChange('All')}
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-pill bg-violet-soft border border-violet-border text-brand-dark font-medium"
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-pill bg-surface-subtle border border-border text-ink-secondary font-medium"
             >
               <span>{activeCategory}</span>
               <LineIcon name="close" size={12} />
@@ -117,7 +117,7 @@ export function SearchFilterBar({
             <button
               type="button"
               onClick={() => onInStockChange(false)}
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-pill bg-violet-soft border border-violet-border text-brand-dark font-medium"
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-pill bg-surface-subtle border border-border text-ink-secondary font-medium"
             >
               <span>In stock only</span>
               <LineIcon name="close" size={12} />
@@ -129,7 +129,7 @@ export function SearchFilterBar({
           <button
             type="button"
             onClick={onReset}
-            className="text-brand-violet font-medium hover:text-brand-dark underline underline-offset-4 min-h-[36px] px-1"
+            className="text-accent font-medium hover:text-accent-hover underline underline-offset-4 min-h-[36px] px-1"
           >
             Reset all filters
           </button>

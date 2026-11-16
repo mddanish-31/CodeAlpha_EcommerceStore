@@ -33,28 +33,28 @@ export function CheckoutForm() {
     return (
       <div className="surface-card p-6 sm:p-10 max-w-2xl mx-auto space-y-6">
         <div className="flex flex-col items-center text-center space-y-3">
-          <div className="w-12 h-12 rounded-pill bg-violet-soft border border-violet-border text-brand-violet flex items-center justify-center">
+          <div className="w-12 h-12 rounded-pill bg-accent text-surface border border-accent flex items-center justify-center">
             <LineIcon name="check" size={24} />
           </div>
           <div className="space-y-1">
-            <p className="text-xs font-semibold uppercase tracking-wider text-brand-dark m-0">
+            <p className="text-xs font-semibold uppercase tracking-wider text-ink-secondary m-0">
               Simulated Demo Order Confirmed
             </p>
             <h2 className="display-section m-0">
               Order {confirmedOrder.orderId} Placed
             </h2>
           </div>
-          <p className="text-sm text-muted max-w-md m-0">
+          <p className="text-sm text-ink-muted max-w-md m-0">
             Saved locally to your browser session order history. No payment was processed and no backend API request was made.
           </p>
         </div>
 
-        <div className="rounded-image bg-page-bg border border-border-default p-4 sm:p-5 space-y-3 text-sm">
-          <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-border-default">
+        <div className="rounded-image bg-background border border-border p-4 sm:p-5 space-y-3 text-sm">
+          <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-border">
             <span className="font-semibold text-ink">
               Ship to {confirmedOrder.shippingAddress.fullName}
             </span>
-            <span className="text-xs text-muted tabular-nums">
+            <span className="text-xs text-ink-muted tabular-nums">
               {confirmedOrder.createdAt}
             </span>
           </div>
@@ -63,7 +63,7 @@ export function CheckoutForm() {
             {confirmedOrder.shippingAddress.state} {confirmedOrder.shippingAddress.postalCode},{' '}
             {confirmedOrder.shippingAddress.country}
           </p>
-          <ul className="space-y-1.5 list-none p-0 m-0 pt-2 border-t border-border-default">
+          <ul className="space-y-1.5 list-none p-0 m-0 pt-2 border-t border-border">
             {confirmedOrder.items.map((item) => (
               <li
                 key={item.product.id}
@@ -78,7 +78,7 @@ export function CheckoutForm() {
               </li>
             ))}
           </ul>
-          <div className="flex items-center justify-between pt-2 border-t border-border-default text-sm font-semibold text-ink">
+          <div className="flex items-center justify-between pt-2 border-t border-border text-sm font-semibold text-ink">
             <span>Demo Total ({confirmedOrder.status})</span>
             <span className="tabular-nums">${confirmedOrder.totalAmount.toFixed(2)}</span>
           </div>
@@ -157,14 +157,14 @@ export function CheckoutForm() {
         aria-label="Simulated storefront checkout"
         className="lg:col-span-8 surface-card p-5 sm:p-8 space-y-6"
       >
-        <div className="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-border-default">
+        <div className="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-border">
           <div>
             <h2 className="heading-sub m-0">Shipping &amp; Simulated Checkout</h2>
-            <p className="text-xs text-muted mt-1 mb-0">
+            <p className="text-xs text-ink-muted mt-1 mb-0">
               Preview checkout flow — orders save locally without external charges.
             </p>
           </div>
-          <span className="inline-flex items-center px-3 py-1 rounded-pill bg-violet-soft border border-violet-border text-[11px] font-semibold text-brand-dark">
+          <span className="inline-flex items-center px-3 py-1 rounded-pill bg-accent text-surface border border-accent text-[11px] font-semibold">
             Demo Checkout Only
           </span>
         </div>
@@ -172,13 +172,13 @@ export function CheckoutForm() {
         {errors.length > 0 ? (
           <div
             role="alert"
-            className="p-4 rounded-image bg-page-bg border border-brand-violet space-y-1.5 text-xs sm:text-sm text-ink"
+            className="p-4 rounded-image bg-surface-subtle border border-error space-y-1.5 text-xs sm:text-sm text-error"
           >
             <div className="flex items-center gap-2 font-semibold">
-              <LineIcon name="alert" size={16} className="text-brand-violet shrink-0" />
+              <LineIcon name="alert" size={16} className="text-error shrink-0" />
               <span>Please review the highlighted checkout fields:</span>
             </div>
-            <ul className="list-disc pl-5 m-0 space-y-0.5 text-ink-secondary">
+            <ul className="list-disc pl-5 m-0 space-y-0.5 text-ink-muted">
               {errors.map((err) => (
                 <li key={err}>{err}</li>
               ))}
@@ -330,7 +330,7 @@ export function CheckoutForm() {
           </div>
         </fieldset>
 
-        <fieldset className="border-0 pt-5 border-t border-border-default p-0 m-0 space-y-3">
+        <fieldset className="border-0 pt-5 border-t border-border p-0 m-0 space-y-3">
           <legend className="text-sm font-semibold text-ink">
             2. Delivery Speed (Demo Options)
           </legend>
@@ -338,8 +338,8 @@ export function CheckoutForm() {
             <label
               className={`flex items-start gap-3 p-4 rounded-image border cursor-pointer transition-colors ${
                 deliveryMethod === 'standard'
-                  ? 'bg-violet-soft border-brand-violet'
-                  : 'bg-surface border-border-default hover:bg-page-bg'
+                  ? 'bg-accent border-accent'
+                  : 'bg-surface border-border hover:bg-background'
               }`}
             >
               <input
@@ -348,11 +348,11 @@ export function CheckoutForm() {
                 value="standard"
                 checked={deliveryMethod === 'standard'}
                 onChange={() => setDeliveryMethod('standard')}
-                className="mt-1 w-4 h-4 accent-brand-violet"
+                className="mt-1 w-4 h-4 accent-accent"
               />
               <div>
                 <div className="text-sm font-semibold text-ink">Standard Delivery</div>
-                <div className="text-xs text-muted">
+                <div className="text-xs text-ink-muted">
                   Free above $75 ($8 flat standard rate otherwise)
                 </div>
               </div>
@@ -361,8 +361,8 @@ export function CheckoutForm() {
             <label
               className={`flex items-start gap-3 p-4 rounded-image border cursor-pointer transition-colors ${
                 deliveryMethod === 'express'
-                  ? 'bg-violet-soft border-brand-violet'
-                  : 'bg-surface border-border-default hover:bg-page-bg'
+                  ? 'bg-accent border-accent'
+                  : 'bg-surface border-border hover:bg-background'
               }`}
             >
               <input
@@ -371,11 +371,11 @@ export function CheckoutForm() {
                 value="express"
                 checked={deliveryMethod === 'express'}
                 onChange={() => setDeliveryMethod('express')}
-                className="mt-1 w-4 h-4 accent-brand-violet"
+                className="mt-1 w-4 h-4 accent-accent"
               />
               <div>
                 <div className="text-sm font-semibold text-ink">Priority Demo Speed</div>
-                <div className="text-xs text-muted">
+                <div className="text-xs text-ink-muted">
                   Demo order calculation preview
                 </div>
               </div>
@@ -383,7 +383,7 @@ export function CheckoutForm() {
           </div>
         </fieldset>
 
-        <fieldset className="border-0 pt-5 border-t border-border-default p-0 m-0 space-y-4">
+        <fieldset className="border-0 pt-5 border-t border-border p-0 m-0 space-y-4">
           <legend className="text-sm font-semibold text-ink">
             3. Simulated Payment Card (No Real Charge)
           </legend>

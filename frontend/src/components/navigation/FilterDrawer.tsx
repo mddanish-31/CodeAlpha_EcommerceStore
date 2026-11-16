@@ -73,12 +73,12 @@ export function FilterDrawer({
       className="drawer-dialog"
     >
       <div className="flex flex-col h-full bg-surface text-ink">
-        <div className="flex items-center justify-between px-5 py-4 border-b border-border-default">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-border">
           <div>
             <h2 id="filter-drawer-title" className="text-lg font-semibold text-ink m-0">
               Filter &amp; Sort
             </h2>
-            <p className="text-xs text-muted tabular-nums m-0">
+            <p className="text-xs text-ink-muted tabular-nums m-0">
               {resultCount} matching object{resultCount === 1 ? '' : 's'}
             </p>
           </div>
@@ -86,7 +86,7 @@ export function FilterDrawer({
             type="button"
             onClick={onClose}
             aria-label="Close filters"
-            className="min-w-[44px] min-h-[44px] inline-flex items-center justify-center rounded-control bg-page-bg border border-border-default text-ink hover:bg-surface-subtle transition-colors"
+            className="min-w-[44px] min-h-[44px] inline-flex items-center justify-center rounded-control bg-background border border-border text-ink hover:bg-surface-subtle transition-colors"
           >
             <LineIcon name="close" size={18} />
           </button>
@@ -94,7 +94,7 @@ export function FilterDrawer({
 
         <div className="flex-1 overflow-y-auto p-5 space-y-6">
           <fieldset className="space-y-3 border-0 p-0 m-0">
-            <legend className="text-xs font-semibold uppercase tracking-wider text-muted mb-2">
+            <legend className="text-xs font-semibold uppercase tracking-wider text-ink-muted mb-2">
               Department
             </legend>
             <div className="flex flex-wrap gap-2">
@@ -108,8 +108,8 @@ export function FilterDrawer({
                     onClick={() => onCategoryChange(cat)}
                     className={`min-h-[44px] px-4 py-2 rounded-control text-sm font-medium transition-colors ${
                       selected
-                        ? 'bg-brand-violet text-surface border border-brand-violet'
-                        : 'bg-surface text-ink border border-border-default hover:bg-page-bg'
+                        ? 'bg-accent text-surface border border-accent'
+                        : 'bg-surface text-ink border border-border hover:bg-background'
                     }`}
                   >
                     {cat === 'All' ? 'All Products' : cat}
@@ -119,11 +119,11 @@ export function FilterDrawer({
             </div>
           </fieldset>
 
-          <fieldset className="space-y-2 border-0 p-0 m-0 pt-4 border-t border-border-default">
-            <legend className="text-xs font-semibold uppercase tracking-wider text-muted mb-2">
+          <fieldset className="space-y-2 border-0 p-0 m-0 pt-4 border-t border-border">
+            <legend className="text-xs font-semibold uppercase tracking-wider text-ink-muted mb-2">
               Availability
             </legend>
-            <label className="flex items-center justify-between gap-3 p-3.5 rounded-image bg-page-bg border border-border-default cursor-pointer">
+            <label className="flex items-center justify-between gap-3 p-3.5 rounded-image bg-background border border-border cursor-pointer">
               <span className="text-sm font-medium text-ink">
                 Show in-stock objects only
               </span>
@@ -131,13 +131,13 @@ export function FilterDrawer({
                 type="checkbox"
                 checked={inStockOnly}
                 onChange={(e) => onInStockChange(e.target.checked)}
-                className="w-5 h-5 accent-brand-violet rounded cursor-pointer"
+                className="w-5 h-5 accent-accent rounded cursor-pointer"
               />
             </label>
           </fieldset>
 
-          <fieldset className="space-y-2 border-0 p-0 m-0 pt-4 border-t border-border-default">
-            <legend className="text-xs font-semibold uppercase tracking-wider text-muted mb-2">
+          <fieldset className="space-y-2 border-0 p-0 m-0 pt-4 border-t border-border">
+            <legend className="text-xs font-semibold uppercase tracking-wider text-ink-muted mb-2">
               Sort Order
             </legend>
             <div className="space-y-2">
@@ -149,7 +149,7 @@ export function FilterDrawer({
               ].map((opt) => (
                 <label
                   key={opt.value}
-                  className="flex items-center justify-between gap-3 p-3.5 rounded-image border border-border-default bg-surface hover:bg-page-bg cursor-pointer transition-colors"
+                  className="flex items-center justify-between gap-3 p-3.5 rounded-image border border-border bg-surface hover:bg-background cursor-pointer transition-colors"
                 >
                   <span className="text-sm font-medium text-ink">{opt.label}</span>
                   <input
@@ -157,7 +157,7 @@ export function FilterDrawer({
                     name="drawer-sort-order"
                     checked={sortBy === opt.value}
                     onChange={() => onSortChange(opt.value)}
-                    className="w-4 h-4 accent-brand-violet cursor-pointer"
+                    className="w-4 h-4 accent-accent cursor-pointer"
                   />
                 </label>
               ))}
@@ -165,7 +165,7 @@ export function FilterDrawer({
           </fieldset>
         </div>
 
-        <div className="p-4 border-t border-border-default bg-page-bg flex items-center gap-3">
+        <div className="p-4 border-t border-border bg-background flex items-center gap-3">
           <button
             type="button"
             onClick={() => {

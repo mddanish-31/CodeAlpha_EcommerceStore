@@ -33,9 +33,9 @@ export function ProductMedia({
       <div
         role="img"
         aria-label={alt}
-        className={`w-full h-full flex flex-col items-center justify-center gap-2 bg-surface-subtle text-muted p-4 text-center ${className}`}
+        className={`w-full h-full flex flex-col items-center justify-center gap-2 bg-surface-subtle text-ink-muted p-4 text-center ${className}`}
       >
-        <LineIcon name="grid" size={24} className="text-muted" />
+        <LineIcon name="grid" size={24} className="text-ink-muted" />
         {fallbackLabel ? (
           <span className="text-xs font-medium text-ink-secondary">{fallbackLabel}</span>
         ) : null}
@@ -58,3 +58,4 @@ export function ProductMedia({
     />
   );
 }
+

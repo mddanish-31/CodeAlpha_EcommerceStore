@@ -70,12 +70,12 @@ export function CartDrawer() {
       className="drawer-dialog"
     >
       <div className="flex flex-col h-full bg-surface text-ink">
-        <div className="flex items-center justify-between px-5 py-4 border-b border-border-default">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-border">
           <div>
             <h2 id="cart-drawer-heading" className="text-lg font-semibold text-ink m-0">
               Shopping Cart
             </h2>
-            <p className="text-xs text-muted tabular-nums m-0">
+            <p className="text-xs text-ink-muted tabular-nums m-0">
               {cartCount} item{cartCount === 1 ? '' : 's'}
             </p>
           </div>
@@ -83,7 +83,7 @@ export function CartDrawer() {
             type="button"
             onClick={closeCartDrawer}
             aria-label="Close shopping cart"
-            className="min-w-[44px] min-h-[44px] inline-flex items-center justify-center rounded-control bg-page-bg border border-border-default text-ink hover:bg-surface-subtle transition-colors"
+            className="min-w-[44px] min-h-[44px] inline-flex items-center justify-center rounded-control bg-background border border-border text-ink hover:bg-surface-subtle transition-colors"
           >
             <LineIcon name="close" size={18} />
           </button>
@@ -95,15 +95,15 @@ export function CartDrawer() {
 
         <div className="flex-1 overflow-y-auto px-5 py-4 space-y-3">
           {cart.length === 0 ? (
-            <div className="p-6 rounded-card bg-page-bg border border-border-default text-center space-y-3 mt-4">
-              <div className="w-11 h-11 rounded-pill bg-violet-soft border border-violet-border text-brand-violet flex items-center justify-center mx-auto">
+            <div className="p-6 rounded-card bg-background border border-border text-center space-y-3 mt-4">
+              <div className="w-11 h-11 rounded-pill bg-surface-subtle border border-border text-ink-secondary flex items-center justify-center mx-auto">
                 <LineIcon name="bag" size={20} />
               </div>
               <div className="space-y-1">
                 <p className="text-sm font-semibold text-ink m-0">
                   Your shopping cart is empty
                 </p>
-                <p className="text-xs text-muted m-0">
+                <p className="text-xs text-ink-muted m-0">
                   Add curated objects to inspect subtotal and shipping threshold.
                 </p>
               </div>
@@ -123,15 +123,15 @@ export function CartDrawer() {
           )}
         </div>
 
-        <div className="p-5 border-t border-border-default bg-page-bg space-y-3">
+        <div className="p-5 border-t border-border bg-background space-y-3">
           <div className="space-y-1.5 text-sm">
-            <div className="flex items-center justify-between text-muted">
+            <div className="flex items-center justify-between text-ink-muted">
               <span>Subtotal</span>
               <span className="font-medium text-ink tabular-nums">
                 ${subtotal.toFixed(2)}
               </span>
             </div>
-            <div className="flex items-center justify-between text-muted">
+            <div className="flex items-center justify-between text-ink-muted">
               <span>Shipping</span>
               <span className="font-medium text-ink tabular-nums">
                 {cart.length === 0
