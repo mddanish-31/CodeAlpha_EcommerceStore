@@ -6,7 +6,7 @@
 [![Internship: CodeAlpha](https://img.shields.io/badge/CodeAlpha-Full%20Stack%20Internship-14B8A6.svg)](#codealpha-internship-context)
 [![Project Status: Frontend Implemented | Backend Planned](https://img.shields.io/badge/Status-Frontend%20Implemented%20%7C%20Backend%20Planned-1E293B.svg)](#development-roadmap)
 
-A planned full-stack e-commerce web application built for the **CodeAlpha Full Stack Development Internship**, featuring a completed **Next.js + TypeScript + Tailwind CSS** storefront (`simple.`, White Canvas Commerce v2 UI) with static demo catalog data and browser `localStorage` persistence, alongside a planned Express.js REST API and MongoDB Atlas backend.
+A planned full-stack e-commerce web application built for the **CodeAlpha Full Stack Development Internship**, featuring a redesigned **Next.js + TypeScript + Tailwind CSS** storefront (`CodeAlpha Store` Modern E-Commerce UI on `feature/modern-frontend-redesign`) with static demo catalog data, bespoke local WebP studio product photography, and browser `localStorage` persistence, alongside a planned Express.js REST API and MongoDB Atlas backend.
 
 > **Current Stage:** Phases 1–4 (`M1`–`M5`) are complete — the responsive Next.js storefront (`frontend/`) and UI/UX documentation (`docs/`) are implemented and verified. Backend REST API (`Express.js`), MongoDB Atlas integration (`Mongoose`), server-side JWT authentication, and live deployment remain **Planned** for Phases 5–8.
 
@@ -31,10 +31,10 @@ A planned full-stack e-commerce web application built for the **CodeAlpha Full S
 
 | Area | Current Status | Notes |
 | --- | --- | --- |
-| GitHub Repository & MIT License | **Implemented** | Public repository on `main` branch with `LICENSE` |
+| GitHub Repository & MIT License | **Implemented** | Public repository with `main` (`v2`) and `feature/modern-frontend-redesign` (`CodeAlpha Store` modern UI) + `LICENSE` |
 | Secret & Artifact Exclusions (`.gitignore`) | **Implemented** | Excludes `.env`, `.env.*`, keys, `node_modules/`, and build outputs |
-| UI/UX Design Specs & Preview (`docs/`) | **Implemented** | [Design System v2](docs/design-system-v2.md), [UX Blueprint v2](docs/frontend-ux-blueprint-v2.md), [Component Architecture](docs/frontend-component-architecture.md), and [Responsive Spec](docs/responsive-design-spec.md) |
-| Frontend Storefront (`Next.js` + `TypeScript` + `Tailwind CSS`) | **Implemented (Demo State)** | `11` App Router routes with static catalog (`12` products) and `localStorage` cart/demo-order/demo-auth state; no backend API connected yet |
+| UI/UX Design Specs (`docs/`) | **Implemented** | [Design System](docs/design-system.md), [Reference Mapping](docs/design-reference-mapping.md), [UX Blueprint](docs/frontend-ux-blueprint.md), [Component Architecture](docs/frontend-component-architecture.md), and [Responsive Spec](docs/responsive-design-spec.md) |
+| Frontend Storefront (`Next.js` + `TypeScript` + `Tailwind CSS`) | **Implemented (Demo State)** | `11` App Router routes with static catalog (`12` products), local studio `.webp` imagery, and `localStorage` cart/demo-order/demo-auth state; no backend API connected yet |
 | Backend REST API (`Node.js` + `Express.js` + `JWT`) | **Planned** | Not yet scaffolded (Phase 5) |
 | Database Integration (`MongoDB Atlas` + `Mongoose`) | **Planned** | Not yet configured (Phase 6) |
 | Full-Stack Integration QA & Deployment | **Planned** | Not yet executed (Phases 7–8) |
@@ -58,10 +58,10 @@ Small retail storefronts often rely on either rigid templates or overly complex 
 ## Features & Current Scope
 
 ### Implemented in Frontend (`localStorage` Demo Storefront)
-- **White Canvas Constellation Storefront (`/`):** 8-tile asymmetric product constellation hero, centered `<search>` pill bar, department pills, Slate Ink spotlight panel, interactive showcase preview, curated bestsellers grid, and demo newsletter form.
-- **Product Catalog & Filtering (`/shop` & `/shop/[id]`):** `12` curated demo objects across `4` departments with keyword search, department/sort/in-stock URL query sync, mobile `FilterDrawer`, stock guard on sold-out items, and multi-stage SVG product galleries.
-- **Shopping Bag & Simulated Checkout (`/cart` & `/checkout`):** Slide-over `<dialog closedby="any">` `CartDrawer`, `$75` free-shipping progress bar, client validation, and simulated `ORD-2026-XXXX` order generation persisted locally in browser storage.
-- **Demo Account & Utility Views (`/auth/login`, `/auth/register`, `/account`, `/about`, `/contact`, `404`):** Simulated sign-in with demo credentials helper, local order history display, craft story, and client-validated contact inquiry form.
+- **Modern Storefront Home (`/`):** Sticky white horizontal navigation header (`CodeAlpha Store`, inline desktop `<search>`, account & cart badge), editorial two-column hero with `4:3` desk studio showcase (`hero-editorial.webp`), benefit cards, 4 department cover cards, curated Best Sellers, New Arrivals, and demo newsletter form.
+- **Product Catalog & Filtering (`/shop` & `/shop/[id]`):** `12` curated demo objects across `4` departments with sticky desktop `<aside>` filter sidebar, mobile `<dialog closedby="any">` `FilterDrawer`, keyword/department/sort/in-stock URL query sync, `Sold Out` guard, and local `900×900` studio `.webp` product galleries with interactive view toggles *(bespoke generated studio assets documented in [design-reference-mapping.md](docs/design-reference-mapping.md))*.
+- **Shopping Cart & Simulated Checkout (`/cart` & `/checkout`):** Slide-over `<dialog closedby="any">` `CartDrawer`, `$75` free-shipping progress bar (`$8` standard below `$75`), client validation, and simulated `ORD-2026-XXXX` order generation persisted locally in browser storage.
+- **Demo Account & Utility Views (`/auth/login`, `/auth/register`, `/account`, `/about`, `/contact`, `404`):** Simulated sign-in with demo credentials helper, local order history display, 2×2 studio product craft story, and client-validated contact inquiry form.
 
 ### Planned Full-Stack Scope (Not Yet Implemented)
 - **Live Backend REST API:** Express.js routes for catalog CRUD, server-side cart/order persistence, and input validation.
@@ -77,11 +77,11 @@ Small retail storefronts often rely on either rigid templates or overly complex 
 | --- | --- | --- |
 | **Frontend Framework** | Next.js (`16.4.5`) | Implemented (static/client demo storefront) |
 | **Language** | TypeScript (`5.9.3`) | Implemented in `frontend/` |
-| **Styling** | Tailwind CSS (`3.4.19`) | Implemented (White Canvas Commerce v2 tokens) |
+| **Styling** | Tailwind CSS (`3.4.19`) | Implemented (`#7C3AED` Violet / `#F9FAFB` Modern tokens) |
 | **Backend Runtime & Framework** | Node.js + Express.js | Planned (Phase 5) |
 | **Database & ODM** | MongoDB Atlas + Mongoose | Planned (Phase 6) |
 | **Authentication** | JSON Web Tokens (JWT) | Planned (Phase 5) |
-| **Version Control** | Git & GitHub | Implemented (`main` branch) |
+| **Version Control** | Git & GitHub | Implemented (`main` + `feature/modern-frontend-redesign`) |
 
 ---
 
@@ -127,14 +127,13 @@ CodeAlpha_EcommerceStore/
 ├── assets/
 │   └── ecommerce-banner.svg                 # Animated SVG repository hero banner
 ├── docs/
-│   ├── design-system-v2.md                  # Authoritative White Canvas Commerce design tokens
-│   ├── design-reference-mapping-v2.md       # Visual hierarchy & component mapping
-│   ├── frontend-ux-blueprint-v2.md          # Route & UX preservation blueprint
-│   ├── frontend-component-architecture.md   # Next.js components & client contracts
-│   ├── responsive-design-spec.md            # Viewport breakpoints & QA matrix summary
-│   ├── preview/shop-constellation-preview.html
-│   └── qa/                                  # Verified desktop & mobile QA screenshots
-├── frontend/                                # Implemented Next.js 16 + TypeScript storefront
+│   ├── design-system.md                     # Authoritative #7C3AED / #F9FAFB design tokens
+│   ├── design-reference-mapping.md          # Component hierarchy & media provenance notes
+│   ├── frontend-ux-blueprint.md             # Route & UX preservation blueprint
+│   ├── frontend-component-architecture.md   # Next.js components, media manifest & contracts
+│   ├── responsive-design-spec.md            # Viewport breakpoints & Headless Chrome QA matrix
+│   └── qa/modern-redesign/                  # Verified desktop & mobile QA screenshots
+├── frontend/                                # Redesigned Next.js 16 + TypeScript storefront & WebP assets
 ├── .gitignore                               # Excludes node_modules, .env*, keys, logs, and build artifacts
 ├── LICENSE                                  # MIT License
 └── README.md                                # Project documentation

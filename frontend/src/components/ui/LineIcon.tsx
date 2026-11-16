@@ -18,7 +18,9 @@ export type IconName =
   | 'grid'
   | 'info'
   | 'mail'
-  | 'clock';
+  | 'clock'
+  | 'truck'
+  | 'layers';
 
 interface LineIconProps {
   name: IconName;
@@ -184,6 +186,23 @@ export function LineIcon({ name, size = 18, className = '' }: LineIconProps) {
       return (
         <svg {...common}>
           <line x1="5" y1="12" x2="19" y2="12" />
+        </svg>
+      );
+    case 'truck':
+      return (
+        <svg {...common}>
+          <rect x="2" y="6" width="12" height="10" rx="1.5" />
+          <path d="M14 9h4.5L21 12v4h-7V9Z" />
+          <circle cx="6.5" cy="18" r="1.75" />
+          <circle cx="17.5" cy="18" r="1.75" />
+        </svg>
+      );
+    case 'layers':
+      return (
+        <svg {...common}>
+          <polygon points="12 3 3 8 12 13 21 8 12 3" />
+          <polyline points="3 12.5 12 17.5 21 12.5" />
+          <polyline points="3 17 12 22 21 17" />
         </svg>
       );
   }

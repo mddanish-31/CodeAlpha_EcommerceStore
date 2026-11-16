@@ -33,41 +33,41 @@ export function CheckoutForm() {
     return (
       <div className="surface-card p-6 sm:p-10 max-w-2xl mx-auto space-y-6">
         <div className="flex flex-col items-center text-center space-y-3">
-          <div className="w-12 h-12 rounded-pill bg-violet-wash/40 border border-shop-violet text-shop-violet flex items-center justify-center">
+          <div className="w-12 h-12 rounded-pill bg-violet-soft border border-violet-border text-brand-violet flex items-center justify-center">
             <LineIcon name="check" size={24} />
           </div>
           <div className="space-y-1">
-            <p className="text-xs font-medium uppercase tracking-wide text-muted-gray m-0">
+            <p className="text-xs font-semibold uppercase tracking-wider text-brand-dark m-0">
               Simulated Demo Order Confirmed
             </p>
-            <h2 className="text-2xl sm:text-3xl font-semibold tracking-[-0.045em] text-ink-black m-0">
+            <h2 className="display-section m-0">
               Order {confirmedOrder.orderId} Placed
             </h2>
           </div>
-          <p className="text-sm text-muted-gray max-w-md m-0">
-            Saved locally to your browser session history. No payment was processed and no external order API was called.
+          <p className="text-sm text-muted max-w-md m-0">
+            Saved locally to your browser session order history. No payment was processed and no backend API request was made.
           </p>
         </div>
 
-        <div className="rounded-image bg-canvas-mist border border-faint-border p-4 sm:p-5 space-y-3 text-sm">
-          <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-faint-border">
-            <span className="font-medium text-ink-black">
+        <div className="rounded-image bg-page-bg border border-border-default p-4 sm:p-5 space-y-3 text-sm">
+          <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-border-default">
+            <span className="font-semibold text-ink">
               Ship to {confirmedOrder.shippingAddress.fullName}
             </span>
-            <span className="text-xs text-canvas-secondary tabular-nums">
+            <span className="text-xs text-muted tabular-nums">
               {confirmedOrder.createdAt}
             </span>
           </div>
-          <p className="text-xs text-canvas-secondary m-0">
+          <p className="text-xs text-ink-secondary m-0">
             {confirmedOrder.shippingAddress.streetAddress}, {confirmedOrder.shippingAddress.city},{' '}
             {confirmedOrder.shippingAddress.state} {confirmedOrder.shippingAddress.postalCode},{' '}
             {confirmedOrder.shippingAddress.country}
           </p>
-          <ul className="space-y-1.5 list-none p-0 m-0 pt-2 border-t border-faint-border">
+          <ul className="space-y-1.5 list-none p-0 m-0 pt-2 border-t border-border-default">
             {confirmedOrder.items.map((item) => (
               <li
                 key={item.product.id}
-                className="flex items-center justify-between gap-2 text-xs text-ink-black"
+                className="flex items-center justify-between gap-2 text-xs text-ink"
               >
                 <span className="truncate">
                   {item.product.title} × {item.quantity}
@@ -78,7 +78,7 @@ export function CheckoutForm() {
               </li>
             ))}
           </ul>
-          <div className="flex items-center justify-between pt-2 border-t border-faint-border text-sm font-semibold text-ink-black">
+          <div className="flex items-center justify-between pt-2 border-t border-border-default text-sm font-semibold text-ink">
             <span>Demo Total ({confirmedOrder.status})</span>
             <span className="tabular-nums">${confirmedOrder.totalAmount.toFixed(2)}</span>
           </div>
@@ -100,7 +100,7 @@ export function CheckoutForm() {
     return (
       <StateFeedbackCard
         icon="bag"
-        title="Your shopping bag is empty"
+        title="Your shopping cart is empty"
         description="Add one or more studio objects before proceeding to simulated checkout."
         actionLabel="Explore Catalog"
         actionHref="/shop"
@@ -157,16 +157,14 @@ export function CheckoutForm() {
         aria-label="Simulated storefront checkout"
         className="lg:col-span-8 surface-card p-5 sm:p-8 space-y-6"
       >
-        <div className="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-faint-border">
+        <div className="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-border-default">
           <div>
-            <h2 className="text-xl font-semibold tracking-[-0.04em] text-ink-black m-0">
-              Shipping &amp; Simulated Checkout
-            </h2>
-            <p className="text-xs text-muted-gray mt-1 mb-0">
+            <h2 className="heading-sub m-0">Shipping &amp; Simulated Checkout</h2>
+            <p className="text-xs text-muted mt-1 mb-0">
               Preview checkout flow — orders save locally without external charges.
             </p>
           </div>
-          <span className="inline-flex items-center px-3 py-1 rounded-pill bg-canvas-mist border border-faint-border text-[11px] font-medium text-ink-black max-w-full">
+          <span className="inline-flex items-center px-3 py-1 rounded-pill bg-violet-soft border border-violet-border text-[11px] font-semibold text-brand-dark">
             Demo Checkout Only
           </span>
         </div>
@@ -174,13 +172,13 @@ export function CheckoutForm() {
         {errors.length > 0 ? (
           <div
             role="alert"
-            className="p-4 rounded-image bg-canvas-mist border border-ink-black space-y-1.5 text-xs sm:text-sm text-ink-black"
+            className="p-4 rounded-image bg-page-bg border border-brand-violet space-y-1.5 text-xs sm:text-sm text-ink"
           >
-            <div className="flex items-center gap-2 font-medium">
-              <LineIcon name="alert" size={16} />
+            <div className="flex items-center gap-2 font-semibold">
+              <LineIcon name="alert" size={16} className="text-brand-violet shrink-0" />
               <span>Please review the highlighted checkout fields:</span>
             </div>
-            <ul className="list-disc pl-5 m-0 space-y-0.5 text-slate-ink">
+            <ul className="list-disc pl-5 m-0 space-y-0.5 text-ink-secondary">
               {errors.map((err) => (
                 <li key={err}>{err}</li>
               ))}
@@ -189,13 +187,13 @@ export function CheckoutForm() {
         ) : null}
 
         <fieldset className="border-0 p-0 m-0 space-y-4">
-          <legend className="text-sm font-semibold text-ink-black tracking-[-0.02em]">
+          <legend className="text-sm font-semibold text-ink">
             1. Contact &amp; Shipping Address
           </legend>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
             <div className="space-y-1.5">
-              <label htmlFor="chk-fullname" className="block text-xs font-medium text-slate-ink">
+              <label htmlFor="chk-fullname" className="block text-xs font-medium text-ink-secondary">
                 Full Name
               </label>
               <input
@@ -207,12 +205,12 @@ export function CheckoutForm() {
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder="MD Danish"
                 required
-                className="input-pill"
+                className="input-field"
               />
             </div>
 
             <div className="space-y-1.5">
-              <label htmlFor="chk-email" className="block text-xs font-medium text-slate-ink">
+              <label htmlFor="chk-email" className="block text-xs font-medium text-ink-secondary">
                 Email Address
               </label>
               <input
@@ -224,12 +222,12 @@ export function CheckoutForm() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="danish.demo@codealpha.dev"
                 required
-                className="input-pill"
+                className="input-field"
               />
             </div>
 
             <div className="space-y-1.5">
-              <label htmlFor="chk-phone" className="block text-xs font-medium text-slate-ink">
+              <label htmlFor="chk-phone" className="block text-xs font-medium text-ink-secondary">
                 Phone Number
               </label>
               <input
@@ -241,12 +239,12 @@ export function CheckoutForm() {
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="+91 98000 12345"
                 required
-                className="input-pill tabular-nums"
+                className="input-field tabular-nums"
               />
             </div>
 
             <div className="space-y-1.5">
-              <label htmlFor="chk-country" className="block text-xs font-medium text-slate-ink">
+              <label htmlFor="chk-country" className="block text-xs font-medium text-ink-secondary">
                 Country
               </label>
               <input
@@ -258,12 +256,12 @@ export function CheckoutForm() {
                 onChange={(e) => setCountry(e.target.value)}
                 placeholder="India"
                 required
-                className="input-pill"
+                className="input-field"
               />
             </div>
 
             <div className="sm:col-span-2 space-y-1.5">
-              <label htmlFor="chk-street" className="block text-xs font-medium text-slate-ink">
+              <label htmlFor="chk-street" className="block text-xs font-medium text-ink-secondary">
                 Street Address
               </label>
               <input
@@ -273,14 +271,14 @@ export function CheckoutForm() {
                 autoComplete="street-address"
                 value={streetAddress}
                 onChange={(e) => setStreetAddress(e.target.value)}
-                placeholder="22 Atelier Lane, Indiranagar"
+                placeholder="22 Atelier Lane"
                 required
-                className="input-pill"
+                className="input-field"
               />
             </div>
 
             <div className="space-y-1.5">
-              <label htmlFor="chk-city" className="block text-xs font-medium text-slate-ink">
+              <label htmlFor="chk-city" className="block text-xs font-medium text-ink-secondary">
                 City
               </label>
               <input
@@ -290,14 +288,14 @@ export function CheckoutForm() {
                 autoComplete="address-level2"
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
-                placeholder="Bengaluru"
+                placeholder="New Delhi"
                 required
-                className="input-pill"
+                className="input-field"
               />
             </div>
 
             <div className="space-y-1.5">
-              <label htmlFor="chk-state" className="block text-xs font-medium text-slate-ink">
+              <label htmlFor="chk-state" className="block text-xs font-medium text-ink-secondary">
                 State / Region
               </label>
               <input
@@ -307,14 +305,14 @@ export function CheckoutForm() {
                 autoComplete="address-level1"
                 value={stateRegion}
                 onChange={(e) => setStateRegion(e.target.value)}
-                placeholder="Karnataka"
+                placeholder="Delhi"
                 required
-                className="input-pill"
+                className="input-field"
               />
             </div>
 
             <div className="sm:col-span-2 space-y-1.5">
-              <label htmlFor="chk-postal" className="block text-xs font-medium text-slate-ink">
+              <label htmlFor="chk-postal" className="block text-xs font-medium text-ink-secondary">
                 Postal Code
               </label>
               <input
@@ -324,24 +322,24 @@ export function CheckoutForm() {
                 autoComplete="postal-code"
                 value={postalCode}
                 onChange={(e) => setPostalCode(e.target.value)}
-                placeholder="560038"
+                placeholder="110001"
                 required
-                className="input-pill"
+                className="input-field"
               />
             </div>
           </div>
         </fieldset>
 
-        <fieldset className="border-0 pt-4 border-t border-faint-border p-0 m-0 space-y-3">
-          <legend className="text-sm font-semibold text-ink-black tracking-[-0.02em]">
+        <fieldset className="border-0 pt-5 border-t border-border-default p-0 m-0 space-y-3">
+          <legend className="text-sm font-semibold text-ink">
             2. Delivery Speed (Demo Options)
           </legend>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <label
               className={`flex items-start gap-3 p-4 rounded-image border cursor-pointer transition-colors ${
                 deliveryMethod === 'standard'
-                  ? 'bg-canvas-mist border-ink-black'
-                  : 'bg-pure-white border-faint-border hover:border-ink-black/40'
+                  ? 'bg-violet-soft border-brand-violet'
+                  : 'bg-surface border-border-default hover:bg-page-bg'
               }`}
             >
               <input
@@ -350,12 +348,12 @@ export function CheckoutForm() {
                 value="standard"
                 checked={deliveryMethod === 'standard'}
                 onChange={() => setDeliveryMethod('standard')}
-                className="mt-1 w-4 h-4 accent-shop-violet"
+                className="mt-1 w-4 h-4 accent-brand-violet"
               />
               <div>
-                <div className="text-sm font-medium text-ink-black">Studio Standard</div>
-                <div className="text-xs text-canvas-secondary">
-                  3–5 business days · Free at $75+ ($8 flat under $75)
+                <div className="text-sm font-semibold text-ink">Standard Delivery</div>
+                <div className="text-xs text-muted">
+                  Free above $75 ($8 flat standard rate otherwise)
                 </div>
               </div>
             </label>
@@ -363,8 +361,8 @@ export function CheckoutForm() {
             <label
               className={`flex items-start gap-3 p-4 rounded-image border cursor-pointer transition-colors ${
                 deliveryMethod === 'express'
-                  ? 'bg-canvas-mist border-ink-black'
-                  : 'bg-pure-white border-faint-border hover:border-ink-black/40'
+                  ? 'bg-violet-soft border-brand-violet'
+                  : 'bg-surface border-border-default hover:bg-page-bg'
               }`}
             >
               <input
@@ -373,26 +371,26 @@ export function CheckoutForm() {
                 value="express"
                 checked={deliveryMethod === 'express'}
                 onChange={() => setDeliveryMethod('express')}
-                className="mt-1 w-4 h-4 accent-shop-violet"
+                className="mt-1 w-4 h-4 accent-brand-violet"
               />
               <div>
-                <div className="text-sm font-medium text-ink-black">Priority Courier</div>
-                <div className="text-xs text-canvas-secondary">
-                  1–2 business days · Included in preview calculation
+                <div className="text-sm font-semibold text-ink">Priority Demo Speed</div>
+                <div className="text-xs text-muted">
+                  Demo order calculation preview
                 </div>
               </div>
             </label>
           </div>
         </fieldset>
 
-        <fieldset className="border-0 pt-4 border-t border-faint-border p-0 m-0 space-y-4">
-          <legend className="text-sm font-semibold text-ink-black tracking-[-0.02em]">
+        <fieldset className="border-0 pt-5 border-t border-border-default p-0 m-0 space-y-4">
+          <legend className="text-sm font-semibold text-ink">
             3. Simulated Payment Card (No Real Charge)
           </legend>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
             <div className="space-y-1.5">
-              <label htmlFor="chk-card-name" className="block text-xs font-medium text-slate-ink">
+              <label htmlFor="chk-card-name" className="block text-xs font-medium text-ink-secondary">
                 Cardholder Name
               </label>
               <input
@@ -404,12 +402,12 @@ export function CheckoutForm() {
                 onChange={(e) => setCardHolder(e.target.value)}
                 placeholder="MD Danish"
                 required
-                className="input-pill"
+                className="input-field"
               />
             </div>
 
             <div className="space-y-1.5">
-              <label htmlFor="chk-card-num" className="block text-xs font-medium text-slate-ink">
+              <label htmlFor="chk-card-num" className="block text-xs font-medium text-ink-secondary">
                 Demo Card Number (Test digits only)
               </label>
               <input
@@ -422,12 +420,12 @@ export function CheckoutForm() {
                 onChange={(e) => setCardNumber(e.target.value)}
                 placeholder="4242 4242 4242 4242"
                 required
-                className="input-pill tabular-nums"
+                className="input-field tabular-nums"
               />
             </div>
 
             <div className="space-y-1.5">
-              <label htmlFor="chk-card-exp" className="block text-xs font-medium text-slate-ink">
+              <label htmlFor="chk-card-exp" className="block text-xs font-medium text-ink-secondary">
                 Expiry (MM/YY)
               </label>
               <input
@@ -439,12 +437,12 @@ export function CheckoutForm() {
                 onChange={(e) => setExpiry(e.target.value)}
                 placeholder="08/29"
                 required
-                className="input-pill tabular-nums"
+                className="input-field tabular-nums"
               />
             </div>
 
             <div className="space-y-1.5">
-              <label htmlFor="chk-card-cvc" className="block text-xs font-medium text-slate-ink">
+              <label htmlFor="chk-card-cvc" className="block text-xs font-medium text-ink-secondary">
                 Demo CVC
               </label>
               <input
@@ -457,7 +455,7 @@ export function CheckoutForm() {
                 onChange={(e) => setCvc(e.target.value)}
                 placeholder="424"
                 required
-                className="input-pill tabular-nums"
+                className="input-field tabular-nums"
               />
             </div>
           </div>
@@ -465,14 +463,14 @@ export function CheckoutForm() {
 
         <div className="pt-2">
           <button type="submit" className="btn-primary w-full justify-between">
-            <span>Place Simulated Demo Order</span>
+            <span>Place Order</span>
             <LineIcon name="arrow-right" size={16} />
           </button>
         </div>
       </form>
 
       <div className="lg:col-span-4">
-        <CartSummaryCard showCheckoutCta={false} />
+        <CartSummaryCard showCheckoutCta={false} showItemThumbnails />
       </div>
     </div>
   );

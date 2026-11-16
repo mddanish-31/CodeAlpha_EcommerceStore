@@ -1,19 +1,19 @@
 export function AnnouncementBar() {
   return (
-    <div className="bg-pure-white border-b border-faint-border min-h-[44px] py-2 px-4 flex items-center justify-center">
-      <div className="store-container flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-center text-xs tracking-[-0.01em] text-slate-ink">
-        <span className="inline-flex items-center gap-2 font-medium text-ink-black">
+    <div className="bg-ink text-surface py-2 px-4 text-center text-xs sm:text-[13px]">
+      <div className="store-container flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
+        <span className="inline-flex items-center gap-2 font-medium">
           <span
-            className="w-2 h-2 rounded-pill bg-shop-violet shrink-0"
+            className="w-2 h-2 rounded-pill bg-brand-violet shrink-0"
             aria-hidden="true"
           />
-          <span>Free shipping on orders over $75</span>
+          <span>Free shipping on orders above $75</span>
         </span>
-        <span className="hidden sm:inline text-muted-gray" aria-hidden="true">
+        <span className="hidden sm:inline text-muted" aria-hidden="true">
           ·
         </span>
-        <span className="text-slate-ink">
-          CodeAlpha Storefront — Static Demo Catalog &amp; Browser-Saved Cart
+        <span className="text-surface-subtle">
+          $8 flat standard shipping below $75 · Local demo storefront
         </span>
       </div>
     </div>

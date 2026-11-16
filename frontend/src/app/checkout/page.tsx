@@ -3,8 +3,8 @@ import { Breadcrumbs } from '@/components/navigation/Breadcrumbs';
 import { CheckoutForm } from '@/components/forms/CheckoutForm';
 
 export const metadata: Metadata = {
-  title: 'Simulated Checkout',
-  description: 'Review your bag and place a simulated demo order stored locally in browser state.',
+  title: 'Checkout',
+  description: 'Review shipping details, order summary, and place a simulated demo order stored locally.',
 };
 
 export default function CheckoutPage() {
@@ -13,15 +13,15 @@ export default function CheckoutPage() {
       <Breadcrumbs
         items={[
           { label: 'Home', href: '/' },
-          { label: 'Bag', href: '/cart' },
-          { label: 'Simulated Checkout' },
+          { label: 'Cart', href: '/cart' },
+          { label: 'Checkout' },
         ]}
       />
 
       <header className="space-y-1.5">
-        <h1 className="display-hero m-0">Simulated Storefront Checkout</h1>
-        <p className="text-sm text-canvas-secondary m-0 max-w-2xl">
-          Verify shipping calculation and order confirmation UI. Real payment processing and backend persistence arrive in Phase 5.
+        <h1 className="display-hero m-0">Simulated Checkout</h1>
+        <p className="text-sm sm:text-base text-muted m-0 max-w-2xl">
+          Verify shipping calculation and order confirmation flow. No real payment or backend order API runs in this frontend milestone.
         </p>
       </header>
 

@@ -25,11 +25,11 @@ export function NewsletterForm() {
       <form
         onSubmit={handleSubmit}
         noValidate
-        aria-label="Studio dispatch newsletter"
+        aria-label="Store updates newsletter"
         className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5"
       >
         <label htmlFor="newsletter-email" className="sr-only">
-          Email address for release notes
+          Email address for studio updates
         </label>
         <input
           id="newsletter-email"
@@ -38,10 +38,10 @@ export function NewsletterForm() {
           autoComplete="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="you@studio.example"
+          placeholder="you@example.com"
           aria-invalid={error ? 'true' : undefined}
           aria-describedby={error ? 'newsletter-error' : undefined}
-          className="input-pill flex-1 min-w-0"
+          className="input-field flex-1 min-w-0"
         />
         <button type="submit" className="btn-primary shrink-0">
           Subscribe
@@ -52,19 +52,19 @@ export function NewsletterForm() {
         <p
           id="newsletter-error"
           role="alert"
-          className="inline-flex items-center gap-1.5 text-xs font-medium text-ink-black m-0"
+          className="inline-flex items-center gap-1.5 text-xs font-medium text-ink m-0"
         >
-          <LineIcon name="alert" size={14} />
-          <span>Error: {error}</span>
+          <LineIcon name="alert" size={14} className="text-brand-violet shrink-0" />
+          <span>{error}</span>
         </p>
       ) : null}
 
       {submittedEmail ? (
         <p
           role="status"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-pill bg-canvas-mist border border-faint-border text-xs font-medium text-ink-black m-0"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-control bg-violet-soft border border-violet-border text-xs font-medium text-brand-dark m-0"
         >
-          <LineIcon name="check" size={14} className="text-shop-violet shrink-0" />
+          <LineIcon name="check" size={14} className="text-brand-violet shrink-0" />
           <span>Demo subscription noted for {submittedEmail}.</span>
         </p>
       ) : null}

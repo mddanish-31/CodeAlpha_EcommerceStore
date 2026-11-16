@@ -1,17 +1,27 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { SAMPLE_PRODUCTS } from '@/data/products';
+import { getProductMedia } from '@/data/productMedia';
+import { ProductMedia } from '@/components/ui/ProductMedia';
 import { Breadcrumbs } from '@/components/navigation/Breadcrumbs';
 import { LineIcon } from '@/components/ui/LineIcon';
 
 export const metadata: Metadata = {
-  title: 'About Simple Store',
+  title: 'About CodeAlpha Store',
   description:
-    'White Canvas Commerce philosophy, studio departments, and CodeAlpha internship engineering scope.',
+    'Product curation philosophy, material standards, and CodeAlpha internship frontend architecture.',
 };
 
 export default function AboutPage() {
+  const showcaseItems = [
+    SAMPLE_PRODUCTS[0], // Chrono Brass Desk Lamp
+    SAMPLE_PRODUCTS[1], // Tactile Field Chronograph
+    SAMPLE_PRODUCTS[2], // Copper Gooseneck Kettle
+    SAMPLE_PRODUCTS[11], // Full-Grain Leather A5 Field Folio
+  ];
+
   return (
-    <div className="store-container pt-6 sm:pt-8 pb-8 space-y-10">
+    <div className="store-container pt-6 sm:pt-8 pb-8 space-y-12">
       <Breadcrumbs
         items={[
           { label: 'Home', href: '/' },
@@ -19,72 +29,102 @@ export default function AboutPage() {
         ]}
       />
 
-      <header className="space-y-3 max-w-3xl">
-        <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-pill bg-pure-white border border-faint-border shadow-sm-soft text-xs font-medium text-slate-ink">
-          <span className="w-2 h-2 rounded-pill bg-shop-violet" aria-hidden="true" />
-          <span>CodeAlpha Internship · Simple E-commerce Store</span>
-        </span>
-        <h1 className="display-hero m-0">
-          Minimalist industrial goods, organized with quiet geometry.
-        </h1>
-        <p className="text-sm sm:text-base text-canvas-secondary leading-relaxed m-0">
-          simple. brings together everyday carry tools, desk instruments, tactile drinkware, and utilitarian studio garments under a calm White Canvas Commerce interface.
-        </p>
+      <header className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div className="lg:col-span-6 space-y-4">
+          <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-pill bg-violet-soft border border-violet-border text-xs font-semibold text-brand-dark">
+            <span className="w-2 h-2 rounded-pill bg-brand-violet shrink-0" aria-hidden="true" />
+            <span>CodeAlpha Internship · Simple E-commerce Store</span>
+          </span>
+          <h1 className="display-hero m-0">
+            Thoughtful objects for everyday work, home and utility.
+          </h1>
+          <p className="text-sm sm:text-base text-muted leading-relaxed m-0">
+            CodeAlpha Store showcases a 12-item catalog spanning Audio &amp; Desk Craft, Everyday Carry, Home Objects, and Apparel &amp; Goods, emphasizing tactile durability, legible typography, and straightforward shopping flows.
+          </p>
+          <div className="flex flex-wrap gap-3 pt-2">
+            <Link href="/shop" className="btn-primary">
+              <span>Shop Collection</span>
+              <LineIcon name="arrow-right" size={16} />
+            </Link>
+            <Link href="/contact" className="btn-secondary">
+              Contact &amp; FAQ
+            </Link>
+          </div>
+        </div>
+
+        {/* 4-Photo Editorial Catalog Mosaic */}
+        <div className="lg:col-span-6 grid grid-cols-2 gap-3 sm:gap-4">
+          {showcaseItems.map((item) => {
+            const media = getProductMedia(item);
+            return (
+              <Link
+                key={item.id}
+                href={`/shop/${item.id}`}
+                className="surface-card card-hover-lift overflow-hidden group"
+              >
+                <div className="aspect-square bg-surface-subtle overflow-hidden">
+                  <ProductMedia
+                    src={media.src}
+                    alt={media.alt}
+                    width={450}
+                    height={450}
+                    imgClassName="transition-transform duration-300 group-hover:scale-[1.03]"
+                  />
+                </div>
+                <div className="p-3 flex items-center justify-between gap-2 text-xs">
+                  <span className="font-semibold text-ink truncate group-hover:text-brand-violet transition-colors">
+                    {item.title}
+                  </span>
+                  <span className="text-muted tabular-nums shrink-0">${item.price}</span>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
       </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <section aria-label="Store principles and materials" className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
         <article className="surface-card p-6 space-y-2.5">
-          <p className="text-xs font-medium text-muted-gray m-0">01 · Material Clarity</p>
-          <h2 className="text-lg font-semibold tracking-[-0.04em] text-ink-black m-0">
-            Tactile Hardware &amp; Craft
-          </h2>
-          <p className="text-sm text-muted-gray leading-relaxed m-0">
-            Catalog fixtures highlight machined brass, bead-blasted steel, dry-waxed duck canvas, and raw matte stoneware without visual clutter.
+          <p className="text-xs font-semibold uppercase tracking-wider text-brand-violet m-0">
+            01 · Tactile Materials
+          </p>
+          <h2 className="heading-sub m-0">Brass, Copper &amp; Heavy Canvas</h2>
+          <p className="text-sm text-muted leading-relaxed m-0">
+            Catalog specifications center on C36000 machined brass, grade-2 titanium, raw speckled stoneware, 14oz–18oz cotton canvas, and full-grain leather.
           </p>
         </article>
 
         <article className="surface-card p-6 space-y-2.5">
-          <p className="text-xs font-medium text-muted-gray m-0">02 · Concentric Geometry</p>
-          <h2 className="text-lg font-semibold tracking-[-0.04em] text-ink-black m-0">
-            White Canvas System
-          </h2>
-          <p className="text-sm text-muted-gray leading-relaxed m-0">
-            Generous 28px white cards float above a soft Canvas Mist backdrop via dual-layer ambient shadows, with accessible contrast on every control.
+          <p className="text-xs font-semibold uppercase tracking-wider text-brand-violet m-0">
+            02 · Clear Storefront UX
+          </p>
+          <h2 className="heading-sub m-0">Accessible Responsive Flows</h2>
+          <p className="text-sm text-muted leading-relaxed m-0">
+            Search, department filtering, stock validation, shopping cart persistence, and native keyboard-dismissible drawers work consistently from 320px to 1440px.
           </p>
         </article>
 
         <article className="surface-card p-6 space-y-2.5">
-          <p className="text-xs font-medium text-muted-gray m-0">03 · Honest Architecture</p>
-          <h2 className="text-lg font-semibold tracking-[-0.04em] text-ink-black m-0">
-            Frontend Scope First
-          </h2>
-          <p className="text-sm text-muted-gray leading-relaxed m-0">
-            This Phase 4D storefront runs interactively in Next.js, TypeScript, and Tailwind CSS with local browser storage ahead of Phase 5 REST APIs.
+          <p className="text-xs font-semibold uppercase tracking-wider text-brand-violet m-0">
+            03 · Transparent Demo State
+          </p>
+          <h2 className="heading-sub m-0">Client Storage Ahead of Backend</h2>
+          <p className="text-sm text-muted leading-relaxed m-0">
+            Cart items, demo orders, and session state currently run locally in Next.js and browser `localStorage` ahead of planned Express.js and MongoDB Atlas integration.
           </p>
         </article>
-      </div>
+      </section>
 
-      <section className="surface-card-slate p-6 sm:p-10 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-        <div className="lg:col-span-8 space-y-2.5">
-          <span className="text-xs font-medium text-violet-wash">
-            Architecture &amp; Stack Roadmap
-          </span>
-          <h2 className="display-section text-pure-white m-0">
-            Prepared for Express.js &amp; MongoDB Atlas Integration
-          </h2>
-          <p className="text-sm text-faint-border max-w-2xl leading-relaxed m-0">
-            Right now catalog items, demo sign-in, shopping bag items, and demo orders operate locally in your browser (`localStorage`). Phase 5 and Phase 6 will wire live backend endpoints, JWT authentication, and persistent Atlas records.
+      <section className="surface-card p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-l-4 border-l-brand-violet">
+        <div className="space-y-1 max-w-2xl">
+          <h2 className="heading-sub m-0">Truthful Scope &amp; Shipping Terms</h2>
+          <p className="text-sm text-muted m-0 leading-relaxed">
+            Orders over $75 qualify for free shipping; smaller carts calculate an $8 standard rate. No real payment gateway or server database is active in this frontend release.
           </p>
         </div>
-        <div className="lg:col-span-4 flex flex-wrap lg:justify-end gap-3">
-          <Link href="/shop" className="btn-white">
-            <span>Explore Catalog</span>
-            <LineIcon name="arrow-right" size={16} />
-          </Link>
-          <Link href="/contact" className="btn-secondary">
-            Contact &amp; FAQ
-          </Link>
-        </div>
+        <Link href="/shop" className="btn-primary shrink-0">
+          Browse Full Catalog
+        </Link>
       </section>
     </div>
   );

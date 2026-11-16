@@ -26,7 +26,7 @@ export function QuantityStepper({
 
   return (
     <div
-      className="inline-flex items-center rounded-pill bg-pure-white border border-ink-black/20 shadow-sm-soft p-0.5"
+      className="inline-flex items-center rounded-control bg-surface border border-border-default shadow-card-subtle p-0.5"
       role="group"
       aria-label={ariaLabel}
     >
@@ -35,12 +35,12 @@ export function QuantityStepper({
         onClick={() => canDecrease && onChange(value - 1)}
         disabled={!canDecrease}
         aria-label="Decrease quantity"
-        className={`${btnSize} inline-flex items-center justify-center rounded-pill text-ink-black hover:bg-canvas-mist disabled:opacity-35 disabled:cursor-not-allowed transition-colors`}
+        className={`${btnSize} inline-flex items-center justify-center rounded-lg text-ink hover:bg-surface-subtle disabled:opacity-35 disabled:cursor-not-allowed transition-colors`}
       >
         <LineIcon name="minus" size={14} />
       </button>
       <span
-        className="min-w-[2.25rem] px-1 text-center text-sm font-medium text-ink-black tabular-nums select-none"
+        className="min-w-[2.25rem] px-1 text-center text-sm font-medium text-ink tabular-nums select-none"
         aria-live="polite"
       >
         {value}
@@ -50,7 +50,7 @@ export function QuantityStepper({
         onClick={() => canIncrease && onChange(value + 1)}
         disabled={!canIncrease}
         aria-label="Increase quantity"
-        className={`${btnSize} inline-flex items-center justify-center rounded-pill text-ink-black hover:bg-canvas-mist disabled:opacity-35 disabled:cursor-not-allowed transition-colors`}
+        className={`${btnSize} inline-flex items-center justify-center rounded-lg text-ink hover:bg-surface-subtle disabled:opacity-35 disabled:cursor-not-allowed transition-colors`}
       >
         <LineIcon name="plus" size={14} />
       </button>

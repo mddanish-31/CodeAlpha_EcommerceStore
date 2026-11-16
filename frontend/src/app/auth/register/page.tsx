@@ -4,7 +4,7 @@ import { AuthForm } from '@/components/forms/AuthForm';
 
 export const metadata: Metadata = {
   title: 'Create Account',
-  description: 'Create a frontend demo customer session for saving addresses and viewing demo orders.',
+  description: 'Create a frontend demo customer session for saving addresses and viewing order history.',
 };
 
 export default function RegisterPage() {

@@ -69,21 +69,21 @@ export function CartDrawer() {
       onClick={handleBackdropClick}
       className="drawer-dialog"
     >
-      <div className="flex flex-col h-full bg-pure-white text-ink-black">
-        <div className="flex items-center justify-between px-5 py-4 border-b border-faint-border">
+      <div className="flex flex-col h-full bg-surface text-ink">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-border-default">
           <div>
-            <h2 id="cart-drawer-heading" className="text-lg font-semibold tracking-[-0.04em]">
-              Shopping Bag
+            <h2 id="cart-drawer-heading" className="text-lg font-semibold text-ink m-0">
+              Shopping Cart
             </h2>
-            <p className="text-xs text-muted-gray tabular-nums">
+            <p className="text-xs text-muted tabular-nums m-0">
               {cartCount} item{cartCount === 1 ? '' : 's'}
             </p>
           </div>
           <button
             type="button"
             onClick={closeCartDrawer}
-            aria-label="Close shopping bag"
-            className="min-w-[44px] min-h-[44px] inline-flex items-center justify-center rounded-pill bg-canvas-mist border border-faint-border text-ink-black hover:border-ink-black transition-colors"
+            aria-label="Close shopping cart"
+            className="min-w-[44px] min-h-[44px] inline-flex items-center justify-center rounded-control bg-page-bg border border-border-default text-ink hover:bg-surface-subtle transition-colors"
           >
             <LineIcon name="close" size={18} />
           </button>
@@ -95,20 +95,20 @@ export function CartDrawer() {
 
         <div className="flex-1 overflow-y-auto px-5 py-4 space-y-3">
           {cart.length === 0 ? (
-            <div className="p-6 rounded-image bg-canvas-mist border border-faint-border text-center space-y-3 mt-4">
-              <div className="w-11 h-11 rounded-pill bg-pure-white border border-faint-border text-ink-black flex items-center justify-center mx-auto">
+            <div className="p-6 rounded-card bg-page-bg border border-border-default text-center space-y-3 mt-4">
+              <div className="w-11 h-11 rounded-pill bg-violet-soft border border-violet-border text-brand-violet flex items-center justify-center mx-auto">
                 <LineIcon name="bag" size={20} />
               </div>
               <div className="space-y-1">
-                <p className="text-sm font-medium text-ink-black m-0">
-                  Your shopping bag is empty
+                <p className="text-sm font-semibold text-ink m-0">
+                  Your shopping cart is empty
                 </p>
-                <p className="text-xs text-canvas-secondary m-0">
-                  Add any studio object to review quantities and shipping progress.
+                <p className="text-xs text-muted m-0">
+                  Add curated objects to inspect subtotal and shipping threshold.
                 </p>
               </div>
               <Link href="/shop" onClick={closeCartDrawer} className="btn-primary w-full">
-                Explore Catalog
+                Explore Shop
               </Link>
             </div>
           ) : (
@@ -123,17 +123,17 @@ export function CartDrawer() {
           )}
         </div>
 
-        <div className="p-5 border-t border-faint-border bg-canvas-mist space-y-3">
+        <div className="p-5 border-t border-border-default bg-page-bg space-y-3">
           <div className="space-y-1.5 text-sm">
-            <div className="flex items-center justify-between text-canvas-secondary">
+            <div className="flex items-center justify-between text-muted">
               <span>Subtotal</span>
-              <span className="font-medium text-ink-black tabular-nums">
+              <span className="font-medium text-ink tabular-nums">
                 ${subtotal.toFixed(2)}
               </span>
             </div>
-            <div className="flex items-center justify-between text-canvas-secondary">
+            <div className="flex items-center justify-between text-muted">
               <span>Shipping</span>
-              <span className="font-medium text-ink-black tabular-nums">
+              <span className="font-medium text-ink tabular-nums">
                 {cart.length === 0
                   ? '$0.00'
                   : shippingCost === 0
@@ -145,7 +145,7 @@ export function CartDrawer() {
 
           <div className="grid grid-cols-2 gap-2.5 pt-1">
             <Link href="/cart" onClick={closeCartDrawer} className="btn-secondary w-full">
-              View Bag
+              View Cart
             </Link>
             {cart.length > 0 ? (
               <Link href="/checkout" onClick={closeCartDrawer} className="btn-primary w-full">

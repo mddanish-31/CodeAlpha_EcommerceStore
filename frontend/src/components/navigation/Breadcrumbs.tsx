@@ -9,23 +9,23 @@ interface CrumbItem {
 export function Breadcrumbs({ items }: { items: CrumbItem[] }) {
   return (
     <nav aria-label="Breadcrumb" className="mb-5">
-      <ol className="flex flex-wrap items-center gap-1.5 text-xs sm:text-sm text-canvas-secondary">
+      <ol className="flex flex-wrap items-center gap-1.5 text-xs sm:text-sm text-muted list-none p-0 m-0">
         {items.map((item, idx) => {
           const isLast = idx === items.length - 1;
           return (
             <li key={`${item.label}-${idx}`} className="inline-flex items-center gap-1.5">
               {idx > 0 ? (
-                <LineIcon name="chevron-right" size={14} className="text-canvas-secondary shrink-0" />
+                <LineIcon name="chevron-right" size={14} className="text-muted shrink-0" />
               ) : null}
               {item.href && !isLast ? (
                 <Link
                   href={item.href}
-                  className="text-canvas-secondary hover:text-ink-black underline-offset-4 hover:underline transition-colors py-1"
+                  className="text-muted hover:text-brand-violet underline-offset-4 hover:underline transition-colors py-1"
                 >
                   {item.label}
                 </Link>
               ) : (
-                <span className="font-medium text-ink-black" aria-current={isLast ? 'page' : undefined}>
+                <span className="font-medium text-ink" aria-current={isLast ? 'page' : undefined}>
                   {item.label}
                 </span>
               )}

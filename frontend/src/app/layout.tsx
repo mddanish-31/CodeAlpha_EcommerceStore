@@ -14,6 +14,7 @@ const inter = localFont({
     { path: '../fonts/inter-latin-400-normal.woff2', weight: '400', style: 'normal' },
     { path: '../fonts/inter-latin-500-normal.woff2', weight: '500', style: 'normal' },
     { path: '../fonts/inter-latin-600-normal.woff2', weight: '600', style: 'normal' },
+    { path: '../fonts/inter-latin-700-normal.woff2', weight: '700', style: 'normal' },
   ],
   variable: '--font-inter',
   display: 'swap',
@@ -21,11 +22,11 @@ const inter = localFont({
 
 export const metadata: Metadata = {
   title: {
-    default: 'simple. — Curated Goods & Studio Objects',
-    template: '%s | simple. Store',
+    default: 'CodeAlpha Store — Curated Everyday Objects & Desk Craft',
+    template: '%s | CodeAlpha Store',
   },
   description:
-    'White Canvas Commerce storefront for Everyday Carry, Home Objects, Audio & Desk Craft, and Apparel & Goods.',
+    'Modern online storefront for Audio & Desk Craft, Everyday Carry, Home Objects, and Apparel & Goods.',
 };
 
 export default function RootLayout({
@@ -35,15 +36,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={inter.variable}>
-      <body className="font-sans bg-canvas-mist text-ink-black antialiased selection:bg-violet-wash selection:text-ink-black">
+      <body className="font-sans bg-page-bg text-ink antialiased selection:bg-violet-soft selection:text-brand-dark">
         <a href="#main-content" className="sr-only skip-link">
           Skip to main content
         </a>
 
         <StoreProvider>
-          <div className="min-h-screen flex flex-col lg:pl-[64px]">
-            <SiteHeader />
+          <div className="min-h-screen flex flex-col">
             <AnnouncementBar />
+            <SiteHeader />
             <main id="main-content" tabIndex={-1} className="flex-1 focus:outline-none">
               {children}
             </main>

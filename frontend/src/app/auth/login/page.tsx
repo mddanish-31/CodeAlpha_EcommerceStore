@@ -4,7 +4,7 @@ import { AuthForm } from '@/components/forms/AuthForm';
 
 export const metadata: Metadata = {
   title: 'Sign In',
-  description: 'Sign in to access your demo profile and local order history.',
+  description: 'Sign in to access your demo customer account and local order history.',
 };
 
 export default function LoginPage() {

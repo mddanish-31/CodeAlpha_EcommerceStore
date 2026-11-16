@@ -7,12 +7,12 @@ import { useStore } from '@/context/StoreContext';
 import { LineIcon } from '@/components/ui/LineIcon';
 
 const DRAWER_LINKS = [
-  { href: '/', label: 'Home', description: 'Floating Shopping Constellation' },
-  { href: '/shop', label: 'Shop All Objects', description: 'Browse & filter 12 studio items' },
-  { href: '/cart', label: 'Shopping Bag', description: 'Review cart & shipping threshold' },
-  { href: '/account', label: 'Account & Orders', description: 'Profile & sample order history' },
-  { href: '/about', label: 'About Simple Store', description: 'Design system & craft principles' },
-  { href: '/contact', label: 'Contact & FAQ', description: 'Store policies & message form' },
+  { href: '/', label: 'Home', description: 'Featured objects & departments' },
+  { href: '/shop', label: 'Shop All Objects', description: 'Browse & filter 12 curated items' },
+  { href: '/cart', label: 'Shopping Cart', description: 'Review items & shipping calculation' },
+  { href: '/account', label: 'Account & Orders', description: 'Demo profile & order history' },
+  { href: '/about', label: 'About CodeAlpha Store', description: 'Curated hardware & craft overview' },
+  { href: '/contact', label: 'Contact & FAQ', description: 'Questions & support policies' },
 ];
 
 export function MobileNavDrawer() {
@@ -69,17 +69,22 @@ export function MobileNavDrawer() {
       onClick={handleBackdropClick}
       className="drawer-dialog drawer-left"
     >
-      <div className="flex flex-col h-full bg-pure-white text-ink-black">
-        <div className="flex items-center justify-between px-5 py-4 border-b border-faint-border">
-          <div id="mobile-nav-title" className="inline-flex items-center text-2xl font-semibold tracking-[-0.055em]">
-            <span>simple</span>
-            <span className="wordmark-dot" aria-hidden="true" />
+      <div className="flex flex-col h-full bg-surface text-ink">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-border-default">
+          <div id="mobile-nav-title" className="inline-flex items-center gap-2 text-lg font-semibold tracking-tight">
+            <span
+              className="w-7 h-7 rounded-lg bg-brand-violet text-surface inline-flex items-center justify-center"
+              aria-hidden="true"
+            >
+              <LineIcon name="layers" size={15} />
+            </span>
+            <span>CodeAlpha Store</span>
           </div>
           <button
             type="button"
             onClick={closeMobileNav}
             aria-label="Close navigation menu"
-            className="min-w-[44px] min-h-[44px] inline-flex items-center justify-center rounded-pill bg-canvas-mist border border-faint-border text-ink-black hover:border-ink-black transition-colors"
+            className="min-w-[44px] min-h-[44px] inline-flex items-center justify-center rounded-control bg-page-bg border border-border-default text-ink hover:bg-surface-subtle transition-colors"
           >
             <LineIcon name="close" size={18} />
           </button>
@@ -97,23 +102,29 @@ export function MobileNavDrawer() {
                 href={item.href}
                 onClick={closeMobileNav}
                 aria-current={active ? 'page' : undefined}
-                className={`flex items-center justify-between p-4 rounded-image border transition-colors ${
+                className={`flex items-center justify-between p-3.5 rounded-image border transition-colors ${
                   active
-                    ? 'bg-canvas-mist border-ink-black text-ink-black'
-                    : 'bg-pure-white border-faint-border text-ink-black hover:bg-canvas-mist'
+                    ? 'bg-violet-soft border-brand-violet text-brand-dark'
+                    : 'bg-surface border-border-default text-ink hover:bg-page-bg'
                 }`}
               >
                 <div>
-                  <div className="text-sm font-medium">{item.label}</div>
-                  <div className="text-xs text-muted-gray">{item.description}</div>
+                  <div className="text-sm font-semibold">{item.label}</div>
+                  <div className={`text-xs ${active ? 'text-brand-dark/80' : 'text-muted'}`}>
+                    {item.description}
+                  </div>
                 </div>
-                <LineIcon name="chevron-right" size={16} className="text-slate-ink shrink-0" />
+                <LineIcon
+                  name="chevron-right"
+                  size={16}
+                  className={active ? 'text-brand-violet shrink-0' : 'text-muted shrink-0'}
+                />
               </Link>
             );
           })}
         </nav>
 
-        <div className="p-4 border-t border-faint-border bg-canvas-mist space-y-2.5">
+        <div className="p-4 border-t border-border-default bg-page-bg space-y-2.5">
           <button
             type="button"
             onClick={() => {
@@ -124,9 +135,9 @@ export function MobileNavDrawer() {
           >
             <span className="inline-flex items-center gap-2">
               <LineIcon name="bag" size={16} />
-              <span>Open Shopping Bag</span>
+              <span>Open Shopping Cart</span>
             </span>
-            <span className="px-2 py-0.5 rounded-pill bg-shop-violet text-pure-white text-xs tabular-nums">
+            <span className="px-2 py-0.5 rounded-pill bg-surface text-brand-dark text-xs font-semibold tabular-nums">
               {cartCount}
             </span>
           </button>

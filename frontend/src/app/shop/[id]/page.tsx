@@ -19,7 +19,7 @@ export async function generateMetadata({
   const { id } = await params;
   const product = SAMPLE_PRODUCTS.find((p) => p.id === id);
   if (!product) {
-    return { title: 'Object Not Found' };
+    return { title: 'Product Not Found' };
   }
   return {
     title: product.title,
@@ -67,7 +67,7 @@ export default async function ProductDetailPage({
           ]}
         />
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-start">
           <div className="lg:col-span-7">
             <ProductGallery product={product} />
           </div>
@@ -82,8 +82,8 @@ export default async function ProductDetailPage({
       </section>
 
       <section aria-labelledby="related-objects-heading" className="space-y-5">
-        <h2 id="related-objects-heading" className="heading-row m-0">
-          Complementary Studio Objects
+        <h2 id="related-objects-heading" className="display-section m-0">
+          Complementary Products
         </h2>
         <ProductGrid products={fallbackRelated} columns="3" />
       </section>

@@ -1,442 +1,245 @@
 'use client';
 
-import { useState, useMemo } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { DEPARTMENTS, SAMPLE_PRODUCTS } from '@/data/products';
-import { useStore } from '@/context/StoreContext';
-import { LineIcon, type IconName } from '@/components/ui/LineIcon';
-import { ProductIllustration, getProductStage } from '@/components/ui/ProductIllustration';
+import {
+  DEPARTMENT_COVER_PRODUCT_ID,
+  HERO_STUDIO_MEDIA,
+  PRODUCT_MEDIA_BY_ID,
+} from '@/data/productMedia';
+import { ProductMedia } from '@/components/ui/ProductMedia';
+import { LineIcon } from '@/components/ui/LineIcon';
 import { ProductGrid } from '@/components/product/ProductGrid';
 import { NewsletterForm } from '@/components/forms/NewsletterForm';
 
-const CATEGORY_ICONS: Record<string, IconName> = {
-  All: 'grid',
-  'Audio & Desk Craft': 'home',
-  'Everyday Carry': 'bag',
-  'Home Objects': 'clock',
-  'Apparel & Goods': 'filter',
-};
-
-const CONSTELLATION_LABELS: Record<string, string> = {
-  'chrono-brass-desk-lamp': 'Lamp',
-  'tactile-field-chronograph': 'Watch',
-  'copper-gooseneck-kettle': 'Kettle',
-  'waxed-canvas-utility-tote': 'Tote',
-  'monolith-mechanical-keypad': 'Keypad',
-  'studio-monitor-isolation-stands': 'Stands',
-  'machined-brass-bolt-pen': 'Pen',
-  'modular-cordura-tech-pouch': 'Pouch',
-};
-
-const SPOTLIGHT_LAMP = SAMPLE_PRODUCTS[0];
-
-const LAMP_SWATCHES = [
-  {
-    key: 'front' as const,
-    label: 'Front',
-    caption: 'View: Front Studio Elevation',
-    bgClass: 'bg-canvas-mist',
-    dark: false,
-    svgOverride: 'lamp',
-  },
-  {
-    key: 'profile' as const,
-    label: 'Clockwork',
-    caption: 'View: Brass Canopy Finish',
-    bgClass: 'bg-faint-border',
-    dark: false,
-    svgOverride: 'clock',
-  },
-  {
-    key: 'darkroom' as const,
-    label: 'Darkroom',
-    caption: 'View: Low-Glare Dark Stage',
-    bgClass: 'bg-slate-ink',
-    dark: true,
-    svgOverride: 'lamp',
-  },
-];
-
 export default function HomePage() {
-  const router = useRouter();
-  const { addToCart } = useStore();
-
-  const [heroQuery, setHeroQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
-  const [spotlightView, setSpotlightView] = useState<'front' | 'profile' | 'darkroom'>('front');
-
-  const leftWing = SAMPLE_PRODUCTS.slice(0, 4);
-  const rightWing = SAMPLE_PRODUCTS.slice(4, 8);
-
-  const visibleFeatured = useMemo(() => {
-    if (selectedCategory === 'All') {
-      return SAMPLE_PRODUCTS.filter((p) => p.featured).slice(0, 4);
-    }
-    return SAMPLE_PRODUCTS.filter((p) => p.category === selectedCategory);
-  }, [selectedCategory]);
-
-  const newArrivals = useMemo(
-    () => SAMPLE_PRODUCTS.filter((p) => p.isNewArrival).slice(0, 4),
-    []
-  );
-
-  const activeSwatch =
-    LAMP_SWATCHES.find((s) => s.key === spotlightView) ?? LAMP_SWATCHES[0];
-
-  const handleHeroSearchSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const params = new URLSearchParams();
-    if (heroQuery.trim()) params.set('q', heroQuery.trim());
-    if (selectedCategory !== 'All') params.set('category', selectedCategory);
-    const qs = params.toString();
-    router.push(qs ? `/shop?${qs}` : '/shop');
-  };
+  const bestSellers = SAMPLE_PRODUCTS.filter((p) => p.featured).slice(0, 4);
+  const newArrivals = SAMPLE_PRODUCTS.filter((p) => p.isNewArrival).slice(0, 4);
 
   return (
-    <div className="store-container pt-6 sm:pt-10 lg:pt-12 pb-6 space-y-16 lg:space-y-20">
-      {/* SECTION 1: Floating Shopping Constellation Hero */}
-      <section aria-label="Storefront discovery hero">
-        <div className="grid grid-cols-1 xl:grid-cols-[minmax(190px,230px)_minmax(480px,600px)_minmax(190px,230px)] gap-6 items-center">
-          {/* Left Wing (Desktop >= 1280px left flank, Mobile 2x2 / Tablet 4-col ribbon below hero) */}
-          <div className="order-2 xl:order-none grid grid-cols-2 sm:grid-cols-4 xl:grid-cols-2 gap-3">
-            {leftWing.map((product, index) => {
-              const stage = getProductStage(product.imageSvgId);
-              const shortLabel = CONSTELLATION_LABELS[product.id] ?? product.title;
-              return (
-                <Link
-                  key={product.id}
-                  href={`/shop/${product.id}`}
-                  aria-label={`${product.title}, $${product.price}`}
-                  className={`surface-card hover-lift p-1.5 flex flex-col gap-1.5 rounded-[22px] ${
-                    index % 2 === 1 ? 'xl:translate-y-4' : ''
-                  }`}
-                >
-                  <div
-                    className={`w-full aspect-square rounded-[16px] ${stage.bgClass} p-3 flex items-center justify-center`}
-                  >
-                    <ProductIllustration
-                      svgId={product.imageSvgId}
-                      darkBackdrop={stage.darkBackdrop}
-                      className="w-16 h-16"
-                    />
-                  </div>
-                  <div className="px-1.5 pb-1 flex items-center justify-between gap-1.5 text-xs">
-                    <span className="font-medium text-ink-black truncate">
-                      {shortLabel}
-                    </span>
-                    <span className="text-muted-gray tabular-nums shrink-0">
-                      ${product.price}
-                    </span>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-
-          {/* Center Search & Identity Column (Always first on Mobile / Tablet) */}
-          <div className="order-1 xl:order-none flex flex-col items-center text-center gap-4 max-w-[600px] w-full mx-auto">
-            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-pill bg-pure-white border border-faint-border shadow-sm-soft text-xs font-medium text-slate-ink">
-              <span className="w-2 h-2 rounded-pill bg-shop-violet shrink-0" aria-hidden="true" />
-              <span>White Canvas Studio · 12 Curated Objects</span>
+    <div className="space-y-16 lg:space-y-20 pb-8">
+      {/* SECTION B: Editorial Product Hero */}
+      <section aria-label="Featured storefront hero" className="bg-surface border-b border-border-default">
+        <div className="store-container py-10 sm:py-14 lg:py-16 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+          <div className="lg:col-span-6 space-y-6">
+            <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-pill bg-violet-soft border border-violet-border text-xs font-semibold text-brand-dark">
+              <span className="w-2 h-2 rounded-pill bg-brand-violet shrink-0" aria-hidden="true" />
+              <span>CodeAlpha Store · 12 Curated Studio Goods</span>
             </span>
 
-            <div className="space-y-2.5">
-              <div className="text-[28px] sm:text-[34px] font-semibold tracking-[-0.055em] leading-none text-ink-black">
-                <span>simple</span>
-                <span className="wordmark-dot" aria-hidden="true" />
-              </div>
+            <div className="space-y-4">
               <h1 className="display-hero m-0">
-                Thoughtful everyday objects, framed in studio clarity.
+                Curated Everyday Objects for Work, Home and Life
               </h1>
-              <p className="text-sm sm:text-base text-canvas-secondary max-w-md mx-auto m-0 leading-relaxed">
-                Functional desk craft, tactile carry goods, and studio vessels organized on a quiet white canvas.
+              <p className="text-base sm:text-lg text-muted max-w-xl m-0 leading-relaxed">
+                Thoughtful tools, durable essentials and timeless goods for a better everyday.
               </p>
             </div>
 
-            <search role="search" className="w-full max-w-[580px] pt-1">
-              <form
-                onSubmit={handleHeroSearchSubmit}
-                className="flex items-center gap-2 min-h-[56px] pl-5 pr-1.5 py-1 rounded-pill bg-pure-white border border-ink-black/20 shadow-sm-soft focus-within:border-shop-violet focus-within:ring-2 focus-within:ring-violet-wash/50"
-              >
-                <label htmlFor="hero-catalog-search" className="sr-only">
-                  Search Simple Store catalog
-                </label>
-                <LineIcon name="search" size={18} className="text-muted-gray shrink-0" />
-                <input
-                  id="hero-catalog-search"
-                  name="q"
-                  type="search"
-                  value={heroQuery}
-                  onChange={(e) => setHeroQuery(e.target.value)}
-                  placeholder="Search brass lamp, chronograph, kettle..."
-                  className="flex-1 min-w-0 bg-transparent border-0 text-base text-ink-black placeholder:text-muted-gray focus:outline-none py-2"
-                />
-                {heroQuery ? (
-                  <button
-                    type="button"
-                    onClick={() => setHeroQuery('')}
-                    aria-label="Clear hero search"
-                    className="min-w-[36px] min-h-[36px] inline-flex items-center justify-center rounded-pill text-muted-gray hover:text-ink-black hover:bg-canvas-mist"
-                  >
-                    <LineIcon name="close" size={15} />
-                  </button>
-                ) : null}
-                <button
-                  type="submit"
-                  aria-label="Search store catalog"
-                  className="btn-search-submit"
-                >
-                  <LineIcon name="arrow-right" size={18} />
-                </button>
-              </form>
-            </search>
-
-            <nav aria-label="Catalog departments" className="w-full pt-1">
-              <div className="flex flex-wrap items-center justify-center gap-2">
-                {['All', ...DEPARTMENTS.map((d) => d.name)].map((cat) => {
-                  const active = selectedCategory === cat;
-                  const iconName = CATEGORY_ICONS[cat] ?? 'grid';
-                  return (
-                    <button
-                      key={cat}
-                      type="button"
-                      aria-pressed={active}
-                      onClick={() => setSelectedCategory(cat)}
-                      className={`inline-flex items-center gap-2 min-h-[44px] px-4 py-2 rounded-pill text-sm transition-colors ${
-                        active
-                          ? 'bg-ink-black text-pure-white border border-ink-black font-medium'
-                          : 'bg-pure-white text-ink-black border border-faint-border shadow-sm-soft hover:border-ink-black/40 font-normal'
-                      }`}
-                    >
-                      <LineIcon name={iconName} size={15} />
-                      <span>{cat === 'All' ? 'All Objects' : cat}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </nav>
-          </div>
-
-          {/* Right Wing (Desktop >= 1280px symmetric flank) */}
-          <div className="hidden xl:grid xl:grid-cols-2 gap-3">
-            {rightWing.map((product, index) => {
-              const stage = getProductStage(product.imageSvgId);
-              const shortLabel = CONSTELLATION_LABELS[product.id] ?? product.title;
-              return (
-                <Link
-                  key={product.id}
-                  href={`/shop/${product.id}`}
-                  aria-label={`${product.title}, $${product.price}`}
-                  className={`surface-card hover-lift p-1.5 flex flex-col gap-1.5 rounded-[22px] ${
-                    index % 2 === 0 ? '-translate-y-4' : ''
-                  }`}
-                >
-                  <div
-                    className={`w-full aspect-square rounded-[16px] ${stage.bgClass} p-3 flex items-center justify-center`}
-                  >
-                    <ProductIllustration
-                      svgId={product.imageSvgId}
-                      darkBackdrop={stage.darkBackdrop}
-                      className="w-16 h-16"
-                    />
-                  </div>
-                  <div className="px-1.5 pb-1 flex items-center justify-between gap-1.5 text-xs">
-                    <span className="font-medium text-ink-black truncate">
-                      {shortLabel}
-                    </span>
-                    <span className="text-muted-gray tabular-nums shrink-0">
-                      ${product.price}
-                    </span>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION 2: Curated Spotlight Duo */}
-      <section aria-label="Curated studio spotlights">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
-          {/* Dark Slate Spotlight */}
-          <article className="surface-card-slate p-6 sm:p-8 flex flex-col justify-between gap-6">
-            <div className="space-y-2">
-              <span className="text-xs font-medium text-violet-wash">
-                Curated Department · Studio Precision
-              </span>
-              <h2 className="display-section text-pure-white m-0">
-                Audio &amp; Desk Craft Built to Endure
-              </h2>
-              <p className="text-sm text-faint-border max-w-md m-0 leading-relaxed">
-                Weighted spun brass lighting, gasket-mounted anodized typing hardware, and acoustic isolation stands.
-              </p>
-            </div>
-
-            <div className="rounded-image bg-ash-veil p-4 flex items-center justify-between gap-4">
-              <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-tile bg-pure-white text-ink-black text-xs font-medium">
-                <span className="w-2 h-2 rounded-pill bg-shop-violet" aria-hidden="true" />
-                <span>AT Series · 3 Objects</span>
-              </span>
-              <ProductIllustration
-                svgId="lamp"
-                darkBackdrop
-                className="w-16 h-16 shrink-0"
-              />
-            </div>
-
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <Link
-                href="/shop?category=Audio+%26+Desk+Craft"
-                className="btn-white"
-              >
-                <span>Explore Desk Craft</span>
-                <LineIcon name="arrow-right" size={15} />
+            <div className="flex flex-wrap items-center gap-3 pt-1">
+              <Link href="/shop" className="btn-primary">
+                <span>Shop Collection</span>
+                <LineIcon name="arrow-right" size={16} />
               </Link>
-              <span className="text-xs text-cool-stone tabular-nums">
-                Starting at $92 USD
-              </span>
-            </div>
-          </article>
-
-          {/* Interactive White Mini-Swatch Spotlight */}
-          <article className="surface-card p-6 sm:p-8 flex flex-col justify-between gap-6">
-            <div className="space-y-2">
-              <span className="text-xs font-medium text-muted-gray">
-                Featured Object · Multi-Perspective Preview
-              </span>
-              <h2 className="display-section text-ink-black m-0">
-                {SPOTLIGHT_LAMP.title}
-              </h2>
-              <p className="text-sm text-muted-gray max-w-md m-0 leading-relaxed">
-                {SPOTLIGHT_LAMP.shortDescription}
-              </p>
+              <a href="#departments" className="btn-secondary">
+                Explore Categories
+              </a>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-[152px_1fr] gap-4 items-center">
-              <div
-                className={`w-full aspect-square rounded-image ${activeSwatch.bgClass} p-4 flex items-center justify-center transition-colors`}
-                aria-live="polite"
-              >
-                <ProductIllustration
-                  svgId={activeSwatch.svgOverride}
-                  darkBackdrop={activeSwatch.dark}
-                  className="w-24 h-24"
+            <dl className="grid grid-cols-3 gap-4 pt-6 border-t border-border-default m-0 max-w-lg">
+              <div>
+                <dt className="text-xs text-muted">Departments</dt>
+                <dd className="m-0 text-lg font-semibold text-ink tabular-nums">4 Curated</dd>
+              </div>
+              <div>
+                <dt className="text-xs text-muted">Catalog Items</dt>
+                <dd className="m-0 text-lg font-semibold text-ink tabular-nums">12 Objects</dd>
+              </div>
+              <div>
+                <dt className="text-xs text-muted">Free Shipping</dt>
+                <dd className="m-0 text-lg font-semibold text-ink tabular-nums">Above $75</dd>
+              </div>
+            </dl>
+          </div>
+
+          <div className="lg:col-span-6">
+            <div className="surface-card p-2 sm:p-3 overflow-hidden">
+              <div className="aspect-[4/3] rounded-image bg-surface-subtle overflow-hidden">
+                <ProductMedia
+                  src={HERO_STUDIO_MEDIA.src}
+                  alt={HERO_STUDIO_MEDIA.alt}
+                  width={HERO_STUDIO_MEDIA.width}
+                  height={HERO_STUDIO_MEDIA.height}
+                  priority
+                  sizes="(max-width: 1023px) 100vw, 50vw"
+                  fallbackLabel="CodeAlpha Store Hero Collection"
                 />
               </div>
-
-              <div className="space-y-3">
-                <p className="text-xs font-medium text-muted-gray m-0">
-                  {activeSwatch.caption}
-                </p>
-
-                <div
-                  className="flex flex-wrap gap-2"
-                  role="group"
-                  aria-label="Chrono Brass Desk Lamp studio perspectives"
+              <div className="px-2 pt-3 pb-1 flex flex-wrap items-center justify-between gap-2 text-xs text-muted">
+                <span className="font-medium text-ink-secondary">
+                  Featured Desk Setup: Chrono Brass Lamp · Monolith 65% Keyboard · Copper Kettle
+                </span>
+                <Link
+                  href="/shop/chrono-brass-desk-lamp"
+                  className="font-semibold text-brand-violet hover:text-brand-dark inline-flex items-center gap-1 shrink-0"
                 >
-                  {LAMP_SWATCHES.map((sw) => {
-                    const active = spotlightView === sw.key;
-                    return (
-                      <button
-                        key={sw.key}
-                        type="button"
-                        aria-pressed={active}
-                        aria-label={sw.label}
-                        onClick={() => setSpotlightView(sw.key)}
-                        className={`w-12 h-12 rounded-tile ${sw.bgClass} p-1.5 flex items-center justify-center border transition-colors ${
-                          active
-                            ? 'border-shop-violet ring-2 ring-violet-wash/70'
-                            : 'border-faint-border hover:border-ink-black/40'
-                        }`}
-                      >
-                        <ProductIllustration
-                          svgId={sw.svgOverride}
-                          darkBackdrop={sw.dark}
-                          className="w-full h-full"
-                        />
-                      </button>
-                    );
-                  })}
-                </div>
-
-                <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-xl font-semibold text-ink-black tabular-nums">
-                      ${SPOTLIGHT_LAMP.price}
-                    </span>
-                    {SPOTLIGHT_LAMP.compareAtPrice ? (
-                      <span className="text-xs text-muted-gray line-through tabular-nums">
-                        ${SPOTLIGHT_LAMP.compareAtPrice}
-                      </span>
-                    ) : null}
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Link
-                      href={`/shop/${SPOTLIGHT_LAMP.id}`}
-                      className="btn-secondary"
-                    >
-                      Inspect
-                    </Link>
-                    <button
-                      type="button"
-                      onClick={() => addToCart(SPOTLIGHT_LAMP, 1)}
-                      className="btn-primary"
-                    >
-                      Add to Bag
-                    </button>
-                  </div>
-                </div>
+                  <span>Inspect Lamp</span>
+                  <LineIcon name="chevron-right" size={14} />
+                </Link>
               </div>
             </div>
-          </article>
+          </div>
         </div>
       </section>
 
-      {/* SECTION 3: Featured / Selected Department Row */}
-      <section aria-labelledby="featured-collection-heading" className="space-y-5">
-        <div className="flex items-center justify-between gap-4">
+      {/* SECTION C: Truthful Storefront Benefits */}
+      <section aria-label="Shopping benefits" className="store-container">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+          <div className="surface-card p-6 flex items-start gap-4">
+            <div className="w-10 h-10 rounded-control bg-violet-soft border border-violet-border text-brand-violet flex items-center justify-center shrink-0">
+              <LineIcon name="truck" size={20} />
+            </div>
+            <div className="space-y-1">
+              <h2 className="text-sm font-semibold text-ink m-0">Free Shipping Above $75</h2>
+              <p className="text-xs sm:text-sm text-muted m-0 leading-relaxed">
+                Orders over $75 qualify automatically for $0 shipping ($8 flat standard shipping below $75).
+              </p>
+            </div>
+          </div>
+
+          <div className="surface-card p-6 flex items-start gap-4">
+            <div className="w-10 h-10 rounded-control bg-violet-soft border border-violet-border text-brand-violet flex items-center justify-center shrink-0">
+              <LineIcon name="grid" size={20} />
+            </div>
+            <div className="space-y-1">
+              <h2 className="text-sm font-semibold text-ink m-0">Four Curated Departments</h2>
+              <p className="text-xs sm:text-sm text-muted m-0 leading-relaxed">
+                Browse balanced desk craft, carry tools, home brew gear, and utilitarian canvas goods.
+              </p>
+            </div>
+          </div>
+
+          <div className="surface-card p-6 flex items-start gap-4">
+            <div className="w-10 h-10 rounded-control bg-violet-soft border border-violet-border text-brand-violet flex items-center justify-center shrink-0">
+              <LineIcon name="check" size={20} />
+            </div>
+            <div className="space-y-1">
+              <h2 className="text-sm font-semibold text-ink m-0">Saved Local Session State</h2>
+              <p className="text-xs sm:text-sm text-muted m-0 leading-relaxed">
+                Shopping cart, demo profile, and simulated orders persist across reloads in browser storage.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION D: Shop by Department (4 Exact Departments) */}
+      <section
+        id="departments"
+        aria-labelledby="departments-heading"
+        className="store-container space-y-6 scroll-mt-24"
+      >
+        <div className="flex flex-wrap items-end justify-between gap-4">
           <div className="space-y-1">
-            <h2 id="featured-collection-heading" className="heading-row m-0">
-              {selectedCategory === 'All' ? 'Featured Collection' : selectedCategory}
+            <h2 id="departments-heading" className="display-section m-0">
+              Shop by Department
             </h2>
-            <p className="text-xs text-canvas-secondary m-0 tabular-nums">
-              {selectedCategory === 'All'
-                ? '4 curated highlights across all departments'
-                : `${visibleFeatured.length} objects in ${selectedCategory}`}
+            <p className="text-sm text-muted m-0">
+              Explore all 4 curated departments across our 12-item catalog
             </p>
           </div>
-
           <Link
-            href={
-              selectedCategory === 'All'
-                ? '/shop'
-                : `/shop?category=${encodeURIComponent(selectedCategory)}`
-            }
-            aria-label="View full catalog"
-            className="min-w-[44px] min-h-[44px] w-11 h-11 rounded-pill bg-pure-white border border-faint-border shadow-lg-soft flex items-center justify-center text-ink-black hover:border-ink-black transition-colors shrink-0"
+            href="/shop"
+            className="text-sm font-semibold text-brand-violet hover:text-brand-dark inline-flex items-center gap-1"
           >
-            <LineIcon name="chevron-right" size={18} />
+            <span>Browse all products</span>
+            <LineIcon name="arrow-right" size={15} />
           </Link>
         </div>
 
-        <ProductGrid products={visibleFeatured} columns="4" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+          {DEPARTMENTS.map((dept) => {
+            const coverId = DEPARTMENT_COVER_PRODUCT_ID[dept.name];
+            const media = PRODUCT_MEDIA_BY_ID[coverId];
+            return (
+              <Link
+                key={dept.id}
+                href={`/shop?category=${encodeURIComponent(dept.name)}`}
+                className="surface-card card-hover-lift overflow-hidden flex flex-col group"
+              >
+                <div className="aspect-[4/3] bg-surface-subtle overflow-hidden">
+                  {media ? (
+                    <ProductMedia
+                      src={media.src}
+                      alt={`${dept.name} department featuring ${media.alt}`}
+                      width={media.width}
+                      height={media.height}
+                      sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 25vw"
+                      imgClassName="transition-transform duration-300 group-hover:scale-[1.03]"
+                    />
+                  ) : null}
+                </div>
+                <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-2">
+                  <div className="space-y-1">
+                    <div className="flex items-center justify-between gap-2">
+                      <h3 className="text-base font-semibold text-ink group-hover:text-brand-violet transition-colors m-0">
+                        {dept.name}
+                      </h3>
+                      <span className="text-xs font-medium text-brand-dark bg-violet-soft px-2 py-0.5 rounded-pill shrink-0 tabular-nums">
+                        {dept.itemCount} items
+                      </span>
+                    </div>
+                    <p className="text-xs text-muted m-0 line-clamp-2 leading-relaxed">
+                      {dept.tagline}
+                    </p>
+                  </div>
+                  <span className="text-xs font-semibold text-brand-violet inline-flex items-center gap-1 pt-1">
+                    <span>Explore {dept.name}</span>
+                    <LineIcon name="chevron-right" size={14} />
+                  </span>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
       </section>
 
-      {/* SECTION 4: New Releases Grid */}
-      <section aria-labelledby="new-releases-heading" className="space-y-5">
-        <div className="flex items-center justify-between gap-4">
+      {/* SECTION E: Best Sellers (Existing Featured Products) */}
+      <section aria-labelledby="best-sellers-heading" className="store-container space-y-6">
+        <div className="flex flex-wrap items-end justify-between gap-4">
           <div className="space-y-1">
-            <h2 id="new-releases-heading" className="heading-row m-0">
-              New Studio Releases
+            <h2 id="best-sellers-heading" className="display-section m-0">
+              Best Sellers
             </h2>
-            <p className="text-xs text-canvas-secondary m-0">
-              Latest machined brass, stoneware, and tactile carry additions
+            <p className="text-sm text-muted m-0">
+              Highlighted catalog favorites ready for immediate dispatch simulation
             </p>
           </div>
+          <Link href="/shop" className="btn-secondary">
+            <span>View Full Shop</span>
+            <LineIcon name="arrow-right" size={15} />
+          </Link>
+        </div>
 
-          <Link href="/shop?sort=newest" className="btn-secondary shrink-0">
-            <span>Browse All</span>
+        <ProductGrid products={bestSellers} columns="4" />
+      </section>
+
+      {/* SECTION F: Discovery / New Arrivals (Existing isNewArrival Flags) */}
+      <section aria-labelledby="new-arrivals-heading" className="store-container space-y-6">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div className="space-y-1">
+            <h2 id="new-arrivals-heading" className="display-section m-0">
+              New Arrivals
+            </h2>
+            <p className="text-sm text-muted m-0">
+              Fresh studio releases across mechanical input, pour-over brewing, and desk timekeeping
+            </p>
+          </div>
+          <Link
+            href="/shop?sort=newest"
+            className="text-sm font-semibold text-brand-violet hover:text-brand-dark inline-flex items-center gap-1"
+          >
+            <span>See all new arrivals</span>
             <LineIcon name="arrow-right" size={15} />
           </Link>
         </div>
@@ -444,45 +247,21 @@ export default function HomePage() {
         <ProductGrid products={newArrivals} columns="4" />
       </section>
 
-      {/* SECTION 5: White Canvas Pillars & Studio Newsletter */}
-      <section aria-label="Store commitments and updates">
-        <div className="surface-card p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="p-4 rounded-image bg-canvas-mist border border-faint-border space-y-1.5">
-              <p className="text-sm font-semibold text-ink-black m-0">
-                Concentric White Canvas
-              </p>
-              <p className="text-xs text-canvas-secondary m-0 leading-relaxed">
-                Clean studio geometry designed to foreground product craft without visual noise.
-              </p>
-            </div>
-            <div className="p-4 rounded-image bg-canvas-mist border border-faint-border space-y-1.5">
-              <p className="text-sm font-semibold text-ink-black m-0">
-                Free Delivery at $75
-              </p>
-              <p className="text-xs text-canvas-secondary m-0 leading-relaxed">
-                Live bag shipping progress bar calculates threshold automatically ($8 flat under $75).
-              </p>
-            </div>
-            <div className="p-4 rounded-image bg-canvas-mist border border-faint-border space-y-1.5">
-              <p className="text-sm font-semibold text-ink-black m-0">
-                Local Session State
-              </p>
-              <p className="text-xs text-canvas-secondary m-0 leading-relaxed">
-                Cart, account demo, and sample orders persist cleanly across browser reloads.
-              </p>
-            </div>
+      {/* SECTION G: Studio Updates & Demo Newsletter */}
+      <section aria-label="Newsletter updates" className="store-container">
+        <div className="surface-card p-6 sm:p-10 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center">
+          <div className="lg:col-span-6 space-y-2">
+            <span className="text-xs font-semibold uppercase tracking-wider text-brand-violet">
+              Store Updates
+            </span>
+            <h2 className="display-section m-0">
+              Follow upcoming studio releases
+            </h2>
+            <p className="text-sm text-muted m-0 leading-relaxed">
+              Sign up for release notifications on restocks and seasonal drops. Emails validate client-side as a frontend demo.
+            </p>
           </div>
-
-          <div className="lg:col-span-5 space-y-3">
-            <div className="space-y-1">
-              <h2 className="text-lg font-semibold tracking-[-0.04em] text-ink-black m-0">
-                Studio Release Notes
-              </h2>
-              <p className="text-xs text-muted-gray m-0">
-                Demo email opt-in for new object drops (stored client-side only).
-              </p>
-            </div>
+          <div className="lg:col-span-6">
             <NewsletterForm />
           </div>
         </div>

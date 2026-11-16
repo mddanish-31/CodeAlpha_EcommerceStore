@@ -22,23 +22,23 @@ export default function CartPage() {
         <Breadcrumbs
           items={[
             { label: 'Home', href: '/' },
-            { label: 'Shopping Bag' },
+            { label: 'Shopping Cart' },
           ]}
         />
 
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="space-y-1">
-            <h1 className="display-hero m-0">Shopping Bag</h1>
-            <p className="text-sm text-canvas-secondary m-0 tabular-nums">
+            <h1 className="display-hero m-0">Shopping Cart</h1>
+            <p className="text-sm text-muted m-0 tabular-nums">
               {cartCount === 0
-                ? 'No items currently selected'
-                : `${cartCount} studio object${cartCount === 1 ? '' : 's'} ready for simulated checkout`}
+                ? 'Your shopping cart is currently empty'
+                : `${cartCount} curated object${cartCount === 1 ? '' : 's'} ready for simulated checkout`}
             </p>
           </div>
 
           {cart.length > 0 ? (
             <button type="button" onClick={clearCart} className="btn-secondary">
-              Clear Bag
+              Clear Cart
             </button>
           ) : null}
         </div>
@@ -46,9 +46,9 @@ export default function CartPage() {
         {cart.length === 0 ? (
           <StateFeedbackCard
             icon="bag"
-            title="Your shopping bag is currently empty"
-            description="Browse the White Canvas Studio catalog to add Everyday Carry, Desk Craft, Home Objects, or Apparel."
-            actionLabel="Browse Studio Catalog"
+            title="Your shopping cart is empty"
+            description="Explore Everyday Carry, Desk Craft, Home Objects, or Apparel to build your order."
+            actionLabel="Browse Shop"
             actionHref="/shop"
           />
         ) : (
@@ -67,7 +67,7 @@ export default function CartPage() {
 
       {suggestions.length > 0 ? (
         <section aria-labelledby="cart-suggestions-heading" className="space-y-5">
-          <h2 id="cart-suggestions-heading" className="heading-row m-0">
+          <h2 id="cart-suggestions-heading" className="display-section m-0">
             Pair with Your Selection
           </h2>
           <ProductGrid products={suggestions} columns="4" />
